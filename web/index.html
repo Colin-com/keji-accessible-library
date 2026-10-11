@@ -59,6 +59,7 @@
   .bar{height:7px;background:#101319;border:1px solid var(--line);margin-top:3px;position:relative;overflow:hidden}
   .bar i{display:block;height:100%;width:0;transition:width .5s steps(8)}
   #mProg i{background:var(--blue)} #mTrust i{background:var(--ok)} #mSus i{background:var(--accent)}
+  #mImpact i{background:#8b7bd8}
   .tools{display:flex;gap:6px}
   .tbtn{font-size:11px;color:var(--muted);background:#141821;border:1px solid var(--line);
     padding:5px 9px;cursor:pointer;letter-spacing:.05em}
@@ -71,13 +72,36 @@
   #stage.s-dawn{background:#221d24}
   #stage.s-dusk{background:#2a2229}
   #stage.s-bright{background:#212a31}
+  #stage.s-rain{background:#1a2029}
+  /* 天花板 + 灯带：让场景看起来是一个"室内空间"，不是一块黑板 */
+  #stage .ceil{position:absolute;left:0;right:0;top:0;height:13%;
+    background:linear-gradient(#101319,#1b2029);border-bottom:2px solid #0d1015;z-index:3}
+  #stage .ceil::after{content:"";position:absolute;left:6%;right:6%;top:58%;height:3px;
+    background:linear-gradient(90deg,transparent,rgba(255,238,198,.30),transparent)}
+  #stage.s-bright .ceil::after{background:linear-gradient(90deg,transparent,rgba(255,246,220,.75),transparent)}
+  #stage.s-dusk .ceil::after{background:linear-gradient(90deg,transparent,rgba(255,206,150,.45),transparent)}
   #stage .wall{position:absolute;inset:0 0 34% 0;
     background:repeating-linear-gradient(90deg,#232833 0 17px,#1b2029 17px 21px);
-    border-bottom:3px solid #12151b}
+    border-bottom:3px solid #12151b;box-shadow:inset 0 -26px 26px -22px rgba(0,0,0,.6)}
+  /* 踢脚线：墙面与地面交界，给空间一个"底" */
+  #stage .wall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;
+    background:#151a22;border-top:2px solid #2c3140}
   #stage .floor{position:absolute;left:0;right:0;bottom:0;height:34%;background:#1a1e26;
     border-top:3px solid #2c3140}
   #stage .floor::after{content:"";position:absolute;inset:0;opacity:.5;
     background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 52px)}
+  /* 地面反光：道具像是站在有光泽的地面上 */
+  #stage .floor::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.07),transparent 62%)}
+  /* 雨天：雨帘 + 地面水洼（第九幕以后用得上） */
+  #stage.s-rain::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;z-index:2;
+    background-image:repeating-linear-gradient(74deg,rgba(198,220,248,.34) 0 1px,transparent 1px 9px);
+    animation:rainfall .5s linear infinite}
+  @keyframes rainfall{from{background-position:0 0}to{background-position:-26px 110px}}
+  #stage.s-rain .floor{background-image:
+    radial-gradient(ellipse 96px 14px at 20% 34%,rgba(198,220,248,.20),transparent 70%),
+    radial-gradient(ellipse 132px 17px at 66% 66%,rgba(198,220,248,.15),transparent 70%),
+    radial-gradient(ellipse 70px 11px at 44% 88%,rgba(198,220,248,.12),transparent 70%)}
   #propBack,#propFront,#actors{position:absolute;inset:0;transition:opacity .3s}
   .prop{position:absolute;display:grid}
   .prop div{width:6px;height:6px}
@@ -167,7 +191,7 @@
     <div class="menuBtns">
       <button class="mbtn primary" id="btnStart">开始游戏<small>学期作业：让图书馆对轮椅可用</small></button>
       <button class="mbtn" id="btnArchFromMenu">无障碍档案库<small id="archCount">已解锁 0 / 10 条</small></button>
-      <button class="mbtn" id="btnHelp">操作说明<small>键位 / 三条指标的含义</small></button>
+      <button class="mbtn" id="btnHelp">操作说明<small>键位 / 四条指标的含义</small></button>
     </div>
     <div class="menufoot">
       <b>90 分钟黑客松作品</b> · 网页版单文件 Demo · 剧情与档案数据驱动<br>
@@ -184,6 +208,7 @@
       <div class="meter" id="mProg"><b>项目进度</b><div class="bar"><i></i></div></div>
       <div class="meter" id="mTrust"><b>当事人信任</b><div class="bar"><i></i></div></div>
       <div class="meter" id="mSus"><b>可持续性</b><div class="bar"><i></i></div></div>
+      <div class="meter" id="mImpact"><b>受益范围</b><div class="bar"><i></i></div></div>
     </div>
     <div class="tools">
       <button class="tbtn" id="tbArch">档案库 <span id="tbNum">0/10</span></button>
@@ -230,24 +255,37 @@
     <div><kbd>R</kbd></div><span>重新开始</span>
     <div><kbd>Esc</kbd></div><span>关闭当前面板</span>
   </div>
-  <h2 style="font-size:15px">左上角那三条，就是你的选择留下的痕迹</h2>
+  <h2 style="font-size:15px">左上角那四条，就是你的选择留下的痕迹</h2>
   <div class="note" style="margin-top:10px">
     <b>项目进度</b>：图书馆真的被改好了多少。<br>
     <b>当事人信任</b>：真正要用这个空间的人，愿不愿意信你。<br>
-    <b>可持续性</b>：这套改动明年还在不在、有没有人维护。<br><br>
+    <b>可持续性</b>：这套改动明年还在不在、有没有人维护。<br>
+    <b>受益范围</b>：这套做法最后影响到了多少人、多少地方。<br><br>
     它们不是分数，也没有隐藏的最优解——你只是要承担选择的后果。
     结局不评判你，只把你做过的决定摆出来。
+    <br><br>档案库里的条目是跨局累积的：玩过的每一局解锁到的东西，回到主界面、重新开始、甚至关掉浏览器再打开，都还在。
   </div>
 </div></div>
 
 <div id="toast"></div>
 
 <script>
-const CASE = {"case_id": "library_access", "title": "图书馆无障碍改造", "major": "工业设计", "start": "n_start", "nodes": {"n_start": {"type": "say", "speaker": "我", "text": "我是工业设计大二。期末作业：\n让校园某处对轮椅真正可用。", "next": "n_meet"}, "n_meet": {"type": "say", "speaker": "小舟", "text": "你要帮我推上去吗？\n先说好，我不想每次靠人推。", "set": {"met_zhou": true}, "relation": {"zhou": 1}, "unlock": ["entry_social_model"], "next": "n_need"}, "n_need": {"type": "say", "speaker": "小舟", "text": "进门查书我能自己来。\n卡在台阶、服务台和四楼。", "set": {"heard_need": true}, "relation": {"zhou": 1}, "next": "n_choice1"}, "n_choice1": {"type": "choice", "prompt": "第一步做什么？", "options": [{"text": "跟着小舟走一遍全流程，把尺寸量清楚", "next": "n_walk", "set": {"walked": true}, "relation": {"zhou": 1}, "progress": 1}, {"text": "先去馆长办公室问预算和工期", "next": "n_budget", "set": {"asked_budget": true}}], "fallback_next": "n_budget"}, "n_walk": {"type": "say", "speaker": "小舟", "text": "你看：三级台阶，服务台，\n还有四楼的书库。", "next": "n_walk2"}, "n_walk2": {"type": "say", "speaker": "我", "text": "台阶高 0.45 米，1:12 的坡\n要 5.4 米长，两端留平台。", "set": {"measured": true}, "progress": 1, "unlock": ["entry_ramp_slope"], "next": "n_walk3"}, "n_walk3": {"type": "say", "speaker": "小舟", "text": "通道最窄 0.8 米，回转\n要 1.5 米才转得开。", "unlock": ["entry_turning_space"], "next": "n_walk4"}, "n_walk4": {"type": "say", "speaker": "小舟", "text": "服务台太高，我够不到，\n四楼的书也上不去。", "relation": {"zhou": 1}, "unlock": ["entry_low_counter"], "next": "n_walk5"}, "n_walk5": {"type": "say", "speaker": "小舟", "text": "还有视障的同学，\n导盲犬进馆常被拦。", "unlock": ["entry_guide_dog"], "next": "n_choice2"}, "n_budget": {"type": "say", "speaker": "馆长", "text": "经费紧，但依法得改：\n设施、信息、服务三块都算。", "set": {"knows_gate": true}, "unlock": ["entry_law_2023"], "next": "n_measure_prompt"}, "n_measure_prompt": {"type": "choice", "prompt": "手上还没有数据，先做什么？", "options": [{"text": "回去量台阶和通道，再谈方案", "next": "n_walk", "set": {"went_measure": true}}, {"text": "先不量，找学姐用志愿者顶上", "next": "n_b1", "set": {"shortcut": true}}], "fallback_next": "n_walk"}, "n_choice2": {"type": "choice", "prompt": "三条路，你走哪条？", "options": [{"text": "实测数据画 1:12 缓坡 + 低位服务台", "next": "n_a1", "require": {"measured": true}, "set": {"solution": "ramp"}, "progress": 3}, {"text": "找学姐组织志愿者代查代借、送书到座", "next": "n_b1", "set": {"solution": "volunteer"}}, {"text": "写成提案，走馆务会争取立项", "next": "n_c1", "require": {"measured": true}, "set": {"solution": "proposal"}}], "fallback_next": "n_b1"}, "n_a1": {"type": "say", "speaker": "我", "text": "缓坡按 1:12 画，5.4 米长，\n两端各留 1.5 米平台。", "set": {"solution_a": true}, "progress": 3, "next": "n_a2"}, "n_a2": {"type": "say", "speaker": "馆长", "text": "合规我认。但 5.4 米要占绿地，\n预算得走基建流程。", "next": "n_a3"}, "n_a3": {"type": "say", "speaker": "学姐", "text": "先顶上送书可以，\n但靠人排班撑不久。", "set": {"volunteer_offered": true}, "relation": {"xuejie": 1}, "next": "n_choice3"}, "n_choice3": {"type": "choice", "prompt": "方案还要等工期，怎么办？", "options": [{"text": "坚持原方案，把造价和工期表做完", "next": "n_a4", "require": {"solution_a": true}, "progress": 2}, {"text": "让志愿者先顶上，方案并行推进", "next": "n_mix1", "set": {"mixed": true}}], "fallback_next": "n_mix1"}, "n_a4": {"type": "say", "speaker": "我", "text": "造价表、工期表、条例文\n我一起交给基建处。", "progress": 3, "next": "n_a5"}, "n_a5": {"type": "say", "speaker": "馆长", "text": "下学期立项，暑假施工。\n小舟，验收你来。", "set": {"approved": true}, "relation": {"zhou": 1}, "progress": 2, "next": "n_good"}, "n_c1": {"type": "say", "speaker": "我", "text": "提案三块：坡道、低位台、\n还有检索机的读屏和字幕。", "set": {"solution_c": true}, "progress": 2, "unlock": ["entry_law_2023", "entry_sign_subtitle", "entry_wcag22"], "next": "n_c2"}, "n_c2": {"type": "say", "speaker": "小舟", "text": "别替我列需求。清单我来写，\n馆务会我自己去说。", "set": {"zhou_involved": true}, "relation": {"zhou": 2}, "unlock": ["entry_participation"], "next": "n_c4"}, "n_c4": {"type": "say", "speaker": "馆长", "text": "馆务会通过了，排在暑假。\n预算走无障碍经费。", "set": {"approved": true}, "progress": 4, "next": "n_good"}, "n_b1": {"type": "say", "speaker": "学姐", "text": "我组队排班，周一到周五，\n代查代借、送书到座。", "set": {"solution_b": true, "volunteer": true}, "next": "n_b2"}, "n_b2": {"type": "say", "speaker": "小舟", "text": "今天我能借到书了，谢谢。\n但这不是我自己来。", "set": {"zhou_objection": true}, "relation": {"zhou": -1}, "next": "n_b4"}, "n_b4": {"type": "say", "speaker": "小舟", "text": "我要的不是有人替我，\n是我自己走完这四步。", "relation": {"zhou": 1}, "unlock": ["entry_participation"], "next": "n_b5"}, "n_b5": {"type": "say", "speaker": "学姐", "text": "排班全靠人，考完试就散了。\n这撑不到明年。", "set": {"unsustainable_worry": true}, "next": "n_choice4"}, "n_choice4": {"type": "choice", "prompt": "怎么收尾？", "options": [{"text": "志愿者只做过渡，同时推改造方案", "next": "n_mix1", "set": {"handoff": true}, "progress": 2}, {"text": "先维持志愿者服务，改造下次再说", "next": "n_partial", "set": {"only_volunteer": true}}], "fallback_next": "n_partial"}, "n_mix1": {"type": "say", "speaker": "学姐", "text": "那我先把排班表做起来，\n改造的事你别停。", "relation": {"xuejie": 1}, "next": "n_mix2"}, "n_mix2": {"type": "say", "speaker": "小舟", "text": "有人送书总比没有好。\n但门槛还在，下一步拆它。", "unlock": ["entry_library_service"], "next": "n_partial"}, "n_partial": {"type": "end", "ending_id": "partial", "title": "半程", "text": "志愿者送书到座，小舟借到了书。\n但台阶没动，他说下一步拆门槛。"}, "n_good": {"type": "end", "ending_id": "good_project", "title": "能动用了", "text": "小舟自己进馆、查书、取书、借书。\n他说：下次我可以自己来。"}}};
+const CASE = {"case_id": "library_access", "title": "可及", "major": "工业设计", "start": "n_start", "nodes": {"n_start": {"type": "say", "speaker": "我", "text": "我是工业设计大二。\n今年专业课的第一周，老师只说了一句话：\n去校园里找一个地方，找出它是怎么把人挡在外面的。", "next": "n_start_b2"}, "n_start_b2": {"type": "say", "speaker": "我", "text": "作业要求写得很轻：\n“不要求施工，不要求预算，只要你真的看懂了一件事。”\n我盯着这行字看了一会儿，觉得它在骗人。", "next": "n_start2"}, "n_start2": {"type": "say", "speaker": "我", "text": "我选了图书馆北门。\n理由是三天前的早上，我在那儿看见一个人，\n在雨里等了二十分钟，等一个恰好路过的人。", "next": "n_start3"}, "n_start3": {"type": "say", "speaker": "我", "text": "后来我才知道，那二十分钟里。\n她等的人不是来扶她的，\n是来替她抬轮椅上台阶的。", "next": "n_rain"}, "n_rain": {"type": "say", "speaker": "旁白", "text": "周一早上八点五十。下雨。\n北门是三级台阶，花岗岩，湿得发亮。\n台阶右边有一条空的盲道，断在两根挡车柱之间。", "next": "n_rain_b2"}, "n_rain_b2": {"type": "say", "speaker": "旁白", "text": "自动门从里面打开，凉气吹出来。\n她已经在这儿停了很久，\n伞歪着，靠在扶手上，伞尖在滴水。", "next": "n_rain2"}, "n_rain2": {"type": "say", "speaker": "旁白", "text": "前轮卡在第二级台阶的边角。\n四个人从四个方向伸手，把她连人带椅抬上去，用了两分钟。\n她连说了四声谢谢，一声比一声轻。", "next": "n_rain2_b2"}, "n_rain2_b2": {"type": "say", "speaker": "旁白", "text": "抬完以后，那四个人各自走了。\n没有人回头。门在她身后慢慢合上。\n我站在伞下，什么都没做。", "next": "n_zhou1"}, "n_zhou1": {"type": "say", "speaker": "小舟", "text": "……你也借书？\n别不好意思，我在这儿借了三年书了。\n每个星期至少来一次。", "next": "n_zhou1_b2"}, "n_zhou1_b2": {"type": "say", "speaker": "小舟", "text": "谢了，真的。刚才那几位也挺好。\n我不是不想让人扶——\n我是不想每次进门，第一句话就得先开口求人。", "next": "n_zhou2"}, "n_zhou2": {"type": "say", "speaker": "小舟", "text": "你看那边楼梯。三楼社科库。\n我想找的书在四楼，我一次都没上去过。\n书都是别人替我借的，借错了我也不好意思说。", "next": "n_zhou2_b2"}, "n_zhou2_b2": {"type": "say", "speaker": "小舟", "text": "被人扶着进来，和被挡在门外，\n听上去是两件事。\n对我来说，是同一种感觉。", "next": "n_shen"}, "n_shen": {"type": "say", "speaker": "沈阿姨", "text": "小姑娘，你在看那个柱子是吧。\n门口那两根，本来是拦汽车的。\n我拿白手杖绕着走，绕了三次，绕不过去。", "unlock": ["entry_turning_space"], "next": "n_shen_b2"}, "n_shen_b2": {"type": "say", "speaker": "沈阿姨", "text": "我不是完全看不见，还有点光感。\n盲道我能摸出来。\n问题是它断在柱子后面——我到那儿就得猜。", "next": "n_shen_b3"}, "n_shen_b3": {"type": "say", "speaker": "沈阿姨", "text": "猜错两次以后，我干脆不来了。\n书让别人借，我在家听广播。\n你说，这算不算图书馆把我关在外面了。", "next": "n_laozhou"}, "n_laozhou": {"type": "say", "speaker": "老周", "text": "我膝盖不行。\n这个助行器平地上还行，上台阶不敢。\n我孙女今天替我借书，我在这儿等她。", "next": "n_laozhou_b2"}, "n_laozhou_b2": {"type": "say", "speaker": "老周", "text": "坐这儿也不难受，就是无聊。\n等的时候我就往里看，看那排书架。\n我想进去自己挑一本，摸一摸是哪本。", "next": "n_need"}, "n_need": {"type": "say", "speaker": "旁白", "text": "一个人被挡住，是今天运气不好。\n两个人被同一扇门挡住，是他们不方便。\n三个人被同一扇门挡住——是这张图纸的问题。", "next": "n_need_b2"}, "n_need_b2": {"type": "say", "speaker": "旁白", "text": "我把三句话记在手机备忘录里，\n记完才发现，他们说的都不是“请帮帮我”，\n而是“我想自己来”。", "next": "n_choice1"}, "n_choice1": {"type": "choice", "prompt": "第一次来现场，先做什么？", "options": [{"text": "跟着他们走一遍，把每一步卡在哪记下来", "next": "n_walk", "set": {"walked": true}, "relation": {"zhou": 1}, "progress": 1}, {"text": "先去馆长办公室，问预算和工期", "next": "n_budget", "set": {"asked_budget": true}, "progress": 1}, {"text": "先问他们：你们自己希望怎么改？", "next": "n_ask", "set": {"asked_users": true}, "relation": {"zhou": 2}, "progress": 1, "unlock": ["entry_participation"]}], "fallback_next": "n_budget"}, "n_ask": {"type": "say", "speaker": "我", "text": "我准备了一张纸，本来想写“需求调查表”。\n结果第一个问题就把我问住了——\n“你们自己希望怎么改？”", "next": "n_ask2"}, "n_ask2": {"type": "say", "speaker": "小舟", "text": "我要自己进来。\n不是被抬进来，\n也不是你们把书送到我手上。", "next": "n_ask2_b2"}, "n_ask2_b2": {"type": "say", "speaker": "小舟", "text": "我知道送书是好事。\n但那样我还是没进过图书馆。\n我想知道书架是怎么排的。", "next": "n_ask3"}, "n_ask3": {"type": "say", "speaker": "沈阿姨", "text": "我要门口那段盲道通到服务台。\n中间别让我猜。\n剩下的路我自己能走。", "next": "n_ask3_b2"}, "n_ask3_b2": {"type": "say", "speaker": "沈阿姨", "text": "还有一件事——\n别再让保安拦导盲犬。\n上个月那只狗被拦在门口，我们俩站了十分钟。", "next": "n_ask4"}, "n_ask4": {"type": "say", "speaker": "老周", "text": "我要一把能坐下的椅子，\n和一个不用站着排的队。\n我站十分钟，膝盖要疼一天。", "next": "n_ask4_b2"}, "n_ask4_b2": {"type": "say", "speaker": "老周", "text": "别的我不挑。\n我不指望你们给我修个电梯，\n我就是想自己挑一本书。", "next": "n_ask5"}, "n_ask5": {"type": "say", "speaker": "旁白", "text": "三个人的答案不一样，甚至互相打架。\n小舟要坡道占绿地，老周说别花那个钱；\n沈阿姨只关心那两根柱子。", "next": "n_ask5_b2"}, "n_ask5_b2": {"type": "say", "speaker": "旁白", "text": "我那张纸写满了，正反面。\n我第一次意识到，\n“无障碍”不是一个东西，是三件不一样的东西。", "next": "n_choice1b"}, "n_choice1b": {"type": "choice", "prompt": "三个人的要求，先按谁的排？", "options": [{"text": "小舟的：上楼的路径要能自己走", "next": "n_order_zhou", "relation": {"zhou": 1}, "progress": 1, "set": {"first": "zhou"}}, {"text": "沈阿姨的：门口的信息要连续", "next": "n_order_shen", "progress": 1, "set": {"first": "shen"}}, {"text": "老周的：先解决坐着的人和排队", "next": "n_order_zhou2", "progress": 1, "set": {"first": "lao"}}], "fallback_next": "n_order_zhou"}, "n_order_zhou": {"type": "say", "speaker": "我", "text": "我把小舟的名字写在第一行。\n笔尖顿了一下——她的要求最贵。\n我告诉自己：贵的不是她的要求，是这张图纸欠她的。", "next": "n_walk"}, "n_order_shen": {"type": "say", "speaker": "我", "text": "我把沈阿姨写在第一行。\n她的事情最小：两根柱子，一段盲道。\n可我想到她在柱子后面猜路的样子，就没法把它排到后面。", "next": "n_walk"}, "n_order_zhou2": {"type": "say", "speaker": "我", "text": "我把老周写在第一行。\n一把椅子、一个不用站着排的队，今天下午就能办到。\n我承认，我也是想先攒一件马上能做成的事。", "next": "n_walk"}, "n_walk": {"type": "say", "speaker": "小舟", "text": "那就从门口开始。\n第一步，台阶。\n我带你走一遍，你别急着记数据。", "next": "n_walk_b2"}, "n_walk_b2": {"type": "say", "speaker": "旁白", "text": "我们走得很慢。\n她每次停在台阶前，都会先把手刹按一下，\n那是她下意识的一个动作，她自己都没注意。", "next": "n_walk2"}, "n_walk2": {"type": "say", "speaker": "我", "text": "三级台阶，每级 0.45 米高。\n按 1:12 的坡，0.45 米要 5.4 米长的坡面。\n我拿卷尺量了三遍，怕量错。", "unlock": ["entry_ramp_slope"], "next": "n_walk2_b2"}, "n_walk2_b2": {"type": "say", "speaker": "我", "text": "第三遍量完，我蹲在台阶边上算。\n5.4 米，意味着要占掉半块绿地。\n我在纸上画了一条线，又把线擦掉了。", "next": "n_walk3"}, "n_walk3": {"type": "say", "speaker": "小舟", "text": "第二步，通道。\n这两排书架之间最窄的地方，0.8 米。\n我的轮椅转个身，要 1.5 米。", "next": "n_walk3_b2"}, "n_walk3_b2": {"type": "say", "speaker": "小舟", "text": "所以我进来只能一直往前。\n想回头，就得退到门口。\n你下次可以自己推个箱子试试。", "next": "n_walk4"}, "n_walk4": {"type": "say", "speaker": "我", "text": "第三步，服务台。\n台面 1.10 米高，她坐着够不到签字板。\n办一张借书证，要站起来签字。", "unlock": ["entry_low_counter"], "next": "n_walk4_b2"}, "n_walk4_b2": {"type": "say", "speaker": "沈阿姨", "text": "那次是我帮她跟服务员说的。\n服务员人挺好，就是站得太高，\n她得仰着头说话，说三句就得停一下。", "next": "n_walk5"}, "n_walk5": {"type": "say", "speaker": "沈阿姨", "text": "还有盲道。门口那段被自行车压住了。\n上个月导盲犬还被保安拦了一次，\n说馆里不让进。", "unlock": ["entry_guide_dog"], "next": "n_walk5_b2"}, "n_walk5_b2": {"type": "say", "speaker": "沈阿姨", "text": "保安也不是坏人，他就是没听过这个规定。\n可我那天回家以后，坐了很久没开灯。", "next": "n_walk6"}, "n_walk6": {"type": "say", "speaker": "旁白", "text": "走完一遍，用了一小时二十分钟。\n她说得太快的地方，我都让她再说一遍。\n有一处她说了三遍，我才听懂。", "next": "n_walk7"}, "n_walk7": {"type": "say", "speaker": "我", "text": "回去以后我整理记录，写到凌晨两点。\n纸上密密麻麻：坡道、盲道、台面、通道、狗。\n我在最上面写了一行：他们想自己来。", "next": "n_choice2"}, "n_budget": {"type": "say", "speaker": "馆长", "text": "北门改造要占绿地，得走基建流程。\n今年的预算已经分完了，一分钱都调不出来。\n但我可以把它写进明年的计划。", "next": "n_budget_b2"}, "n_budget_b2": {"type": "say", "speaker": "馆长", "text": "我在这儿干了十九年，这样的想法我见过七八个。\n最后都没做成，不是因为难，\n是因为没人替他们跑手续。", "next": "n_budget2"}, "n_budget2": {"type": "say", "speaker": "我", "text": "他给了我一沓表格，和一句实话：\n光有热情，批不下来。\n要先有一个人，愿意替他背这个流程。", "next": "n_budget3"}, "n_budget3": {"type": "say", "speaker": "旁白", "text": "表格第十五页是绿地占用说明，要求附一张现状照片。\n我拍的正是那个雨天：\n台阶、伞、和一个等在那里的人。", "next": "n_choice2"}, "n_choice2": {"type": "choice", "prompt": "三条路，先走哪条？", "options": [{"text": "1:12 缓坡：占绿地 5.4 米，合规，但要预算和工期", "next": "n_a1", "set": {"solution": "ramp"}, "relation": {"guan": 1}, "progress": 2}, {"text": "便宜陡坡：0.9 米凑一段，很快就能批", "next": "n_steep", "set": {"solution": "steep"}, "progress": 2}, {"text": "志愿者先顶着，设施的事明年再说", "next": "n_vol", "set": {"solution": "volunteer"}, "progress": 2}], "fallback_next": "n_vol"}, "n_steep": {"type": "say", "speaker": "我", "text": "造价表报上去，两周就批了。\n0.9 米的坡，坡度快到 1:2。\n我当时想：先能用起来，总比没有强。", "next": "n_steep_b2"}, "n_steep_b2": {"type": "say", "speaker": "旁白", "text": "施工只用了一个周末。\n周一早上，门口的台阶旁边多了一块水泥斜面。\n它很短，很省钱，在阳光下发白。", "next": "n_steep2"}, "n_steep2": {"type": "say", "speaker": "小舟", "text": "……这个坡我上不去。\n上到一半会往后滑。\n我得整个人往前压，压不住。", "next": "n_steep3"}, "n_steep3": {"type": "say", "speaker": "旁白", "text": "我推着她试了一次。\n前轮上去了，后轮打滑，椅子偏了一下。\n到第三下，她把手刹拉住了。我们都没说话。", "next": "n_steep4"}, "n_steep4": {"type": "say", "speaker": "小舟", "text": "没事，你别自责。\n后门有个坡，我要绕三百米。\n下雨我就一般不来。", "next": "n_bad"}, "n_a1": {"type": "say", "speaker": "我", "text": "1:12，坡长 5.4 米，\n两端各留 1.5 米平台，占绿地 6 平米。\n图纸画出来，像给门口装了一条缓下来的路。", "next": "n_a1_b2"}, "n_a1_b2": {"type": "say", "speaker": "旁白", "text": "我画了七版。\n第五版的时候，我为了省绿地，把坡做成了折返。\n小舟看了一眼说：这样我上到一半要转身，转不了。", "next": "n_a2"}, "n_a2": {"type": "say", "speaker": "馆长", "text": "绿地要报批，工期排到暑假。\n你确定要替我背这个流程？\n做不完，明年这笔预算就没了。", "next": "n_a2_b2"}, "n_a2_b2": {"type": "say", "speaker": "我", "text": "我说确定。\n其实那天晚上我犹豫了很久，\n我担心我做不完，更担心做完没人用。", "next": "n_a3"}, "n_a3": {"type": "say", "speaker": "学姐", "text": "我帮你盯志愿队，你去跑流程。\n但你答应我一件事——\n验收那天，让小舟来签。", "next": "n_a3_b2"}, "n_a3_b2": {"type": "say", "speaker": "学姐", "text": "别让她签“感谢信”，让她签“验收单”。\n一个是谢你，一个是检查你。\n这两个东西差得很远。", "next": "n_choice2b"}, "n_choice2b": {"type": "choice", "prompt": "验收单，谁来签？", "options": [{"text": "让使用人签：她说不合格，就重做", "next": "n_sign_user", "relation": {"zhou": 2}, "progress": 1, "set": {"signer": "user"}, "unlock": ["entry_social_model"]}, {"text": "让馆方签：按规范条文逐项对表", "next": "n_sign_org", "progress": 1, "set": {"signer": "org"}}, {"text": "让学校签：先保住这个作业的成绩", "next": "n_sign_school", "progress": 1, "set": {"signer": "school"}}], "fallback_next": "n_sign_org"}, "n_sign_user": {"type": "say", "speaker": "我", "text": "我把验收单第一行改成：使用人意见。\n下面留了三行空白，\n是留给她写“哪里还不行”的。", "next": "n_a4"}, "n_sign_org": {"type": "say", "speaker": "我", "text": "我按规范条文做了一张对照表，一共十九项。\n每一项后面写“符合”。\n表很漂亮，就是没有一行是她的字。", "next": "n_a4"}, "n_sign_school": {"type": "say", "speaker": "我", "text": "我先把作业保住。\n答辩通过那天，我松了一口气，\n然后发现自己整整两周没去过北门。", "next": "n_a4"}, "n_a4": {"type": "say", "speaker": "旁白", "text": "造价表、工期表、条例文，我改了七版。\n第四十条写着：低位服务台，或者无障碍服务窗口。\n我把这条抄在图纸边上。", "unlock": ["entry_law_2023"], "next": "n_a4_b2"}, "n_a4_b2": {"type": "say", "speaker": "旁白", "text": "这条不是装饰。\n它是我在教务处和基建处之间，\n唯一能拿来跟人讲道理的东西。", "next": "n_a5"}, "n_a5": {"type": "say", "speaker": "我", "text": "暑假施工，围挡拆掉那天，\n是九月一号，还是下雨。\n我站在门口，比她还紧张。", "next": "n_a5_b2"}, "n_a5_b2": {"type": "say", "speaker": "旁白", "text": "坡面上有水，反着天光。\n她把伞收起来夹在腿边，两只手搭上轮圈。\n我退后了半步——我练了很多次这个动作。", "next": "n_arrive"}, "n_arrive": {"type": "say", "speaker": "小舟", "text": "别扶我。\n……好，我自己来。\n你看着就行。", "next": "n_arrive_b2"}, "n_arrive_b2": {"type": "say", "speaker": "旁白", "text": "前轮上坡，后轮跟上，中间没有停。\n轮子压在湿水泥上，发出那种很轻的沙沙声。\n一共十二秒。", "next": "n_arrive2"}, "n_arrive2": {"type": "say", "speaker": "小舟", "text": "今天我自己上来的。\n你量一下，我用了十二秒。\n下次应该更快。", "next": "n_arrive2_b2"}, "n_arrive2_b2": {"type": "say", "speaker": "旁白", "text": "她进馆的时候，伞是自己收的。\n我在旁边什么都没做，\n那是我第一次觉得，站着不动也挺好。", "next": "n_arrive3"}, "n_arrive3": {"type": "say", "speaker": "我", "text": "做对的地方，不需要我。\n这句话我记了很久，比我拿的那个分数记得久。", "next": "n_arrive3_b2"}, "n_arrive3_b2": {"type": "say", "speaker": "旁白", "text": "那天下午，她上了四楼。\n我在楼下等她，等了一个小时，\n她下来的时候抱了四本书，没有叫我。", "next": "n_scale"}, "n_vol": {"type": "say", "speaker": "学姐", "text": "我组一个志愿队吧。\n周一到周五，谁想借书群里说一声，我们送到座。\n先让她们有书读，行不行？", "next": "n_vol_b2"}, "n_vol_b2": {"type": "say", "speaker": "旁白", "text": "志愿队第二周就上了线。\n排班表贴在公告栏，二十三个名字。\n小舟一次都没报过名。", "next": "n_vol2"}, "n_vol2": {"type": "say", "speaker": "旁白", "text": "志愿者能顶一阵。\n但排班表只有一个学期，书库还在三楼，\n台阶也还在那儿，一动不动。", "unlock": ["entry_library_service"], "next": "n_choice3"}, "n_choice3": {"type": "choice", "prompt": "台阶还在，你还动它吗？", "options": [{"text": "继续推：把预算和工期啃下来", "next": "n_scale", "set": {"solution": "ramp"}, "relation": {"guan": 1}, "progress": 2}, {"text": "维持志愿者，改造以后再说", "next": "n_partial", "progress": 2}], "fallback_next": "n_partial"}, "n_scale": {"type": "say", "speaker": "我", "text": "门口改完，我把整套东西整理成了一份清单：\n坡道尺寸、低位台高度、盲道位置、字幕、\n导盲犬通道、志愿者培训。", "next": "n_scale_b2"}, "n_scale_b2": {"type": "say", "speaker": "我", "text": "写的时候我一直在删“我”字。\n我想让这份东西看起来不像一个学生的作业，\n像一份谁都能用的说明书。", "next": "n_scale2"}, "n_scale2": {"type": "say", "speaker": "旁白", "text": "一共十一页，附了二十三张现场照片、\n七版造价表，还有一张她上坡的秒表记录。\n我把它交到了市图书馆联盟。", "next": "n_scale2_b2"}, "n_scale2_b2": {"type": "say", "speaker": "旁白", "text": "交上去那天，我在封面上写：\n“可拆、可抄、可骂。”\n第三行被我用胶带盖住了，后来忘了撕。", "next": "n_scale3"}, "n_scale3": {"type": "say", "speaker": "联盟负责人", "text": "十二家区馆，今年有三家愿意试。\n但说实话，你这个是学生作业，\n谁敢照着一张学生作业改自己的门？", "next": "n_scale3_b2"}, "n_scale3_b2": {"type": "say", "speaker": "联盟负责人", "text": "我不是为难你。\n我改过三次馆，每一次都有人问我：\n“这个钱花给谁了？谁受益了？”", "next": "n_scale4"}, "n_scale4": {"type": "say", "speaker": "小舟", "text": "敢。\n因为我是用的人，验收单是我签的。\n你们先照一版做，用不了我来给你们改。", "next": "n_choice4"}, "n_choice4": {"type": "choice", "prompt": "怎么把它推下去？", "options": [{"text": "先做能立刻复制的三件小事：低位台、字幕、盲道", "next": "n_small", "set": {"scale": "small"}, "progress": 3, "unlock": ["entry_sign_subtitle"]}, {"text": "申请专项经费，把清单写成行业标准", "next": "n_std", "set": {"scale": "std"}, "progress": 3, "unlock": ["entry_wcag22"]}, {"text": "只找愿意的馆做样板，做出口碑再说", "next": "n_demo", "set": {"scale": "demo"}, "progress": 3}, {"text": "需求他们提、图我来画，署名写他们的", "next": "n_user", "set": {"scale": "user"}, "relation": {"zhou": 2}, "progress": 3, "require": {"asked_users": true}}], "fallback_next": "n_demo"}, "n_small": {"type": "say", "speaker": "旁白", "text": "三家馆各花了四千块：\n低位台、字幕屏、盲道重铺六十米。\n没有一家需要报批绿地，也没有一家拖延。", "next": "n_small_b2"}, "n_small_b2": {"type": "say", "speaker": "沈阿姨", "text": "我今天自己来的。\n从门口到服务台，一段盲道走到了底。\n白手杖敲到的是盲道，不是自行车。", "next": "n_choice4b"}, "n_std": {"type": "say", "speaker": "馆长", "text": "写进标准是好事，但要三年。\n先做能用的，再写能推广的。\n两件事不冲突，顺序不能乱。", "next": "n_std_b2"}, "n_std_b2": {"type": "say", "speaker": "旁白", "text": "我把清单改成了标准格式，七十四条。\n审稿会说“贴近实际，但缺乏实测数据”。\n我知道他说的对，也知道我需要的是时间。", "next": "n_choice4b"}, "n_demo": {"type": "say", "speaker": "我", "text": "两家馆做成了样板，拍照很好看。\n第三家说“我们今年没预算”，\n然后是第二家说“我们再想想”。", "next": "n_demo_b2"}, "n_demo_b2": {"type": "say", "speaker": "旁白", "text": "样板馆的照片挂在联盟会议室里，挂了两年。\n照片上的坡很好看，照片外面没有人在用。", "next": "n_choice4b"}, "n_user": {"type": "say", "speaker": "我", "text": "我退后半步：\n需求由他们提，图我来画，署名写他们。\n我在图纸右下角写了一行小字：使用人复核。", "next": "n_user_b2"}, "n_user_b2": {"type": "say", "speaker": "小舟", "text": "这份清单是我们一起写的。\n不是“为残疾人设计”，\n是和我们一起设计。", "unlock": ["entry_social_model"], "next": "n_choice4b"}, "n_choice4b": {"type": "choice", "prompt": "这份清单，署谁的名？", "options": [{"text": "署使用人的名：谁用，谁定稿", "next": "n_credit_user", "relation": {"zhou": 1}, "progress": 1, "set": {"credit": "user"}}, {"text": "署团队的名：志愿队和设计组一起", "next": "n_credit_team", "progress": 1, "set": {"credit": "team"}}, {"text": "不署名：让东西自己说话", "next": "n_credit_none", "progress": 1, "set": {"credit": "none"}}], "fallback_next": "n_credit_team"}, "n_credit_user": {"type": "say", "speaker": "旁白", "text": "清单的每一页页脚都有一行小字：\n“复核：小舟、沈阿姨、老周”。\n有人问这是谁，我说是用的人。", "next": "n_mid"}, "n_credit_team": {"type": "say", "speaker": "旁白", "text": "署名写的是“图书馆无障碍志愿设计组”。\n九个人，三届学生。\n到第三年，已经没有人记得第一版是谁画的。", "next": "n_mid"}, "n_credit_none": {"type": "say", "speaker": "旁白", "text": "我没署名。\n三年后我在另一家馆的墙上看到这份清单，\n第一页被人用铅笔写了一句：挺管用。", "next": "n_mid"}, "n_mid": {"type": "say", "speaker": "旁白", "text": "第二年，十二家馆里有七家改了门口。\n我收到三张照片、三封邮件，\n和一张寄到学校的感谢卡——落款是三个人一起签的。", "next": "n_mid_b2"}, "n_mid_b2": {"type": "say", "speaker": "旁白", "text": "卡上没有写“谢谢设计师”。\n写的是：\n“现在我们自己进得去了。”", "next": "n_mid2"}, "n_mid2": {"type": "say", "speaker": "小舟", "text": "四楼社科库，我第一次自己上去。\n借了四本书，自己扛下来的。\n你没有跟着我。", "next": "n_mid2_b2"}, "n_mid2_b2": {"type": "say", "speaker": "小舟", "text": "我在书架之间转了两圈，就为了确认一件事：\n回头的时候，我能不能转身。\n能。", "next": "n_mid3"}, "n_mid3": {"type": "say", "speaker": "老周", "text": "孙女扶着我，我扶着助行器，走你那个坡。\n我坐着看完了一整本书。\n这书我借了三次，前两次是她替我借的。", "next": "n_mid3_b2"}, "n_mid3_b2": {"type": "say", "speaker": "旁白", "text": "他坐在靠窗的位置，把书摊在膝盖上。\n阳光移了两次，他没挪。\n走的时候他把椅子推回了原位。", "next": "n_choice_mid"}, "n_choice_mid": {"type": "choice", "prompt": "七家馆改完了，你还做什么？", "options": [{"text": "写第二版清单，把踩过的坑都写进去", "next": "n_mid_v2", "progress": 1, "set": {"v2": true}}, {"text": "去教别人怎么跑流程，别让他们再踩一遍", "next": "n_mid_teach", "progress": 1, "relation": {"guan": 1}, "set": {"teach": true}}, {"text": "收尾：这学期结束，我该准备毕业了", "next": "n_mid_close", "progress": 1, "set": {"close": true}}], "fallback_next": "n_mid_v2"}, "n_mid_v2": {"type": "say", "speaker": "我", "text": "第二版删掉了六页漂亮话，\n加了一页“我们做错的地方”：\n折返坡、被拦的导盲犬、没签字的验收单。", "next": "n_choice5"}, "n_mid_teach": {"type": "say", "speaker": "我", "text": "我做了三场分享，教别的学校怎么跑流程。\n第二场结束，有个女生问：\n“你怎么知道该问他们什么？”", "next": "n_choice5"}, "n_mid_close": {"type": "say", "speaker": "旁白", "text": "我交了毕设，去了一家做地铁导视的公司。\n第一个项目，我把“使用人复核”写进了流程表，\n组长说：这条好，谁加的？", "next": "n_choice5"}, "n_choice5": {"type": "choice", "prompt": "最后一件小事：这套做法归谁？", "options": [{"text": "归项目：交回图书馆，写进他们的运维手册", "next": "n_end_open", "progress": 2}, {"text": "归我们：手册开源，谁都能抄", "next": "n_end_open2", "progress": 2}, {"text": "归我：写进作品集，申请课题", "next": "n_end_mine", "progress": 2}], "fallback_next": "n_end_open"}, "n_end_open": {"type": "say", "speaker": "我", "text": "手册留在馆里，编号 A-07。\n明年新来的管理员，\n从这一页开始学怎么验收坡道。", "next": "n_good"}, "n_end_open2": {"type": "say", "speaker": "我", "text": "我把十一页传到网上，\n开头写了一句：\n拿去改吧，别问我。", "next": "n_good"}, "n_end_mine": {"type": "say", "speaker": "我", "text": "作品集里，这是我最好的一页。\n那一年我拿了两个课题，\n门口的坡，也还在。", "next": "n_self"}, "n_good": {"type": "end", "ending_id": "good_scale", "title": "一条能复制的坡", "text": "第二年，那道坡从北门长到了七家馆的门口。\n走在上面的不只轮椅——推婴儿车的、拄拐的、拖行李箱的。\n障碍不在人身上，在图纸上。"}, "n_self": {"type": "end", "ending_id": "self_arrive", "title": "今天我是自己上来的", "text": "只改了一个门口。\n但那天她自己进来、自己上四楼、自己扛书下来。\n做对的地方，不需要我。"}, "n_partial": {"type": "end", "ending_id": "partial", "title": "书送到了，门槛还在", "text": "志愿者送书到座，大家都有书读。\n台阶没动，排班表只有一学期。\n第二年秋天，她又在门口等人帮她抬轮椅。"}, "n_bad": {"type": "end", "ending_id": "steep_fail", "title": "坡修好了，没人用", "text": "坡很短，很省钱，也很陡。\n她试了一次，退下来绕去后门。\n省下的钱，买了一个用不上的坡。"}}};
 const ARCHIVE = [{"id": "entry_law_2023", "title": "《无障碍环境建设法》：2023 年 9 月 1 日起施行", "one_liner": "2023 年 6 月 28 日十四届全国人大常委会第三次会议通过，共 8 章：总则、无障碍设施建设、无障碍信息交流、无障碍社会服务、保障措施、监督管理、法律责任、附则。", "why_it_matters": "中国无障碍从行政法规升级为法律；三大领域（设施／信息／社会服务）是理解后续所有条文的地图。第二条第二款还写明“其他人有无障碍需求的，可以享受无障碍环境便利”，一句话否掉“无障碍=残疾人专用”。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "2023", "无障碍环境建设法"]}, {"id": "entry_ramp_slope", "title": "轮椅坡道：GB 50763-2012 查表", "one_liner": "坡度 1:12 对应最大高度 0.75 m、水平长度 9.00 m；1:20 对应 1.20 m／24 m；最陡允许 1:8（高度 0.30 m、长度 2.40 m）；起点终点和中间休息平台水平长度不应小于 1.50 m。", "why_it_matters": "写“坡道太陡”时有可引用的判定标准（贵阳案实测 1:4.76 被判不合格）。条文说明另强调：1:8 是极限、不是标准，“在有条件的情况下将坡道做到小于 1:12 的坡度，通行将更加安全和舒适”。", "source_url": "https://snamr.shaanxi.gov.cn/sy/ztzl/sbgxhxfpyjhx/bzcx/gjbz/202409/P020250320613009651129.pdf", "tags": ["标准", "中国", "坡道", "GB 50763"]}, {"id": "entry_turning_space", "title": "安检口与挡车柱：45 cm 拦住了轮椅", "one_liner": "崂山区案中，出入口挡车柱间距仅 45 cm，轮椅无法通行，整改后按国家标准扩大到不小于 90 cm；无障碍卫生间轮椅回转空间直径也须不小于 1.5 m。", "why_it_matters": "无障碍失效常常发生在“一个具体尺寸”上——这是剧本里最容易做出真实感的地方。", "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html", "tags": ["案例", "标准", "尺寸", "回转空间"]}, {"id": "entry_low_counter", "title": "第四十条：低位服务台或无障碍服务窗口", "one_liner": "行政服务机构、社区服务机构以及供水、供电、供气、供热等公共服务机构，应当设置低位服务台或无障碍服务窗口，配备电子信息显示屏、手写板、语音提示等设备。", "why_it_matters": "“柜台太高够不到”不是态度问题，是法定设备问题——《无障碍环境建设法》第四十条。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "低位服务台", "第四十条"]}, {"id": "entry_library_service", "title": "合肥图书馆：设备在那儿，但用不了", "one_liner": "盲人阅览室的盲文与有声读物无法正常使用、无障碍信息交流设备配置不完善、借阅流程不通畅；检察建议推动后，30 余家图书馆完成信息无障碍环境改造，新增 200 余册盲文图书与“网络+邮寄”借阅。", "why_it_matters": "“设施存在 ≠ 服务可用”是信息无障碍最常见的最后一米，也是最有戏剧张力的现实矛盾。", "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html", "tags": ["案例", "公共服务", "图书馆", "公益诉讼"]}, {"id": "entry_social_model", "title": "社会模式：是社会使人残障", "one_liner": "UPIAS：“在我们看来，是社会使肢体损伤者变得残障。残障是被强加在损伤之上的一种处境。”", "why_it_matters": "这是现代残障权利话语的起点：把“问题在个人身上”翻转为“问题在环境与制度里”。游戏里任何一处障碍，都可以据此判断它该写在哪一侧。", "source_url": "https://the-ndaca.org/resources/audio-described-gallery/fundamental-principles-of-disability", "tags": ["社会模式", "UPIAS", "概念", "1976"]}, {"id": "entry_participation", "title": "“没有我们的参与，就不要为我们做决定”", "one_liner": "CRPD 第 4.3 条要求在与残障人相关的事项上与其密切协商并使其积极参与；委员会第 7 号一般性意见指出，残障者常在自身相关决策中不被咨询、决定被替其作出。", "why_it_matters": "判断一部作品是否尊重主体性的硬指标：当事人有没有出现在决策、测试、验收环节里。", "source_url": "https://www.ohchr.org/en/documents/general-comments-and-recommendations/general-comment-no7-article-43-and-333-participation", "tags": ["CRPD", "主体性", "参与"]}, {"id": "entry_wcag22", "title": "WCAG 2.2 的两条新规：24 像素与“不能只靠拖动”", "one_liner": "2.5.8 目标尺寸（最小，AA）：可交互目标至少 24×24 CSS 像素或保持足够间距；2.5.7 拖动动作（AA）：需要拖动的操作必须也能用单击完成。", "why_it_matters": "这两条直接对应手抖、精细动作受限的用户——检索机、网站、App 都适用；WCAG 2.2 已于 2023 年 10 月 5 日成为 W3C 推荐标准。", "source_url": "https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22", "tags": ["标准", "WCAG 2.2", "W3C", "触摸目标"]}, {"id": "entry_sign_subtitle", "title": "财政资金设立的电视台：须配同步字幕", "one_liner": "第三十条：条件具备的每天至少播放一次配播手语的新闻节目；国家鼓励影视录像制品、网络视频加配字幕、手语或口述音轨。", "why_it_matters": "信息无障碍最“可见”的法定要求，也是“手语／字幕／口述影像”三类服务的法律源头。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "信息无障碍", "第三十条"]}, {"id": "entry_guide_dog", "title": "服务犬：导盲犬、导听犬、辅助犬", "one_liner": "第四十六条：公共场所经营管理单位、交通运输设施和公共交通运输工具的运营单位应当为残疾人携带服务犬提供便利。", "why_it_matters": "导盲犬被拒不是误会，是本条下的合规问题（尽管执行细则仍缺）。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "导盲犬", "第四十六条"]}];
 
 /* ── 状态机（契约与 docs/CONTRACT.md 一致：flags / relation / progress / unlocked）── */
 const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), path:[], node:null, ended:false, started:false};
+
+/* ── 档案库跨局保留：解锁即写盘，重开 / 回主菜单 / 关掉浏览器都还在 ── */
+const ARCH_KEY = "keji_archive_v1";
+try {
+  JSON.parse(localStorage.getItem(ARCH_KEY) || "[]").forEach(id => {
+    if (ARCHIVE.some(e => e.id === id)) S.unlocked.add(id);
+  });
+} catch (err) { /* 隐私模式等场景下忽略 */ }
+function saveArchive() {
+  try { localStorage.setItem(ARCH_KEY, JSON.stringify([...S.unlocked])); } catch (err) {}
+}
 
 function toast(msg){
   const t=document.getElementById("toast");
@@ -263,6 +301,7 @@ function effects(n){
       S.unlocked.add(id);
       const e=ARCHIVE.find(x=>x.id===id);
       if(e) toast("解锁档案：" + e.title);
+      saveArchive();
     }
   });
   hud();
@@ -307,8 +346,8 @@ function speak(who, txt, done){
   let i=0;
   typing=setInterval(()=>{
     el.textContent = txt.slice(0, ++i);
-    if(i>=txt.length){ clearInterval(typing); typing=null; if(done) setTimeout(done, 260); }
-  }, 26);
+    if(i>=txt.length){ clearInterval(typing); typing=null; if(done) setTimeout(done, 460); }
+  }, 34);
 }
 function finishTyping(){
   if(!typing) return;
@@ -411,7 +450,63 @@ const ACT={
                 "kkkkkkkkkkk.",
                 ".aaaaaaaaaa.",
                 ".kk.kk.kk.k.",
-                "............"]}
+                "............"]},
+  /* 沈阿姨：视障读者 · 白发 · 墨镜 · 白手杖（杖头红衣，像盲杖的红色警示段） */
+  "沈阿姨":{map:["..wwwww.",
+                "..wwwwww",
+                ".wwssssw",
+                ".wwkkkkw",
+                ".wwssss.",
+                "..wssee.",
+                "..bbbbb.",
+                ".bbbbbbb",
+                ".bbbbbbb",
+                ".sbbbbbs",
+                "..bbbbb.",
+                "..bbbbb.",
+                ".bbbbbbb",
+                "..ss.ss.",
+                "..ss.ss.",
+                "..kk.kk.",
+                "....w...",
+                "....w...",
+                "....w...",
+                "....r..."]},
+  /* 老周：老年读者 · 灰发 · 助行器（四脚框架） */
+  "老周":{map:[".gggg...",
+                "..ggggg.",
+                "..gsssg.",
+                "..gsese.",
+                "..gsssg.",
+                "..ggggg.",
+                "..ccccc.",
+                ".ccccccc",
+                ".cgcccgc",
+                "..ccccc.",
+                "..ccccc.",
+                ".ccccccc",
+                "..ss.ss.",
+                "..ss.ss.",
+                "..kk.kk.",
+                "..gg.gg.",
+                ".ggg.ggg"]},
+  /* 陈主任：市图书馆联盟负责人 · 深西装 · 浅衬衫 · 领带 */
+  "陈主任":{map:["...kkk..",
+                "..kkkkk.",
+                "..ksssk.",
+                "..kseesk",
+                "..ksssk.",
+                "...kkk..",
+                "..kwwwk.",
+                ".kkwrwkk",
+                ".kkwwwkk",
+                "..kkkkk.",
+                "..kkkkk.",
+                ".kkkkkkk",
+                "..kkkkk.",
+                "..kk.kk.",
+                "..kk.kk.",
+                "..kk.kk."]}
 };
 
 /* ── 场景道具（wall=贴墙，floor=落地）── */
@@ -508,7 +603,83 @@ const PROP={
                             "ggggggggg",
                             "...g.g...",
                             "...g.g...",
-                            "..gg.gg.."]}
+                            "..gg.gg.."]},
+  /* 通排书架：远景书墙，把"图书馆"这件事说清楚 */
+  shelfrow:{cell:6,wall:1,map:["gggggggggggggggggggg",
+                            "g.bbb.rrr.yyy.ggg..g",
+                            "g.bbb.rrr.yyy.ggg..g",
+                            "gggggggggggggggggggg",
+                            "g.rrr.ggg.bbb.yyy..g",
+                            "g.rrr.ggg.bbb.yyy..g",
+                            "gggggggggggggggggggg",
+                            "g.yyy.bbb.ggg.rrr..g",
+                            "g.yyy.bbb.ggg.rrr..g",
+                            "gggggggggggggggggggg"]},
+  /* 自助检索机：屏幕上能读屏（视障读者） */
+  kiosk:{cell:8,floor:1,map:["gggggggggggggggg",
+                            "gwwwwwwwwwwwwwwg",
+                            "gw............wg",
+                            "gwwwwwwwwwwwwwwg",
+                            "g....gggggg....g",
+                            "g....g....g....g",
+                            "g....gggggg....g",
+                            "g...gggggggg...g",
+                            "g..gggggggggg..g",
+                            "gggggggggggggggg"]},
+  /* 字幕屏：挂在墙上，给听障读者 */
+  caption:{cell:8,wall:1,map:["kkkkkkkkkkkkkkkkkk",
+                            "k................k",
+                            "k..wwwww..ww..wwwk",
+                            "k................k",
+                            "k..www..wwww..ww.k",
+                            "k................k",
+                            "k...w.w.w..ww.ww.k",
+                            "kkkkkkkkkkkkkkkkkk"]},
+  /* 无障碍标识牌：蓝底白轮椅（认得出的那个标） */
+  access_sign:{cell:8,wall:1,map:["bbbbbbbbbbbbbbbb",
+                            "bbbbbbbbbbbbbbbb",
+                            "bbbbbbbwwbbbbbbb",
+                            "bbbbbbbwwbbbbbbb",
+                            "bbbbwwwwwwwwbbbb",
+                            "bbbbbbwwbbbbbbbb",
+                            "bbbbbbwwbbbbbbbb",
+                            "bbbbbbwwwwbbbbbb",
+                            "bbbwwwwwwwwwbbbb",
+                            "bbbbbbbbbbbbbbbb",
+                            "bbbbbbbbbbbbbbbb",
+                            "bbbbbbbbbbbbbbbb"]},
+  /* 挡车柱：拦车的三根柱子（沈阳阿姨绕不过去的就是它） */
+  bollard:{cell:8,floor:1,map:["..gg.....gg.....gg..",
+                            "..ww.....ww.....ww..",
+                            "..yy.....yy.....yy..",
+                            "..gg.....gg.....gg..",
+                            "..gg.....gg.....gg..",
+                            "..gg.....gg.....gg..",
+                            "..gg.....gg.....gg..",
+                            "gggggggggggggggggggg"]},
+  /* 施工围挡：黄黑斜纹 + 支架 */
+  barrier:{cell:8,floor:1,map:["ykykykykykykykykykyk",
+                            "kykykykykykykykykyky",
+                            "ykykykykykykykykykyk",
+                            "kykykykykykykykykyky",
+                            "gggggggggggggggggggg",
+                            "..g..............g.."]},
+  /* 长椅：老周要的"能坐下的椅子" */
+  bench:{cell:8,floor:1,map:["gggggggggggggggggg",
+                            "g................g",
+                            "gggggggggggggggggg",
+                            "g................g",
+                            "gg..............gg",
+                            ".gg............gg."]},
+  /* 送书车：志愿者代查代借用的那辆 */
+  cart:{cell:7,floor:1,map:["...gggggggggg.",
+                            "..gbbbyyyg....",
+                            "..ggggggggg...",
+                            "...g......g...",
+                            "...g......g...",
+                            "...gg....gg...",
+                            "..ggg....ggg..",
+                            "..g.g....g.g.."]}
 };
 
 /* ── 场景表：每个节点「谁在场、有什么道具、光线如何」——剧情推进时画面随之变化 ── */
@@ -545,6 +716,92 @@ const SCENES={
  n_good:{t:"结局 · 自己走完这四步",light:"bright",hint:"坡道 · 低位台 · 盲道",a:[["小舟",48]],p:[["ramp",30],["counterlow",64],["blind",52],["sign",8]]}
 };
 
+/* ── 场景表（新版 · 覆盖 63 个节点）：每个节点「谁在场、有什么道具、光线如何」 ── */
+const SCENES2={
+ n_start:{t:"图书馆 · 北门前（雨）",light:"rain",hint:"北门三级台阶 · 雨天",a:[["我",30]],p:[["door",84],["window",44],["steps",58],["access_sign",13],["plant",4]]},
+ n_start2:{t:"图书馆 · 北门前（雨）",light:"rain",hint:"三天前 · 她等了二十分钟",a:[["我",32]],p:[["door",84],["steps",54],["bollard",18],["access_sign",8]]},
+ n_rain:{t:"北门前 · 三级台阶（雨）",light:"rain",hint:"前轮卡在台阶边上",a:[["我",26],["小舟",66]],p:[["door",86],["steps",50],["bollard",14],["plant",4]]},
+ n_rain2:{t:"北门前 · 三级台阶（雨）",light:"rain",hint:"四个人抬上去 · 两分钟",a:[["我",24],["小舟",62]],p:[["door",86],["steps",50],["bollard",14]]},
+ n_zhou1:{t:"北门前（雨）",light:"rain",hint:"\"我不想每次进门都先开口求人\"",a:[["我",72],["小舟",42]],p:[["door",88],["steps",44],["bollard",16]]},
+ n_zhou2:{t:"北门前（雨）",light:"rain",hint:"三楼社科库 · 她一次没上去过",a:[["我",74],["小舟",42]],p:[["door",88],["steps",48],["shelfrow",6]]},
+ n_shen:{t:"北门前 · 挡车柱",light:"day",hint:"盲道被自行车压住了",a:[["我",74],["沈阿姨",40]],p:[["bollard",26],["blind",52],["access_sign",10],["door",88]]},
+ n_laozhou:{t:"北门前 · 等候区",light:"day",hint:"助行器上不了台阶",a:[["我",74],["老周",40]],p:[["bench",20],["steps",52],["door",88],["plant",4]]},
+ n_need:{t:"北门前 · 一处门挡住三个人",light:"dusk",hint:"这不是运气，是图纸",a:[["我",26],["小舟",56],["沈阿姨",80]],p:[["door",86],["steps",46],["bollard",14]]},
+ n_choice1:{t:"北门 · 第一次到现场",light:"day",hint:"先跟走 / 先问预算 / 先问他们",a:[["我",22],["小舟",52],["老周",80]],p:[["door",88],["steps",42],["bench",16]]},
+
+ n_ask:{t:"北门 · 一张纸和三个问题",light:"day",hint:"你们希望怎么改？",a:[["我",30],["小舟",66]],p:[["door",88],["steps",46],["bench",14]]},
+ n_ask2:{t:"北门 · 小舟的回答",light:"day",hint:"我要自己进来",a:[["我",72],["小舟",38]],p:[["door",88],["steps",48]]},
+ n_ask3:{t:"北门 · 沈阿姨的回答",light:"day",hint:"盲道通到服务台就行",a:[["我",72],["沈阿姨",38]],p:[["blind",48],["bollard",20],["access_sign",8]]},
+ n_ask4:{t:"北门 · 老周的回答",light:"day",hint:"一把能坐下的椅子",a:[["我",72],["老周",38]],p:[["bench",26],["door",88],["plant",4]]},
+ n_ask5:{t:"北门 · 三个答案不一样",light:"day",hint:"图纸要容得下三个答案",a:[["我",16],["小舟",42],["沈阿姨",66],["老周",88]],p:[["door",90],["steps",44]]},
+
+ n_walk:{t:"动线第一步 · 台阶",light:"day",hint:"从门口开始量",a:[["小舟",38],["我",72]],p:[["steps",28],["door",88],["access_sign",10]]},
+ n_walk2:{t:"台阶前 · 量尺寸",light:"day",hint:"0.45 m ÷ 1:12 = 5.4 m",a:[["我",38],["小舟",70]],p:[["steps",26],["sign",64]]},
+ n_walk3:{t:"一层 · 通道最窄处",light:"day",hint:"最窄 0.80 m · 回转 1.50 m",a:[["我",22],["小舟",58]],p:[["shelfrow",2],["shelfrow",36],["shelfrow",70]]},
+ n_walk4:{t:"一层 · 服务台",light:"day",hint:"台面 1.10 m · 坐着签不了字",a:[["小舟",34],["我",72]],p:[["counter",46],["kiosk",8],["caption",78]]},
+ n_walk5:{t:"入口 · 导盲犬被拦过一次",light:"day",hint:"盲道 + 导盲犬",a:[["我",24],["沈阿姨",52],["导盲犬",74]],p:[["blind",36],["door",90],["access_sign",8]]},
+ n_walk6:{t:"走完一遍 · 一小时二十分钟",light:"dawn",hint:"她说太快的地方我让她再说一遍",a:[["我",30],["小舟",66]],p:[["shelfrow",4],["shelfrow",38],["shelfrow",72]]},
+ n_budget:{t:"馆长办公室",light:"dawn",hint:"今年的预算没有",a:[["我",28],["馆长",66]],p:[["shelfrow",4],["window",70],["caption",40]]},
+ n_budget2:{t:"馆长办公室 · 一沓表格",light:"dawn",hint:"光有热情，批不下来",a:[["我",26],["馆长",66]],p:[["shelfrow",4],["window",70],["bench",6]]},
+ n_choice2:{t:"三种做法",light:"dawn",hint:"缓坡 / 陡坡 / 志愿者",a:[["我",18],["馆长",48],["学姐",82]],p:[["ramp",34],["steps",6],["barrier",68]]},
+
+ n_steep:{t:"便宜陡坡 · 0.9 米",light:"day",hint:"坡度快到 1:2",a:[["我",34]],p:[["ramp",44],["barrier",72],["cone",12]]},
+ n_steep2:{t:"小舟试坡",light:"day",hint:"上到一半会往后滑",a:[["我",70],["小舟",40]],p:[["ramp",44],["barrier",74]]},
+ n_steep3:{t:"她把手刹拉住了",light:"dusk",hint:"我们都没说话",a:[["我",70],["小舟",40]],p:[["ramp",46],["cone",14],["barrier",74]]},
+ n_steep4:{t:"后门 · 绕三百米",light:"dusk",hint:"下雨我就一般不来",a:[["我",72],["小舟",38]],p:[["ramp",30],["barrier",72]]},
+
+ n_a1:{t:"方案：1:12 缓坡",light:"day",hint:"坡长 5.4 m · 两端留 1.5 m 平台",a:[["我",30],["小舟",70]],p:[["ramp",38],["steps",8],["access_sign",12]]},
+ n_a2:{t:"馆长：要占绿地",light:"dawn",hint:"工期排到暑假 · 明年这笔预算",a:[["我",26],["馆长",66]],p:[["ramp",40],["plant",80],["shelfrow",4]]},
+ n_a3:{t:"学姐：验收那天让小舟签",light:"day",hint:"志愿队我帮你盯",a:[["我",26],["学姐",66]],p:[["ramp",42],["cart",8],["shelfrow",74]]},
+ n_a4:{t:"造价表 · 工期表 · 条例文（第7版）",light:"day",hint:"第四十条：低位服务台或无障碍窗口",a:[["我",34]],p:[["barrier",16],["cone",8],["sign",62],["ramp",78]]},
+ n_a5:{t:"暑假施工 · 围挡拆掉那天",light:"dusk",hint:"九月一号，还是下雨",a:[["我",26],["馆长",54],["小舟",80]],p:[["ramp",36],["counterlow",64],["barrier",10],["access_sign",6]]},
+ n_arrive:{t:"九月一号 · 她自己上来（雨）",light:"rain",hint:"我用了十二秒",a:[["小舟",46],["我",76]],p:[["ramp",30],["blind",62],["access_sign",8],["door",90]]},
+ n_arrive2:{t:"雨 · 伞是自己收的",light:"rain",hint:"我站在旁边什么都没做",a:[["小舟",40],["我",74]],p:[["ramp",34],["counterlow",68],["blind",58]]},
+ n_arrive3:{t:"做对的地方，不需要我",light:"rain",hint:"门口那道坡",a:[["我",40]],p:[["ramp",38],["access_sign",10],["blind",70]]},
+ n_vol:{t:"学姐组队 · 送书到座",light:"day",hint:"周一到周五代查代借",a:[["我",28],["学姐",66]],p:[["cart",18],["shelfrow",6],["counter",72]]},
+ n_vol2:{t:"排班表只有一学期",light:"dusk",hint:"书库还在三楼",a:[["学姐",44],["我",74]],p:[["cart",20],["steps",52],["shelfrow",6]]},
+ n_choice3:{t:"台阶还在，你还动它吗？",light:"day",hint:"继续推 / 先维持",a:[["我",20],["小舟",50],["学姐",82]],p:[["steps",16],["ramp",50],["cart",74]]},
+
+ n_scale:{t:"把一处变成一套 · 11 页清单",light:"day",hint:"坡道 · 低位台 · 盲道 · 字幕 · 导盲犬 · 培训",a:[["我",34]],p:[["shelfrow",4],["caption",42],["access_sign",78],["kiosk",8]]},
+ n_scale2:{t:"市图书馆联盟 · 交材料",light:"day",hint:"23 张照片 · 7 版造价表 · 秒表记录",a:[["我",26],["陈主任",70]],p:[["shelfrow",2],["caption",40],["access_sign",82]]},
+ n_scale3:{t:"联盟：学生作业，谁敢照做？",light:"dawn",hint:"12 家区馆，3 家愿意试",a:[["我",26],["陈主任",70]],p:[["shelfrow",2],["caption",44],["access_sign",84]]},
+ n_scale4:{t:"小舟：敢。验收单是我签的",light:"day",hint:"用不了我给你改",a:[["我",16],["小舟",46],["陈主任",82]],p:[["access_sign",76],["caption",40],["blind",6]]},
+ n_choice4:{t:"怎么把它推下去？",light:"day",hint:"小事立刻做 / 写标准 / 做样板 / 他们提需求",a:[["我",18],["小舟",50],["陈主任",82]],p:[["kiosk",6],["caption",40],["bench",70],["access_sign",90]]},
+
+ n_small:{t:"三家馆各花四千块",light:"day",hint:"低位台 · 字幕屏 · 盲道 60 m",a:[["我",26],["沈阿姨",66]],p:[["counterlow",44],["caption",76],["blind",12],["access_sign",4]]},
+ n_small_b2:{t:"沈阿姨：我不用再麻烦别人了",light:"bright",hint:"白手杖敲到的是盲道",a:[["沈阿姨",44]],p:[["blind",40],["kiosk",74],["access_sign",8],["counterlow",22]]},
+ n_std:{t:"馆长：先做能用的，再写能推广的",light:"day",hint:"顺序不能乱",a:[["我",30],["馆长",68]],p:[["caption",44],["shelfrow",4],["kiosk",78]]},
+ n_demo:{t:"两家样板 · 第三家说没预算",light:"dusk",hint:"然后就没有然后了",a:[["我",38]],p:[["barrier",20],["cone",10],["ramp",58]]},
+ n_user:{t:"我退后半步：需求他们提，图我画",light:"day",hint:"图纸右下角：使用人复核",a:[["我",30],["小舟",70]],p:[["kiosk",8],["counterlow",46],["blind",82]]},
+ n_user_b2:{t:"\"不是为残疾人设计，是和我们一起设计\"",light:"bright",hint:"署名写他们的",a:[["小舟",44],["我",76]],p:[["access_sign",10],["bench",64],["blind",34]]},
+ n_mid:{t:"第二年 · 七家馆改了门口",light:"bright",hint:"三张照片 · 三封邮件 · 一张感谢卡",a:[["我",16],["小舟",44],["老周",72]],p:[["ramp",34],["access_sign",8],["bench",62],["blind",86]]},
+ n_mid2:{t:"四楼社科库 · 她第一次自己上去",light:"bright",hint:"借了四本，自己扛下来的",a:[["小舟",48]],p:[["shelfrow",2],["shelfrow",36],["shelfrow",70]]},
+ n_mid3:{t:"老周：我坐着看完了一整本书",light:"bright",hint:"这书我借了三次",a:[["老周",44],["我",76]],p:[["bench",26],["ramp",58],["shelfrow",4]]},
+ n_choice5:{t:"最后一件小事：这套做法归谁？",light:"bright",hint:"归项目 / 归我们 / 归我",a:[["我",24],["小舟",60]],p:[["access_sign",10],["ramp",44],["blind",78]]},
+
+ n_end_open:{t:"手册留在馆里 · 编号 A-07",light:"day",hint:"明年新来的管理员从这页学",a:[["我",36]],p:[["shelfrow",4],["access_sign",40],["kiosk",74]]},
+ n_end_open2:{t:"手册开源：拿去改吧，别问我",light:"bright",hint:"十一页 · 谁都能抄",a:[["我",38]],p:[["kiosk",40],["access_sign",8],["shelfrow",72]]},
+ n_end_mine:{t:"作品集里最好的一页",light:"day",hint:"那一年我拿了两个课题",a:[["我",40]],p:[["ramp",40],["access_sign",8],["sign",76]]},
+
+ n_good:{t:"结局 · 一条能复制的坡",light:"bright",hint:"从北门长到七家馆的门口",a:[["小舟",40]],p:[["ramp",26],["counterlow",58],["blind",44],["access_sign",6],["bench",80]]},
+ n_self:{t:"结局 · 今天我是自己上来的",light:"bright",hint:"只改了一个门口",a:[["小舟",44]],p:[["ramp",30],["shelfrow",4],["access_sign",70],["blind",56]]},
+ n_partial:{t:"结局 · 书送到了，门槛还在",light:"dawn",hint:"第二年她又等人在门口抬轮椅",a:[["小舟",44],["我",74]],p:[["steps",36],["cart",14],["bench",66]]},
+ n_bad:{t:"结局 · 坡修好了，没人用",light:"dusk",hint:"她绕去了后门",a:[["小舟",42],["我",72]],p:[["ramp",44],["barrier",70],["cone",12]]},
+ n_order_zhou:{t:"北门前 · 台阶旁",light:"day",hint:"我把小舟写在第一行",a:[["我",32],["小舟",68]],p:[["door",80],["steps",54],["bollard",16],["blind",26]]},
+ n_order_shen:{t:"北门前 · 盲道的断口",light:"day",hint:"两根柱子，一段断掉的盲道",a:[["我",32],["沈阿姨",70]],p:[["bollard",26],["blind",44],["access_sign",10],["door",76]]},
+ n_order_zhou2:{t:"馆内 · 服务台前",light:"day",hint:"一把椅子，一个不用站着排的队",a:[["我",34],["老周",70]],p:[["counterlow",58],["bench",30],["window",44],["kiosk",60]]},
+ n_sign_user:{t:"门口 · 验收单第一行",light:"rain",hint:"下面留三行空白，写“哪里还不行”",a:[["我",30],["小舟",66]],p:[["ramp",40],["sign",18],["door",80],["barrier",26]]},
+ n_sign_org:{t:"门口 · 十九项对照表",light:"day",hint:"每一项后面都写“符合”",a:[["我",36],["馆长",72]],p:[["ramp",38],["sign",20],["steps",34],["door",78]]},
+ n_sign_school:{t:"教学楼 · 答辩前夜",light:"dusk",hint:"表很漂亮，就是没有一行是她的字",a:[["我",40]],p:[["window",48],["bench",30],["plant",12]]},
+ n_credit_user:{t:"第二年 · 联盟会议室",light:"day",hint:"页脚：复核——小舟、沈阿姨、老周",a:[["我",32],["陈主任",70]],p:[["window",66],["bench",26],["sign",14]]},
+ n_credit_team:{t:"第二年 · 联盟会议室",light:"day",hint:"署名：图书馆无障碍志愿设计组",a:[["我",34],["陈主任",70]],p:[["window",66],["bench",26],["access_sign",10]]},
+ n_credit_none:{t:"第二年 · 另一家馆的墙",light:"bright",hint:"第一页被人用铅笔写了：挺管用",a:[["我",38]],p:[["window",60],["access_sign",14],["plant",10]]},
+ n_choice_mid:{t:"第二年 · 一楼靠窗",light:"bright",hint:"阳光移了两次，他没挪",a:[["我",30],["老周",68]],p:[["shelfrow",44],["bench",52],["window",58]]},
+ n_mid_v2:{t:"第二年 · 我在改第二版",light:"day",hint:"删掉六页漂亮话，加一页做错的地方",a:[["我",38]],p:[["window",54],["sign",16],["bench",28]]},
+ n_mid_teach:{t:"教学楼 · 分享会",light:"bright",hint:"“你怎么知道该问他们什么？”",a:[["我",40]],p:[["window",56],["bench",34],["access_sign",12]]},
+ n_mid_close:{t:"地铁导视 · 第一个项目",light:"day",hint:"我把“使用人复核”写进流程表",a:[["我",42]],p:[["sign",22],["window",50],["blind",30]]},
+};
+
 function pxSprite(map, pal, cls){
   const d=document.createElement("div"); d.className=cls||"";
   d.style.gridTemplateColumns="repeat("+map[0].length+",1fr)";
@@ -556,10 +813,23 @@ function pxSprite(map, pal, cls){
   return d;
 }
 
+/* 节点取景：精确匹配优先；拆分出的呼吸拍（n_x_b2 / n_choice1b）自动继承同名前缀的镜头 */
+function sceneFor(id){
+  if(SCENES2[id]||SCENES[id]) return SCENES2[id]||SCENES[id];
+  const base=id.replace(/_b\d+$/,"");
+  if(base!==id && (SCENES2[base]||SCENES[base])) return SCENES2[base]||SCENES[base];
+  let best=null;
+  for(const k of Object.keys(SCENES2)) if(k!=="__last" && id.startsWith(k) && (!best||k.length>best.length)) best=k;
+  if(!best) for(const k of Object.keys(SCENES)) if(id.startsWith(k) && (!best||k.length>best.length)) best=k;
+  return best ? (SCENES2[best]||SCENES[best]) : null;
+}
+
 /* 场景切换：谁在场、什么道具、地点与光线，全部随节点变化 */
 function setScene(id, talker){
-  const s = SCENES[id] || SCENES.__last; if(!s) return; SCENES.__last=s;
-  document.getElementById("stage").className = "s-"+(s.light||"day");
+  const s = sceneFor(id) || SCENES2.__last || SCENES.__last; if(!s) return; SCENES2.__last=s;
+  const st=document.getElementById("stage");
+  st.className = "s-"+(s.light||"day");
+  if(!st.querySelector(".ceil")){const ce=document.createElement("div");ce.className="ceil";st.insertBefore(ce,st.firstChild);}
   const back=document.getElementById("propBack"), front=document.getElementById("propFront"), box=document.getElementById("actors");
   back.innerHTML=""; front.innerHTML=""; box.innerHTML="";
   (s.p||[]).forEach(([nm,x])=>{
@@ -586,14 +856,18 @@ function setScene(id, talker){
 /* ── HUD 三条（把"选择的代价"做成可见的量，而不是弹窗）── */
 function hud(){
   const v=(x)=>Math.max(0,Math.min(100, x||0));
-  document.querySelector("#mProg i").style.width = v(S.progress*20)+"%";
+  document.querySelector("#mProg i").style.width = v(S.progress*10)+"%";
   document.querySelector("#mTrust i").style.width = v(55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5)+"%";
-  const sus = (S.flags.solution==="proposal"?78:S.flags.solution==="ramp"?70:S.flags.solution==="volunteer"?34:45)
+  const sus = (S.flags.solution==="proposal"?78:S.flags.solution==="ramp"?70:S.flags.solution==="steep"?26:S.flags.solution==="volunteer"?34:45)
             + (S.flags.measured?8:0);
   document.querySelector("#mSus i").style.width = v(sus)+"%";
+  /* 受益范围：把"帮助残障人士带来的回报"做成看得见的一条 */
+  const imp = (S.flags.scale==="user"?3:S.flags.scale==="std"?2:S.flags.scale?1:0);
+  document.querySelector("#mImpact i").style.width = v(imp*30)+"%";
   const n=S.unlocked.size;
   document.getElementById("tbNum").textContent = n+"/"+ARCHIVE.length;
-  document.getElementById("archCount").textContent = "已解锁 "+n+" / "+ARCHIVE.length+" 条";
+  document.getElementById("archCount").textContent = "已解锁 " + n + " / " + ARCHIVE.length + " 条"
+    + (n > 0 ? "（跨局保留）" : "");
   document.getElementById("chapter").textContent = S.started
     ? ("工业设计 · 已做 "+S.path.length+" 个决定") : "工业设计 · 学期作业";
   renderArch();
@@ -652,7 +926,8 @@ function ending(n){
 
 /* ── 流程控制 ── */
 function resetState(){
-  S.flags={}; S.relation={}; S.progress=0; S.unlocked=new Set();
+  /* 注意：unlocked 不清空——档案库是跨局累积的收集品，重开/回主菜单都该留着 */
+  S.flags={}; S.relation={}; S.progress=0;
   S.path=[]; S.node=null; S.ended=false;
   ovOff("arch"); ovOff("help");
   document.getElementById("end").classList.remove("on");

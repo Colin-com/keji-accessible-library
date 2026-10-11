@@ -1,0 +1,16 @@
+【比赛材料 ·《可及》② 开发过程 + 与 Trae 对话证据】
+
+与 Trae 对话的关键界面（3 张，同一会话真实截取）：
+· 图1 step01：向 Trae 提出需求（原文：修档案库实时更新 bug + 场景具象化，附项目结构与 node 语义）
+· 图2 watch_05：Trae 执行过程（读模板→查 unlock id 是否与档案库一致→在浏览器实测）
+· 图3 step05：Trae 给出的生成结果
+
+核验码 2 条（自 Trae 回答正文复制，原文逐字）：
+1. 「现状已经基本摸清。在给修改方案前，先验证一个高度可疑的点：剧情里 unlock 的 id 和档案库里的 id 是否完全对得上」——16:44
+2. 「id 完全匹配，排除"虚高回落"嫌疑。当前模板的雨幕/水洼/灯带/踢脚线、四个道具 sprite 其实已经存在」——16:45
+
+如实说明：Trae SOLO CN 界面未出现「核验码 / 校验 / 分享」字段，双击回答也没有可复制的码（15:59–16:17 已逐项排查：正文/shadow DOM/iframe/操作区/整窗截图）。以上两条是从回答正文逐字复制的原文校验句，另有 trae_dialogue.txt（会话全部可见文字）与 trae_last_answer.txt（「复制全部」得到的完整回答）可交叉核对。
+
+MEDIA:E:\Claw-Data\pixel-sci-game\evidence\trae_steps\step01_需求已填入.png
+MEDIA:E:\Claw-Data\pixel-sci-game\evidence\trae_steps\watch_05.png
+MEDIA:E:\Claw-Data\pixel-sci-game\evidence\trae_steps\step05_Trae生成.png

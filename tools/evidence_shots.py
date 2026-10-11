@@ -16,15 +16,13 @@ EDGE_CANDIDATES = [
 BASE = "http://127.0.0.1:8899/index.html"
 OUT = r"E:\Claw-Data\pixel-sci-game\evidence"
 SHOTS = [
-    ("",            "ui_menu.png",     "首界面（标题/立意/入口）"),
-    ("?screen=game", "ui_gameplay.png", "游戏中（场景 + HUD 三条 + 选项）"),
-    ("?screen=help", "ui_help.png",     "操作说明面板"),
-    ("?screen=end",  "ui_ending.png",   "结局结算页（轨迹 + 解锁数）"),
-    ("?screen=scene&node=n_start",  "ui_scene_start.png", "场景：北门台阶前（只有我）"),
-    ("?screen=scene&node=n_meet",   "ui_scene_meet.png",  "场景：小舟登场（轮椅进画面）"),
-    ("?screen=scene&node=n_walk5",  "ui_scene_guide.png", "场景：入口（盲道 + 导盲犬）"),
-    ("?screen=scene&node=n_good",   "ui_scene_good.png",  "场景：结局（坡道 + 低位台 + 盲道）"),
-    ("?screen=arch&unlock=5",       "ui_archive.png",     "档案库：已解锁 5 条 + 未解锁态（不再是问号）"),
+    ("",            "run_menu.png",     "首界面（标题/立意/入口）"),
+    ("?screen=game", "run_gameplay.png", "游戏中（场景 + HUD 四条 + 选项）"),
+    ("?screen=scene&node=n_order_shen", "run_scene_blind.png", "场景：盲道断口 + 挡车柱（沈阿姨）"),
+    ("?screen=scene&node=n_choice_mid", "run_scene_year2.png", "场景：第二年一楼靠窗（老周）"),
+    ("?screen=scene&node=n_sign_user",  "run_scene_sign.png",  "场景：雨天门口 · 验收单第一行"),
+    ("?screen=scene&node=n_good",       "run_scene_good.png",  "场景：结局（坡道 + 低位台 + 盲道）"),
+    ("?screen=arch&unlock=6",           "run_archive.png",     "档案库：已解锁 6 条（不再是问号）"),
 ]
 
 
