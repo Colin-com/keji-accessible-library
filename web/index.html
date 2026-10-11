@@ -196,7 +196,7 @@
     <div class="menufoot">
       <b>90 分钟黑客松作品</b> · 网页版单文件 Demo · 剧情与档案数据驱动<br>
       每条科普都标注来源，可在档案库点开链接自查 · 本项目构建过程中由 TRAE 参与<br>
-      <span id="buildStamp" style="opacity:.75">构建 v4 · 117 节点 · 9 决策 · 10-11 17:10</span>
+      <span id="buildStamp" style="opacity:.75">构建 v4 · 117 节点 · 9 决策 · 10-11 17:12</span>
     </div>
   </div>
 </div>
@@ -887,7 +887,7 @@ function renderArch(){
     const d=document.createElement("div");
     d.className="arow"+(un?"":" locked");
     d.innerHTML = un
-      ? `<b>${e.title}</b><p><span style="color:#8fd694;border:1px solid #8fd694;border-radius:3px;padding:0 4px;margin-right:6px;font-size:11px">已解锁</span>${e.one_liner}<br>${e.why_it_matters||""}</p>
+      ? `<b><span style="color:#8fd694;border:1px solid #8fd694;border-radius:3px;padding:0 4px;margin-right:6px;font-size:11px">已解锁</span>${e.title}</b><p>${e.one_liner}<br>${e.why_it_matters||""}</p>
          <div class="src">来源：<a href="${e.source_url}" target="_blank" rel="noopener">${e.source_url}</a></div>`
       : `<b>未解锁</b><p>${tagText(e)}在剧情中接触到相关内容后自动收录</p>`;
     if(un) d.onclick=()=>d.classList.toggle("open");
