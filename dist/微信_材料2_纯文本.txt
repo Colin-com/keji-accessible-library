@@ -1,0 +1,24 @@
+【材料② 与 Trae 对话证据】
+
+一、仓库（公开，可玩）
+· 仓库：https://github.com/Colin-com/keji-accessible-library
+· 直接玩：https://colin-com.github.io/keji-accessible-library/web/index.html
+· 离线：双击源码里的 web/index.html（单文件、零依赖）
+
+二、与 Trae 对话的关键界面截图（3 张，同一会话真实截取）
+1) step01_需求已填入.png —— 提给 Trae 的需求原文（修档案库实时更新 bug + 场景具象化；说明 web/template.html 是唯一事实来源，options 带 set/relation/progress/unlock 字段）
+2) watch_05.png —— Trae 执行过程：读模板 → 先验证"剧情里 unlock 的 id 与档案库 id 是否完全对得上" → 浏览器实测
+3) step05_Trae生成.png —— Trae 给出的生成结果
+
+三、核验码 2 条（自 Trae 回答正文逐字复制）
+1.「现状已经基本摸清。在给修改方案前，先验证一个高度可疑的点：剧情里 unlock 的 id 和档案库里的 id 是否完全对得上」（16:44）
+2.「id 完全匹配，排除"虚高回落"嫌疑。当前模板的雨幕/水洼/灯带/踢脚线、四个道具 sprite 其实已经存在」（16:45）
+
+四、如实说明
+Trae SOLO 界面未出现「核验码 / 校验 / 分享」字段，双击回答也没有可复制的码（已逐项排查正文 / shadow DOM / iframe / 操作区 / 整窗截图）。以上两条为回答正文的原文校验句，另有 evidence/trae_steps/ 下的 trae_dialogue.txt（会话全部可见文字）与 trae_last_answer.txt（Trae「复制全部」的完整回答）可交叉核对。
+
+五、程序跑通截图 7 张
+run_menu / run_gameplay / run_scene_blind / run_scene_year2 / run_scene_sign / run_scene_good / run_archive —— 均在 evidence/ 目录。
+
+六、功能（96 字）
+《可及》是网页像素叙事游戏：你扮演工业设计学生，为学校图书馆做无障碍改造——和轮椅使用者、视障老人一起量台阶、定方案，选择改变进度、信任与受益范围，通向 4 种结局，解锁 10 条可溯源科普档案。
