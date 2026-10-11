@@ -20,6 +20,11 @@ SHOTS = [
     ("?screen=game", "ui_gameplay.png", "游戏中（场景 + HUD 三条 + 选项）"),
     ("?screen=help", "ui_help.png",     "操作说明面板"),
     ("?screen=end",  "ui_ending.png",   "结局结算页（轨迹 + 解锁数）"),
+    ("?screen=scene&node=n_start",  "ui_scene_start.png", "场景：北门台阶前（只有我）"),
+    ("?screen=scene&node=n_meet",   "ui_scene_meet.png",  "场景：小舟登场（轮椅进画面）"),
+    ("?screen=scene&node=n_walk5",  "ui_scene_guide.png", "场景：入口（盲道 + 导盲犬）"),
+    ("?screen=scene&node=n_good",   "ui_scene_good.png",  "场景：结局（坡道 + 低位台 + 盲道）"),
+    ("?screen=arch&unlock=5",       "ui_archive.png",     "档案库：已解锁 5 条 + 未解锁态（不再是问号）"),
 ]
 
 

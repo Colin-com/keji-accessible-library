@@ -65,33 +65,38 @@
   .tbtn:hover{border-color:var(--accent);color:var(--ink)}
 
   /* ══════════ 场景区 ══════════ */
-  #stage{position:relative;height:300px;background:var(--panel2);
-    border:2px solid var(--line);overflow:hidden;image-rendering:pixelated}
-  #stage .shelfband{position:absolute;inset:0 0 34% 0;
+  #stage{position:relative;height:340px;background:var(--panel2);
+    border:2px solid var(--line);overflow:hidden;image-rendering:pixelated;transition:background .6s}
+  #stage.s-day{background:#1e222b}
+  #stage.s-dawn{background:#221d24}
+  #stage.s-dusk{background:#2a2229}
+  #stage.s-bright{background:#212a31}
+  #stage .wall{position:absolute;inset:0 0 34% 0;
     background:repeating-linear-gradient(90deg,#232833 0 17px,#1b2029 17px 21px);
     border-bottom:3px solid #12151b}
-  #stage .shelves{position:absolute;left:0;right:0;top:0;bottom:34%;
-    background:repeating-linear-gradient(0deg,transparent 0 23px,#12151b 23px 26px)}
   #stage .floor{position:absolute;left:0;right:0;bottom:0;height:34%;background:#1a1e26;
     border-top:3px solid #2c3140}
-  #stage .mat{position:absolute;left:8%;right:8%;bottom:6%;height:26px;
-    background:repeating-linear-gradient(90deg,#d9b23a 0 9px,#c9a233 9px 18px);opacity:.5;border-radius:2px}
-  #stage .steps{position:absolute;right:6%;bottom:0;width:26%;height:26%;
-    background:repeating-linear-gradient(0deg,#2b303c 0 12px,#232833 12px 24px)}
-  #stage .counter{position:absolute;left:6%;bottom:34%;width:22%;height:16%;
-    background:#2a2f3a;border:2px solid #363c4a}
-  #stage .door{position:absolute;right:2%;bottom:34%;width:9%;height:40%;background:#242a36;border:2px solid #363c4a}
-  #stage .window{position:absolute;left:34%;top:8%;width:14%;height:22%;background:#2b3a4d;border:2px solid #3c4757;opacity:.8}
-  .actor{position:absolute;bottom:34%;transform:translateX(-50%)}
-  .actor .name{position:absolute;left:50%;transform:translateX(-50%);bottom:-20px;
-    font-size:11px;color:var(--muted);white-space:nowrap}
-  .actor.talk .name{color:var(--accent)}
+  #stage .floor::after{content:"";position:absolute;inset:0;opacity:.5;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 52px)}
+  #propBack,#propFront,#actors{position:absolute;inset:0;transition:opacity .3s}
+  .prop{position:absolute;display:grid}
+  .prop div{width:6px;height:6px}
+  .prop.big div{width:8px;height:8px}
+  .actor{position:absolute;bottom:34%;transform:translateX(-50%);transition:left .45s}
+  .actor .px{display:grid;filter:drop-shadow(0 3px 0 rgba(0,0,0,.35))}
+  .actor .px div{width:6px;height:6px}
+  .actor .name{position:absolute;left:50%;transform:translateX(-50%);bottom:-22px;
+    font-size:11px;color:var(--muted);white-space:nowrap;
+    background:rgba(14,16,21,.8);padding:1px 6px;border:1px solid transparent}
+  .actor.talk .name{color:var(--accent);border-color:var(--accent)}
   .actor.talk::after{content:"";position:absolute;left:50%;transform:translateX(-50%);
-    bottom:-26px;width:0;height:0;border:5px solid transparent;border-top-color:var(--accent)}
+    bottom:-28px;width:0;height:0;border:5px solid transparent;border-top-color:var(--accent)}
   .px{display:grid}
   .px div{width:var(--cell);height:var(--cell)}
-  #stageTag{position:absolute;left:10px;top:8px;font-size:11px;color:var(--dim);
-    background:rgba(14,16,21,.8);border:1px solid var(--line);padding:2px 7px;letter-spacing:.06em}
+  #stageTag{position:absolute;left:10px;top:8px;font-size:11px;color:var(--muted);max-width:60%;
+    background:rgba(14,16,21,.85);border:1px solid var(--line);padding:3px 8px;letter-spacing:.06em}
+  #sceneHint{position:absolute;right:10px;top:8px;font-size:11px;color:var(--dim);text-align:right;
+    background:rgba(14,16,21,.85);border:1px solid var(--line);padding:3px 8px;letter-spacing:.04em}
 
   /* ══════════ 对话框 ══════════ */
   #box{margin-top:10px;background:var(--panel);border:2px solid var(--line);padding:14px 16px 16px;min-height:168px}
@@ -117,6 +122,7 @@
   .arow b{font-size:14px;font-weight:600}
   .arow.locked{border-left-color:#232833;cursor:default}
   .arow.locked b{color:var(--dim)}
+  .arow.locked p{display:block;color:var(--dim);font-size:12px}
   .arow p{margin:5px 0 0;font-size:13px;color:var(--muted);line-height:1.65;display:none}
   .arow.open p{display:block}
   .arow a{color:var(--blue);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--blue);word-break:break-all}
@@ -186,12 +192,13 @@
     </div>
   </div>
 
-  <div id="stage">
-    <div class="shelfband"></div><div class="shelves"></div><div class="floor"></div>
-    <div class="window"></div><div class="mat"></div><div class="steps"></div>
-    <div class="counter"></div><div class="door"></div>
-    <div id="stageTag">市图书馆 · 一层大厅</div>
+  <div id="stage" class="s-day">
+    <div class="wall"></div><div class="floor"></div>
+    <div id="propBack"></div>
+    <div id="propFront"></div>
     <div id="actors"></div>
+    <div id="stageTag">市图书馆 · 北门前</div>
+    <div id="sceneHint"></div>
   </div>
 
   <div id="box">
@@ -266,6 +273,7 @@ function goto(id){
   const n = CASE.nodes[id];
   if(!n){ console.error("节点不存在", id); return; }
   S.node = id; S.flags.__node = id;
+  setScene(id, n.speaker||"");
   if(n.unlock) effects({unlock:n.unlock});
   if(n.type==="say"){
     if(n.set||n.relation||n.progress) effects(n);
@@ -322,35 +330,257 @@ function showOpts(list){
 }
 window.__pick=i=>{ const o=window.__opts&&window.__opts[i]; if(o) pick(o); };
 
-/* ── 像素小人（字符画 → div 网格）── */
-const SPR={
- player:["..hhh..","..hhh..",".sssss.",".s.s.s.","..ccc..",".ccccc.","..ccc..","..c.c..","..s.s.."],
- xiaozhou:["..hhh..","..hhh..",".sssss.","..ccc..","..ccc..","...c...",".wwwww.","w.w.w.w","..w.w.."],
- logo:["....aaa....","...aaaaa...","..aa...aa..",".aaaaaaaaa.","aa.......aa","aaa.....aaa","..aaaaaaa..","...aa.aa...","...aa.aa...","..aa...aa.."]
+/* ── 像素素材：角色（四个各有特征，不再共用同一张图）── */
+const PAL={a:"#e8b13a",w:"#e9e6e0",s:"#e6c9a8",k:"#20242e",j:"#4a9eda",q:"#3fa9a0",
+  h:"#c9ccd4",m:"#4a3340",r:"#d9694a",e:"#1a1d24",x:"#2a2f3a",
+  t:"#e8b13a",b:"#3b4252",g:"#6b7381",c:"#2b303c",y:"#d9b23a",
+  o:"#b9c0cc",l:"#9aa3b2",d:"#2a2f3a",v:"#4f9a5e",p:"#8a5a3b"};
+
+const ACT={
+  /* 我：短发 · 蓝外套 · 双肩包背带 · 牛仔裤 · 白球鞋 */
+  "我":{map:["...kkkkk.",
+             "..kkkkkkk",
+             "..ksssssk",
+             "..ksesesk",
+             "..ksssssk",
+             "...ksssk.",
+             "..jjjjjj.",
+             ".jjbbbbjj",
+             ".jjbbbbjj",
+             ".jjjjjjjj",
+             ".jjjjjjjj",
+             "..jj..jj.",
+             "..kk..kk.",
+             "..kk..kk.",
+             "..ww..ww.",
+             "..ww..ww."]},
+  /* 小舟：轮椅使用者 —— 大轮 + 扶手 + 坐姿， silhouett 明显更宽 */
+  "小舟":{map:["......kkkkk....",
+              ".....kkkkkkk...",
+              ".....ksssssk...",
+              ".....ksesekk...",
+              ".....ksssssk...",
+              "......ksssk....",
+              "....qqqqqqq....",
+              "..qqqqqqqqqq...",
+              "..qqqqqqqqqqq..",
+              "..qqqqqqqqqqq..",
+              "...kkkkkkkkk...",
+              ".oooookkkkooo..",
+              "oo....ooo....oo",
+              "o.....o.o.....o",
+              ".o...ooo...o...",
+              "..ooo.....ooo.."]},
+  /* 馆长：灰白发 · 眼镜 · 衬衫领带 · 深色马甲 */
+  "馆长":{map:["...hhhhh.",
+              "..hhhhhhh",
+              "..hsssssh",
+              "..hxxxxxs",
+              "..hsssssh",
+              "...hsssh.",
+              "..wjjjjjw",
+              ".wwjjtjjw",
+              ".wwjjtjjw",
+              ".wwjtjjjw",
+              ".jjjjjjj.",
+              "..jjjjj..",
+              "..kk..kk.",
+              "..kk..kk.",
+              "..kk..kk.",
+              ".kkk..kkk"]},
+  /* 学姐：长发垂到肩下 · 玫红外套 · 斜挎包带 · 裙摆 */
+  "学姐":{map:["...mmmmm.",
+              "..mmmmmmm",
+              "..msssssm",
+              "..mseesem",
+              "..msssssm",
+              "...msssm.",
+              "..mrrrrrm",
+              ".mrrkrrrm",
+              ".mrrkrrrm",
+              "..rrrrrr.",
+              "..rrrrrr.",
+              ".rrrrrrr.",
+              ".rrrrrrr.",
+              "..ss..ss.",
+              "..ss..ss.",
+              "..kk..kk."]},
+  /* 导盲犬：小型犬 + 鞍具 */
+  "导盲犬":{map:[".kk......kk.",
+                "kkkk....kkkk",
+                "kkkkkkkkkkk.",
+                ".aaaaaaaaaa.",
+                ".kk.kk.kk.k.",
+                "............"]}
 };
-const PAL={h:"#2b2f3a",s:"#e6c9a8",c:"#4a9eda",w:"#c9ccd4",g:"#5fbf7f",a:"#e8b13a",b:"#8b93a3"};
-function sprite(map,left,pal,cell){
-  const d=document.createElement("div"); d.className="px actor";
-  if(left) d.style.left=left;
-  d.style.gridTemplateColumns=`repeat(${map[0].length},${cell||"var(--cell)"})`;
+
+/* ── 场景道具（wall=贴墙，floor=落地）── */
+const PROP={
+  door:{cell:7,wall:1,map:["...gggggggg...",
+                            ".gg........gg.",
+                            ".g.wwww.wwww.g",
+                            ".g.wwww.wwww.g",
+                            ".g.wwww.wwww.g",
+                            ".g.wwww.wwww.g",
+                            ".g...........g",
+                            ".g.........dg.",
+                            ".g.........dg.",
+                            ".g...........g",
+                            ".gggggggggggg."]},
+  window:{cell:7,wall:1,map:["gggggggggggggg",
+                             "g.wwwwwwwwww.g",
+                             "g.wwwwwwwwww.g",
+                             "g.wwwwwwwwww.g",
+                             "g.wwwwwwwwww.g",
+                             "g.wwwwwwwwww.g",
+                             "g.wwwwwwwwww.g",
+                             "g.wwwwwwwwww.g",
+                             "gggggggggggggg"]},
+  shelf:{cell:6,wall:1,map:["gggggggggggggggggggg",
+                            "g.bbb.rrr.yyy.ggg..g",
+                            "g.bbb.rrr.yyy.ggg..g",
+                            "gggggggggggggggggggg",
+                            "g.rrr.ggg.bbb.yyy..g",
+                            "g.rrr.ggg.bbb.yyy..g",
+                            "gggggggggggggggggggg",
+                            "g.yyy.bbb.ggg.rrr..g",
+                            "g.yyy.bbb.ggg.rrr..g",
+                            "gggggggggggggggggggg"]},
+  steps:{cell:8,floor:1,map:["..............ww",
+                             "...........wwwww",
+                             "........wwwwwwww",
+                             ".....wwwwwwwwwww",
+                             "..wwwwwwwwwwwwww",
+                             "wwwwwwwwwwwwwwww",
+                             "cccccccccccccccc",
+                             "cccccccccccccccc"]},
+  ramp:{cell:8,floor:1,map:["..............rrrr..",
+                            "..........rrrrrrrr..",
+                            "......rrrrrrrrrrrr..",
+                            "..rrrrrrrrrrrrrrrr..",
+                            "wwwwwwwwwwwwwwwwwwww",
+                            "wwwwwwwwwwwwwwwwwwww",
+                            "cccccccccccccccccccc",
+                            "...................."]},
+  blind:{cell:8,floor:1,map:["yy..yy..yy..yy..yy..",
+                             "yy..yy..yy..yy..yy..",
+                             "yyyyyyyyyyyyyyyyyyyy"]},
+  counter:{cell:8,floor:1,map:["gggggggggggggggggg",
+                               "gssssssssssssssssg",
+                               "gggggggggggggggggg",
+                               "g................g",
+                               "g......ddd.......g",
+                               "g......ddd.......g",
+                               "g................g",
+                               "gggggggggggggggggg"]},
+  counterlow:{cell:8,floor:1,map:["gggggggggggggggggg",
+                                  "gssssssssssssssssg",
+                                  "gggggggggggggggggg",
+                                  "g................g",
+                                  "g......ddd.......g",
+                                  "g......ddd.......g",
+                                  "g................g",
+                                  "g.llllllllllllll.g",
+                                  "g.llllllllllllll.g",
+                                  "gggggggggggggggggg"]},
+  cone:{cell:7,floor:1,map:["..ooo..",
+                            "..ooo..",
+                            ".ooooo.",
+                            ".ooooo.",
+                            "wwwwwww",
+                            ".wwwww.",
+                            "wwwwwww"]},
+  plant:{cell:6,floor:1,map:["...vvv...",
+                             "..vvvvv..",
+                             ".vvvvvvv.",
+                             "..vvvvv..",
+                             "...vvv...",
+                             "....v....",
+                             "...ppp...",
+                             "...ppp...",
+                             "..ppppp.."]},
+  sign:{cell:6,floor:1,map:["ggggggggg",
+                            "g.......g",
+                            "g..www..g",
+                            "g..w.w..g",
+                            "g..www..g",
+                            "g.......g",
+                            "ggggggggg",
+                            "...g.g...",
+                            "...g.g...",
+                            "..gg.gg.."]}
+};
+
+/* ── 场景表：每个节点「谁在场、有什么道具、光线如何」——剧情推进时画面随之变化 ── */
+const SCENES={
+ n_start:{t:"图书馆 · 北门前",light:"day",hint:"北门三级台阶",a:[["我",30]],p:[["door",84],["window",44],["steps",58],["plant",6]]},
+ n_meet:{t:"北门前 · 三级台阶",light:"day",hint:"小舟在台阶前等着",a:[["我",26],["小舟",62]],p:[["door",86],["steps",50],["plant",6]]},
+ n_need:{t:"北门前 · 三级台阶",light:"day",hint:"门 → 服务台 → 四楼书库",a:[["我",26],["小舟",62]],p:[["door",86],["steps",50],["plant",6]]},
+ n_choice1:{t:"北门前 · 三级台阶",light:"day",hint:"先跟走一遍，还是先问预算",a:[["我",26],["小舟",62]],p:[["door",86],["steps",50],["plant",6]]},
+ n_walk:{t:"沿动线走一遍 · 台阶前",light:"day",hint:"台阶 3 级",a:[["小舟",36],["我",68]],p:[["steps",28],["door",88]]},
+ n_walk2:{t:"台阶前 · 量尺寸",light:"day",hint:"0.45 m ÷ 1:12 = 5.4 m",a:[["我",38],["小舟",70]],p:[["steps",26],["sign",62]]},
+ n_walk3:{t:"通道最窄处",light:"day",hint:"最窄 0.80 m · 回转 1.50 m",a:[["我",28],["小舟",60]],p:[["shelf",8],["shelf",46],["shelf",78]]},
+ n_walk4:{t:"一层服务台",light:"day",hint:"台面 1.10 m 高",a:[["小舟",34],["我",70]],p:[["counter",44],["shelf",6]]},
+ n_walk5:{t:"入口 · 导盲犬常被拦",light:"day",hint:"盲道 + 导盲犬",a:[["我",26],["小舟",56],["导盲犬",74]],p:[["door",88],["blind",36],["steps",8]]},
+ n_budget:{t:"馆长办公室",light:"dawn",hint:"设施 · 信息 · 服务三块",a:[["我",28],["馆长",66]],p:[["shelf",6],["shelf",44],["window",74]]},
+ n_measure_prompt:{t:"馆长办公室",light:"dawn",hint:"要不要先量数据",a:[["我",28],["馆长",66]],p:[["shelf",6],["shelf",44],["window",74]]},
+ n_choice2:{t:"三种做法",light:"dawn",hint:"实测 / 志愿者 / 提案",a:[["我",22],["馆长",56],["小舟",84]],p:[["shelf",6],["shelf",44]]},
+ n_a1:{t:"方案：1:12 缓坡",light:"day",hint:"坡长 5.4 m · 两端留平台",a:[["我",28],["小舟",68]],p:[["ramp",40],["steps",10]]},
+ n_a2:{t:"馆长：要占绿地、走基建流程",light:"dawn",hint:"预算与工期",a:[["我",26],["馆长",66]],p:[["ramp",44],["plant",84],["shelf",6]]},
+ n_a3:{t:"学姐：送书只能顶一阵",light:"day",hint:"人排班撑不久",a:[["我",26],["学姐",66]],p:[["ramp",44],["shelf",6]]},
+ n_choice3:{t:"坚持原方案 / 让志愿者先顶",light:"day",hint:"两条路都有代价",a:[["我",20],["馆长",50],["学姐",82]],p:[["ramp",38],["steps",6]]},
+ n_a4:{t:"造价表 · 工期表 · 条例文",light:"day",hint:"交到基建处",a:[["我",34]],p:[["ramp",52],["cone",16],["sign",80]]},
+ n_a5:{t:"立项：下学期，暑假施工",light:"dusk",hint:"验收由小舟来",a:[["我",24],["馆长",52],["小舟",80]],p:[["ramp",40],["counterlow",68],["cone",8]]},
+ n_c1:{t:"提案：坡道 · 低位台 · 读屏字幕",light:"day",hint:"三块一起要",a:[["我",32]],p:[["shelf",6],["counterlow",54],["sign",82]]},
+ n_c2:{t:"小舟：别替我列需求",light:"day",hint:"清单由本人来写",a:[["我",28],["小舟",66]],p:[["shelf",6],["counterlow",58]]},
+ n_c4:{t:"馆务会通过",light:"bright",hint:"排进暑假 · 走无障碍经费",a:[["我",22],["馆长",52],["小舟",80]],p:[["ramp",38],["counterlow",68],["blind",14]]},
+ n_b1:{t:"学姐组队排班",light:"day",hint:"周一到周五代查代借",a:[["我",28],["学姐",66]],p:[["shelf",8],["counter",58]]},
+ n_b2:{t:"今天借到书了，但不是我自己来",light:"dawn",hint:"台阶还在",a:[["我",26],["小舟",66]],p:[["steps",28],["shelf",6]]},
+ n_b4:{t:"我要的是自己走完这四步",light:"dawn",hint:"门槛没拆",a:[["我",30],["小舟",68]],p:[["steps",32],["door",84]]},
+ n_b5:{t:"排班撑不到明年",light:"dusk",hint:"考完试就散了",a:[["学姐",38]],p:[["shelf",8],["counter",58]]},
+ n_choice4:{t:"过渡还是继续拆门槛",light:"day",hint:"两条路",a:[["我",20],["小舟",50],["学姐",82]],p:[["steps",16],["ramp",50]]},
+ n_mix1:{t:"学姐排班，改造不停",light:"day",hint:"两条并行",a:[["我",28],["学姐",66]],p:[["ramp",46],["steps",12]]},
+ n_mix2:{t:"门槛还在，下一步拆它",light:"dawn",hint:"有人送书，门槛没动",a:[["我",28],["小舟",68]],p:[["steps",28],["ramp",54]]},
+ n_partial:{t:"结局 · 门槛没动",light:"dawn",hint:"志愿者撑一阵",a:[["我",28],["小舟",66]],p:[["steps",38],["shelf",6]]},
+ n_good:{t:"结局 · 自己走完这四步",light:"bright",hint:"坡道 · 低位台 · 盲道",a:[["小舟",48]],p:[["ramp",30],["counterlow",64],["blind",52],["sign",8]]}
+};
+
+function pxSprite(map, pal, cls){
+  const d=document.createElement("div"); d.className=cls||"";
+  d.style.gridTemplateColumns="repeat("+map[0].length+",1fr)";
   map.forEach(row=>[...row].forEach(ch=>{
     const c=document.createElement("div");
-    if(cell){ c.style.width=cell; c.style.height=cell; }
-    c.style.background = ch==="."?"transparent":(pal&&pal[ch])||PAL[ch]||"#333";
+    c.style.background = ch==="."?"transparent":((pal&&pal[ch])||PAL[ch]||"#333");
     d.appendChild(c);
   }));
   return d;
 }
-function stage(names){
-  const box=document.getElementById("actors"); box.innerHTML="";
-  const P={ "我":["player","28%",null], "小舟":["xiaozhou","52%",null],
-            "馆长":["player","72%",{c:"#8b93a3"}], "学姐":["player","16%",{c:"#5fbf7f"}] };
-  Object.entries(P).forEach(([nm,[sp,lx,over]])=>{
-    const el=sprite(SPR[sp],lx,over);
-    el.innerHTML+=`<div class="name">${nm}</div>`;
-    if(names.includes(nm)) el.classList.add("talk");
+
+/* 场景切换：谁在场、什么道具、地点与光线，全部随节点变化 */
+function setScene(id, talker){
+  const s = SCENES[id] || SCENES.__last; if(!s) return; SCENES.__last=s;
+  document.getElementById("stage").className = "s-"+(s.light||"day");
+  const back=document.getElementById("propBack"), front=document.getElementById("propFront"), box=document.getElementById("actors");
+  back.innerHTML=""; front.innerHTML=""; box.innerHTML="";
+  (s.p||[]).forEach(([nm,x])=>{
+    const d=PROP[nm]; if(!d) return;
+    const el=pxSprite(d.map,null,"prop"+(d.cell>=8?" big":"")); el.dataset.name=nm;
+    el.style.left=x+"%";
+    if(d.wall){ el.style.top="6%"; } else { el.style.bottom="34%"; }
+    (d.wall?back:front).appendChild(el);
+  });
+  (s.a||[]).forEach(([nm,x])=>{
+    const d=ACT[nm]; if(!d) return;
+    const el = document.createElement("div"); el.className="actor"; el.dataset.name=nm;
+    el.style.left=x+"%";
+    el.appendChild(pxSprite(d.map,null,"px"));
+    const lb=document.createElement("div"); lb.className="name"; lb.textContent=nm;
+    el.appendChild(lb);
+    if(nm===talker) el.classList.add("talk");
     box.appendChild(el);
   });
+  document.getElementById("stageTag").textContent = s.t||"";
+  document.getElementById("sceneHint").textContent = s.hint||"";
 }
 
 /* ── HUD 三条（把"选择的代价"做成可见的量，而不是弹窗）── */
@@ -370,6 +600,11 @@ function hud(){
 }
 
 /* ── 档案库 ── */
+function tagText(e){
+  const t=e.tags; if(!t) return "";
+  const s=Array.isArray(t)?t.join(" · "):String(t);
+  return s? ("分类："+s+" ｜ ") : "";
+}
 function renderArch(){
   const box=document.getElementById("alist"); box.innerHTML="";
   ARCHIVE.forEach(e=>{
@@ -379,7 +614,7 @@ function renderArch(){
     d.innerHTML = un
       ? `<b>${e.title}</b><p>${e.one_liner}<br>${e.why_it_matters||""}</p>
          <div class="src">来源：<a href="${e.source_url}" target="_blank" rel="noopener">${e.source_url}</a></div>`
-      : `<b>？？？</b><p>尚未解锁</p>`;
+      : `<b>未解锁</b><p>${tagText(e)}在剧情中接触到相关内容后自动收录</p>`;
     if(un) d.onclick=()=>d.classList.toggle("open");
     box.appendChild(d);
   });
@@ -427,7 +662,7 @@ function resetState(){
 function startGame(){
   resetState(); S.started=true;
   ovOff("menu"); document.getElementById("wrap").classList.add("on");
-  stage(["我"]); hud(); goto(CASE.start);
+  setScene("n_start","我"); hud(); goto(CASE.start);
 }
 function restart(){ startGame(); }
 function toMenu(){
@@ -460,15 +695,16 @@ document.addEventListener("keydown",e=>{
 
 /* ── 首界面装饰 ── */
 (function deco(){
+  const LOGO=["....aaa....","...aaaaa...","..aa...aa..",".aaaaaaaaa.","aa.......aa","aaa.....aaa","..aaaaaaa..","...aa.aa...","...aa.aa...","..aa...aa.."];
   const lp=document.getElementById("logoPx");
-  const s=sprite(SPR.logo,null,null,"6px"); s.className="px"; lp.replaceWith(s);
+  const s=pxSprite(LOGO,null,"px"); lp.replaceWith(s);
   const pl=document.getElementById("pixline");
   for(let i=0;i<48;i++){ const b=document.createElement("i");
     if(i%7===2) b.className="a"; else if(i%11===5) b.className="b"; pl.appendChild(b); }
 })();
 
 /* ── 启动：先停在首界面 ── */
-stage(["我"]); hud();
+setScene("n_start","我"); hud();
 
 /* 演示/截图辅助：?screen=game|help|end 直接跳到对应界面（不影响正常玩法） */
 (function autoScreen(){
@@ -488,6 +724,22 @@ stage(["我"]); hud();
       if(o) o.click(); else finishTyping();
     },110);
     return;
+  }
+  if(s==="scene"){
+    const nm=/[?&]node=(\w+)/.exec(location.search);
+    const id=nm?nm[1]:CASE.start;
+    goto(id);
+    // 定格：停打字机 + 掐断 pendDone（否则 120ms 后会推进到下一幕，画面被覆盖）
+    if(typeof typing!=="undefined" && typing){ clearInterval(typing); typing=null; }
+    pendDone=null;
+    const t2=document.getElementById("text"); if(pendTxt) t2.textContent=pendTxt;
+    const en=document.getElementById("end"); if(en) en.classList.remove("on");
+    return;
+  }
+  if(s==="arch"){
+    const um=/[?&]unlock=(\d+)/.exec(location.search);
+    if(um){ ARCHIVE.slice(0,+um[1]).forEach(e=>S.unlocked.add(e.id)); renderArch(); }
+    ovOn("arch"); return;
   }
 })();
 
