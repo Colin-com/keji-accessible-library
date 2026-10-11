@@ -10,6 +10,7 @@
 import json
 import sys
 import pathlib
+import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "web" / "template.html"
@@ -19,6 +20,8 @@ OUTPUT_PATH = ROOT / "web" / "index.html"
 
 CASE_MARK = "__CASE_JSON__"
 ARCHIVE_MARK = "__ARCHIVE_JSON__"
+BUILD_MARK = "__BUILD__"
+BUILD_VERSION = "v4"
 
 
 def fail(msg: str):
@@ -50,12 +53,20 @@ def main():
         fail("archive_entries.json 应为非空 JSON 数组")
 
     template = TEMPLATE.read_text(encoding="utf-8-sig")
-    for mark in (CASE_MARK, ARCHIVE_MARK):
+    for mark in (CASE_MARK, ARCHIVE_MARK, BUILD_MARK):
         if mark not in template:
             fail("模板 " + TEMPLATE.name + " 缺少占位符 " + mark)
 
+    # 版本戳：让"玩家手里是不是最新版"一眼可辨（浏览器缓存 10 分钟，旧的会看着像 bug 没好）
+    stamp = "构建 %s · %d 节点 · %d 决策 · %s" % (
+        BUILD_VERSION,
+        len(case["nodes"]),
+        sum(1 for n in case["nodes"].values() if n.get("type") == "choice"),
+        time.strftime("%m-%d %H:%M"),
+    )
     out = (template.replace(CASE_MARK, dumps_for_html(case))
-                   .replace(ARCHIVE_MARK, dumps_for_html(archive)))
+                   .replace(ARCHIVE_MARK, dumps_for_html(archive))
+                   .replace(BUILD_MARK, stamp))
     OUTPUT_PATH.write_text(out, encoding="utf-8", newline="\n")
 
     # ── 自检：重新读回磁盘上的成品再检查 ──────────────────────────
@@ -69,7 +80,8 @@ def main():
     checks = [
         ("文件已生成", OUTPUT_PATH.exists()),
         ("大小合理（成品大于模板）", back_bytes > len(template.encode("utf-8"))),
-        ("占位符已全部替换", CASE_MARK not in back and ARCHIVE_MARK not in back),
+        ("占位符已全部替换", CASE_MARK not in back and ARCHIVE_MARK not in back and BUILD_MARK not in back),
+        ("版本戳已注入", stamp in back),
         ("能搜到剧情标题", case["title"] in back),
         ("能搜到剧情文本", bool(first_say_line) and first_say_line in back),
         ("能搜到档案条目", any(e.get("title", "") in back for e in archive)),
