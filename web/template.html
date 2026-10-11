@@ -24,7 +24,8 @@
     background:
       radial-gradient(1200px 500px at 50% -10%, #1d2331 0%, transparent 60%),
       repeating-linear-gradient(90deg,#141821 0 17px,#12151c 17px 21px);
-    display:flex;align-items:center;justify-content:center;padding:24px}
+    display:none;align-items:center;justify-content:center;padding:24px}
+  #menu.on{display:flex}
   #menuInner{width:100%;max-width:760px;text-align:center}
   .logo{display:flex;justify-content:center;gap:14px;align-items:flex-end;margin-bottom:6px}
   .logo .px{display:grid}
@@ -150,7 +151,7 @@
 <body>
 
 <!-- ══════════ 首界面 ══════════ -->
-<div id="menu">
+<div id="menu" class="on">
   <div id="menuInner">
     <div class="logo"><div class="px" id="logoPx"></div></div>
     <h1 class="title">可及</h1>
