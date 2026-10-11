@@ -1,50 +1,76 @@
-# 《可及》· 项目总目录（一个文件夹装下全部）
+# 《可及》· 无障碍科普叙事游戏（网页版）
 
-> 像素风剧情向科普游戏：大学生用自己专业的本事，帮残障人士解决真实的无障碍难题。
-> **本目录是唯一的项目根**：代码、任务书、调研、工具、日志、产物全在这里，赛后按本文件即可完整复盘。
+> 一款像素风分支叙事科普游戏：你扮演工业设计专业的大学生，用自己专业的本事，
+> 帮轮椅使用者、视障老人等**当事人**解决图书馆真实的无障碍难题。
+> 主题是**社会模式**：障碍来自环境与设计，不来自人。
 
-## 一、目录地图
+**在线试玩**：https://&lt;你的用户名&gt;.github.io/keji-accessible-library/web/index.html
+（也可离线：直接双击 `web/index.html`，单文件、零依赖）
 
-| 路径 | 里面是什么 | 复盘时看什么 |
-|-|-|-|
-| `project.godot` `scenes/` `game/` `tests/` | Godot 4.7.2 工程本体 | 游戏怎么实现的 |
-| `docs/DESIGN.md` | 设计文档：价值红线、玩法支柱、MVP 切片范围 | **最重要**：为什么这么做 |
-| `docs/CONTRACT.md` | 冻结契约：三方并行开发的接口约定 | 多 agent 怎么不互相踩 |
-| `docs/JOURNAL.md` | **施工日志**：时间线、决策、踩坑、验收记录 | 复盘主线 |
-| `docs/DEV.md` | 怎么跑、怎么测、怎么导出（工程侧说明） | 复现步骤 |
-| `tasks/0X_*.md` | 派给各 agent 的任务书（原文） | 派活的写法 |
-| `research/` | 调研底座：社会模式、法规标准、辅助技术、真实案例、误区、档案库条目（每条带来源 URL） | 内容准确性来源 |
-| `tools/` | 复用工具：`trae_cdp.py`(驱动 Trae 界面) / `dl_fast2.py`(分段下载) / `dispatch.py`(给分区 agent 派活) / `validate_case.py`(剧情数据校验) | 怎么遥控 agent |
-| `logs/` | 施工期原始输出：agent 回报、验收命令原始日志 | 证据链 |
-| `exports/web/` | 交付产物：网页版（index.html + wasm + pck） | 交付物 |
-| `.tools/godot/` | Godot 4.7.2 引擎本体（含 console 版，命令行用） | 环境复现 |
-| `.tools/export_templates/` | 导出模板包（1221MB，网页导出必需） | 环境复现 |
+---
 
-## 二、怎么跑（复盘时最快的路径）
+## 一、程序实现的功能（96 字，提交口径）
+
+《可及》是网页像素叙事游戏：你扮演工业设计学生，为学校图书馆做无障碍改造——和轮椅使用者、视障老人一起量台阶、定方案，选择改变进度、信任与受益范围，通向 4 种结局，解锁 10 条可溯源科普档案。
+
+## 二、怎么玩
+
+| 操作 | 作用 |
+|-|-|
+| 点文字 / 空格 | 跳过打字机动画 |
+| 点选项 / 按 1–5 | 做选择 |
+| Tab | 打开档案库（10 条科普条目，跨局累积解锁） |
+| R | 重开一局 |
+| Esc | 关闭面板 |
+
+四条指标：**项目进度 / 当事人信任 / 可疑度 / 受益范围**。
+选择不只是解锁剧情，会真的改变后面的人怎么对你、以及最后那笔账算不算得清。
+
+## 三、网页版跑起来
 
 ```bash
-cd /e/Claw-Data/pixel-sci-game
-G=".tools/godot/Godot_v4.7.2-stable_win64_console.exe"
+# 最省事：双击 web/index.html
 
-# 1) 导入资源
-"$G" --headless --path . --import
-
-# 2) 自动测试：穷举剧情全部选择组合（无死节点、至少 2 结局可达）
-"$G" --headless --path . res://tests/test_paths.tscn
-
-# 3) 导出网页版
-"$G" --headless --path . --export-release "Web" exports/web/index.html
-
-# 4) 本地起服务预览（然后浏览器打开 http://127.0.0.1:8899/）
-python -m http.server 8899 -d exports/web
+# 或者本地起个服务（推荐，避免个别浏览器对本地文件的限制）
+python -m http.server 8899 -d web
+# 然后打开 http://127.0.0.1:8899/index.html
 ```
 
-## 三、这个东西是怎么做出来的（一句话版）
+改完模板/剧本后重新打包单文件：
 
-我（Hermes 统筹）负责：设计、冻结接口、写任务书、派活、**独立验收**；
-工人池：Codex CLI（代码主力 + 设计顾问）、Trae SOLO（并行模块）、doc 分区分身（剧本数据）、ana 分区分身（事实调研）。
-详细时间线与决策见 `docs/JOURNAL.md`。
+```bash
+python web/build_web.py      # web/template.html + game/data/*.json → web/index.html
+python tools/check_scenes2.py  # 一致性自检：节点/场景/结局/悬空引用
+```
 
-## 四、赛道定位
+## 四、目录地图
 
-Trae 黑客松 · 90 分钟垂直切片。提交口径：**网页 demo 可玩**。
+| 路径 | 里面是什么 |
+|-|-|
+| `web/template.html` | **唯一事实来源**：像素素材表、场景驱动、状态机、UI |
+| `web/index.html` | 构建产物：单文件可玩版（离线） |
+| `web/build_web.py` | 模板 + 数据 → 单文件 |
+| `game/data/case_library.json` | 剧情：117 节点 / 9 决策点 / 4 结局 / 正文 4681 字 |
+| `game/data/archive_entries.json` | 档案库：10 条科普条目，每条带来源 |
+| `research/` | 调研底座：社会模式、GB 50763 等标准、辅助技术、真实案例 |
+| `docs/DESIGN.md` | 设计文档：内容红线、玩法支柱、MVP 切片 |
+| `docs/JOURNAL.md` | **施工日志**：时间线、决策、踩坑、验收记录 |
+| `tasks/` | 派给各 AI agent 的任务书原文 |
+| `evidence/` | 证据链：实机截图、与 Trae 的对话记录与截图、核验材料 |
+| `tools/` | 自检与取证：`check_scenes2.py`、`trae_vibe.py`、`make_source_zip.py` |
+| `dist/` | 交付包（源码 zip） |
+
+## 五、内容与验收
+
+- 每条科普说法都要求**可溯源**（档案库条目带来源链接，见 `research/`）。
+- 不自造"更好的人"叙事：残障角色是使用者、是同事、是验收人，不是被拯救对象。
+- 自检：`python tools/check_scenes2.py` 必须全绿（0 缺场景 / 0 悬空引用 / 4 结局可达）。
+- 无障碍：语义化 HTML、键盘可完成全流程、可见焦点、对比度达标、尊重 `prefers-reduced-motion`。
+
+## 六、这个 demo 是怎么做出来的
+
+统筹（Hermes）负责设计、冻结接口、写任务书、派活与**独立验收**；
+工人池：Codex CLI、Trae SOLO、分区 agent 分身。
+AI 对话与关键步骤截图在 `evidence/trae_steps/`，完整施工时间线在 `docs/JOURNAL.md`。
+
+赛题：Trae 黑客松 · 90 分钟垂直切片 · 提交口径「网页 demo 能玩就行」。
