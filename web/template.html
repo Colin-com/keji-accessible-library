@@ -278,7 +278,7 @@ const CASE = __CASE_JSON__;
 const ARCHIVE = __ARCHIVE_JSON__;
 
 /* ── 状态机（契约与 docs/CONTRACT.md 一致：flags / relation / progress / unlocked）── */
-const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), path:[], node:null, ended:false, started:false};
+const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), run:new Set(), path:[], node:null, ended:false, started:false};
 
 /* ── 档案库跨局保留：解锁即写盘，重开 / 回主菜单 / 关掉浏览器都还在 ── */
 const ARCH_KEY = "keji_archive_v1";
@@ -305,7 +305,7 @@ function archDiagText(){
   const stamp = st ? st.textContent : "";
   if(!storageOK) return "\u26a0 本机存储不可用（无痕/隐私模式？）——解锁只在本次打开期间有效 \u00b7 " + stamp;
   if(stored < S.unlocked.size) return "本次会话 " + S.unlocked.size + " 条 \u00b7 本机记录 " + stored + " 条（未写盘）\u00b7 " + stamp;
-  return "本机记录 " + stored + " 条 \u00b7 本次会话 " + S.unlocked.size + " 条 \u00b7 跨局保留正常 \u00b7 " + stamp;
+  return "本机记录 " + stored + " 条 \u00b7 本次会话 " + S.unlocked.size + " 条 \u00b7 本局新增 " + S.run.size + " 条 \u00b7 跨局保留正常 \u00b7 " + stamp;
 }
 
 function toast(msg){
@@ -319,9 +319,9 @@ function effects(n){
   if(n.progress)S.progress=Math.max(0,Math.min(100,S.progress+n.progress));
   (n.unlock||[]).forEach(id=>{
     if(!S.unlocked.has(id)){
-      S.unlocked.add(id);
+      S.unlocked.add(id); S.run.add(id);
       const e=ARCHIVE.find(x=>x.id===id);
-      if(e) toast("解锁档案：" + e.title);
+      if(e) toast("解锁档案：" + e.title + "（累计 " + S.unlocked.size + "/" + ARCHIVE.length + "）");
       saveArchive();
     }
   });
@@ -908,7 +908,7 @@ function renderArch(){
     const d=document.createElement("div");
     d.className="arow"+(un?"":" locked");
     d.innerHTML = un
-      ? `<b><span style="color:#8fd694;border:1px solid #8fd694;border-radius:3px;padding:0 4px;margin-right:6px;font-size:11px">已解锁</span>${e.title}</b><p>${e.one_liner}<br>${e.why_it_matters||""}</p>
+      ? `<b><span style="color:#8fd694;border:1px solid #8fd694;border-radius:3px;padding:0 4px;margin-right:6px;font-size:11px">已解锁</span>${S.run.has(e.id)?`<span style="color:#e0b463;border:1px solid #e0b463;border-radius:3px;padding:0 4px;margin-right:6px;font-size:11px">本局新增</span>`:""}${e.title}</b><p>${e.one_liner}<br>${e.why_it_matters||""}</p>
          <div class="src">来源：<a href="${e.source_url}" target="_blank" rel="noopener">${e.source_url}</a></div>`
       : `<b>未解锁</b><p>${tagText(e)}在剧情中接触到相关内容后自动收录</p>`;
     if(un) d.onclick=()=>d.classList.toggle("open");
@@ -930,6 +930,7 @@ function ending(n){
     <div class="line">${n.text}</div>
     <div class="scoreline">
       <div>已解锁档案 <b>${S.unlocked.size}/${ARCHIVE.length}</b></div>
+      <div>本局新解锁 <b>${S.run.size}</b> 条</div>
       <div>项目进度 <b>${Math.min(100,S.progress*20)}%</b></div>
       <div>当事人信任 <b>${Math.max(0,Math.min(100,55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5))}%</b></div>
     </div>
@@ -959,7 +960,7 @@ function resetState(){
   document.getElementById("end").innerHTML="";
 }
 function startGame(){
-  resetState(); S.started=true;
+  resetState(); S.run=new Set(); S.started=true;
   ovOff("menu"); document.getElementById("wrap").classList.add("on");
   setScene("n_start","我"); hud(); goto(CASE.start);
 }
