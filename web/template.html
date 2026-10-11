@@ -15,10 +15,40 @@
   html,body{margin:0;background:var(--bg);color:var(--ink);
     font-family:"Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased}
-  #wrap{max-width:960px;margin:0 auto;padding:14px 14px 28px}
+  button{font-family:inherit}
+  #wrap{max-width:960px;margin:0 auto;padding:14px 14px 28px;display:none}
+  #wrap.on{display:block}
 
-  /* ── 顶部 HUD ── */
-  #hud{display:flex;gap:14px;align-items:center;justify-content:space-between;
+  /* ══════════ 首界面 ══════════ */
+  #menu{position:fixed;inset:0;z-index:20;overflow:auto;
+    background:
+      radial-gradient(1200px 500px at 50% -10%, #1d2331 0%, transparent 60%),
+      repeating-linear-gradient(90deg,#141821 0 17px,#12151c 17px 21px);
+    display:flex;align-items:center;justify-content:center;padding:24px}
+  #menuInner{width:100%;max-width:760px;text-align:center}
+  .logo{display:flex;justify-content:center;gap:14px;align-items:flex-end;margin-bottom:6px}
+  .logo .px{display:grid}
+  .logo .px div{width:6px;height:6px}
+  h1.title{font-size:82px;line-height:1;margin:0 0 10px;letter-spacing:.22em;
+    font-weight:800;color:var(--ink);text-shadow:5px 5px 0 #2a3142,10px 10px 0 rgba(232,177,58,.16)}
+  .tagline{font-size:17px;color:var(--accent);letter-spacing:.06em;margin:0 0 6px}
+  .subline{font-size:13px;color:var(--muted);letter-spacing:.05em;margin:0 0 26px}
+  .menuBtns{display:flex;flex-direction:column;gap:10px;max-width:340px;margin:0 auto}
+  .mbtn{font-size:17px;color:var(--ink);background:#161b25;border:2px solid var(--line);
+    padding:14px 18px;cursor:pointer;text-align:left;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:center;transition:.12s}
+  .mbtn:hover{border-color:var(--accent);background:#1c2230;transform:translateX(3px)}
+  .mbtn.primary{border-color:var(--accent);background:#241d0e;color:#fff}
+  .mbtn.primary:hover{background:#2e2512}
+  .mbtn small{color:var(--dim);font-size:12px;letter-spacing:0}
+  .menufoot{margin-top:28px;font-size:11px;color:var(--dim);line-height:2;letter-spacing:.04em}
+  .menufoot b{color:var(--muted);font-weight:400}
+  .pixline{display:grid;grid-template-columns:repeat(48,10px);gap:1px;justify-content:center;margin:0 0 22px}
+  .pixline i{height:6px;background:#20263a;display:block}
+  .pixline i.a{background:var(--accent);opacity:.85}
+  .pixline i.b{background:var(--blue);opacity:.6}
+
+  /* ══════════ 顶部 HUD ══════════ */
+  #hud{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;
     background:var(--panel);border:2px solid var(--line);padding:8px 12px;margin-bottom:10px}
   #hud .title{font-weight:700;letter-spacing:.06em}
   #hud .title small{color:var(--dim);font-weight:400;margin-left:8px;letter-spacing:0}
@@ -28,9 +58,12 @@
   .bar{height:7px;background:#101319;border:1px solid var(--line);margin-top:3px;position:relative;overflow:hidden}
   .bar i{display:block;height:100%;width:0;transition:width .5s steps(8)}
   #mProg i{background:var(--blue)} #mTrust i{background:var(--ok)} #mSus i{background:var(--accent)}
-  #hintkey{font-size:11px;color:var(--dim);border:1px dashed var(--line);padding:4px 8px}
+  .tools{display:flex;gap:6px}
+  .tbtn{font-size:11px;color:var(--muted);background:#141821;border:1px solid var(--line);
+    padding:5px 9px;cursor:pointer;letter-spacing:.05em}
+  .tbtn:hover{border-color:var(--accent);color:var(--ink)}
 
-  /* ── 场景区 ── */
+  /* ══════════ 场景区 ══════════ */
   #stage{position:relative;height:300px;background:var(--panel2);
     border:2px solid var(--line);overflow:hidden;image-rendering:pixelated}
   #stage .shelfband{position:absolute;inset:0 0 34% 0;
@@ -41,12 +74,13 @@
   #stage .floor{position:absolute;left:0;right:0;bottom:0;height:34%;background:#1a1e26;
     border-top:3px solid #2c3140}
   #stage .mat{position:absolute;left:8%;right:8%;bottom:6%;height:26px;
-    background:repeating-linear-gradient(90deg,#d9b23a 0 9px,#c9a233 9px 18px);opacity:.5;
-    border-radius:2px}
+    background:repeating-linear-gradient(90deg,#d9b23a 0 9px,#c9a233 9px 18px);opacity:.5;border-radius:2px}
   #stage .steps{position:absolute;right:6%;bottom:0;width:26%;height:26%;
     background:repeating-linear-gradient(0deg,#2b303c 0 12px,#232833 12px 24px)}
   #stage .counter{position:absolute;left:6%;bottom:34%;width:22%;height:16%;
     background:#2a2f3a;border:2px solid #363c4a}
+  #stage .door{position:absolute;right:2%;bottom:34%;width:9%;height:40%;background:#242a36;border:2px solid #363c4a}
+  #stage .window{position:absolute;left:34%;top:8%;width:14%;height:22%;background:#2b3a4d;border:2px solid #3c4757;opacity:.8}
   .actor{position:absolute;bottom:34%;transform:translateX(-50%)}
   .actor .name{position:absolute;left:50%;transform:translateX(-50%);bottom:-20px;
     font-size:11px;color:var(--muted);white-space:nowrap}
@@ -58,12 +92,12 @@
   #stageTag{position:absolute;left:10px;top:8px;font-size:11px;color:var(--dim);
     background:rgba(14,16,21,.8);border:1px solid var(--line);padding:2px 7px;letter-spacing:.06em}
 
-  /* ── 对话框 ── */
+  /* ══════════ 对话框 ══════════ */
   #box{margin-top:10px;background:var(--panel);border:2px solid var(--line);padding:14px 16px 16px;min-height:168px}
   #speaker{display:inline-block;font-size:12px;letter-spacing:.1em;color:var(--bg);
     background:var(--accent);padding:2px 10px;margin-bottom:9px;font-weight:700}
   #speaker.narr{background:#2c3140;color:var(--muted)}
-  #text{font-size:19px;line-height:1.75;min-height:66px;letter-spacing:.02em}
+  #text{font-size:19px;line-height:1.75;min-height:66px;letter-spacing:.02em;cursor:pointer}
   #opts{display:flex;flex-direction:column;gap:7px;margin-top:12px}
   .opt{text-align:left;font:inherit;font-size:16px;color:var(--ink);background:#141821;
     border:2px solid var(--line);padding:9px 12px;cursor:pointer;letter-spacing:.02em}
@@ -71,45 +105,90 @@
   .opt em{color:var(--dim);font-style:normal;margin-right:9px;font-size:13px}
   .opt.sel em{color:var(--accent)}
 
-  /* ── 档案库 ── */
-  #arch{position:fixed;inset:0;background:rgba(8,10,14,.94);display:none;z-index:9;overflow:auto}
-  #arch.on{display:block}
-  #archInner{max-width:820px;margin:32px auto;background:var(--panel);border:2px solid var(--line);padding:20px 22px}
-  #arch h2{margin:0 0 4px;font-size:17px;letter-spacing:.08em}
-  #arch .sub{color:var(--dim);font-size:12px;margin-bottom:14px;letter-spacing:.04em}
+  /* ══════════ 档案库 / 说明（覆盖层）══════════ */
+  .ov{position:fixed;inset:0;background:rgba(8,10,14,.94);display:none;z-index:9;overflow:auto}
+  .ov.on{display:block}
+  #archInner,#helpInner{max-width:820px;margin:32px auto;background:var(--panel);border:2px solid var(--line);padding:20px 22px}
+  .ov h2{margin:0 0 4px;font-size:17px;letter-spacing:.08em}
+  .ov .sub{color:var(--dim);font-size:12px;margin-bottom:14px;letter-spacing:.04em}
   .arow{border-left:3px solid var(--line);padding:8px 12px;margin-bottom:7px;cursor:pointer;background:#141821}
   .arow:hover{border-left-color:var(--accent);background:#1a1f2b}
   .arow b{font-size:14px;font-weight:600}
+  .arow.locked{border-left-color:#232833;cursor:default}
   .arow.locked b{color:var(--dim)}
   .arow p{margin:5px 0 0;font-size:13px;color:var(--muted);line-height:1.65;display:none}
   .arow.open p{display:block}
-  .arow a{color:var(--blue);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--blue)}
+  .arow a{color:var(--blue);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--blue);word-break:break-all}
   .arow .src{font-size:11px;color:var(--dim);letter-spacing:.04em;margin-top:5px}
+  .closer{float:right;font-size:11px;color:var(--muted);background:#141821;border:1px solid var(--line);padding:4px 10px;cursor:pointer}
+  .closer:hover{border-color:var(--accent);color:var(--ink)}
+  .keys{display:grid;grid-template-columns:110px 1fr;gap:8px 14px;font-size:14px;line-height:1.7;margin:6px 0 18px}
+  .keys kbd{display:inline-block;font-size:12px;color:var(--accent);background:#141821;
+    border:1px solid var(--line);border-bottom-width:2px;padding:2px 7px;margin-right:5px}
+  .keys span{color:var(--muted)}
+  #help .note{font-size:13px;color:var(--muted);line-height:1.85;border-left:3px solid var(--line);padding-left:12px}
 
-  /* ── 结局卡 ── */
+  /* ══════════ 结局结算 ══════════ */
   #end{display:none;margin-top:10px;background:var(--panel);border:2px solid var(--accent);padding:20px}
   #end.on{display:block}
-  #end h3{margin:0 0 10px;font-size:22px;letter-spacing:.06em;color:var(--accent)}
+  #end .badge{font-size:11px;color:var(--dim);letter-spacing:.14em;margin-bottom:6px}
+  #end h3{margin:0 0 10px;font-size:26px;letter-spacing:.06em;color:var(--accent)}
   #end .recap{font-size:13px;color:var(--muted);line-height:1.9;border-left:3px solid var(--line);padding-left:12px;margin:12px 0}
   #end .line{font-size:17px;line-height:1.8}
+  #end .scoreline{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0 0;font-size:13px;color:var(--muted)}
+  #end .scoreline b{color:var(--ink);font-weight:600}
+  #endBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
   .key{display:inline-block;font-size:11px;color:var(--dim);border:1px dashed var(--line);padding:2px 6px;margin-right:6px}
+
+  /* ══════════ 解锁提示 ══════════ */
+  #toast{position:fixed;left:50%;transform:translate(-50%,20px);bottom:26px;z-index:30;
+    background:#241d0e;border:2px solid var(--accent);color:var(--ink);font-size:13px;
+    padding:10px 16px;opacity:0;transition:.25s;pointer-events:none;letter-spacing:.04em}
+  #toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
+
+<!-- ══════════ 首界面 ══════════ -->
+<div id="menu">
+  <div id="menuInner">
+    <div class="logo"><div class="px" id="logoPx"></div></div>
+    <h1 class="title">可及</h1>
+    <p class="tagline">“障碍来自环境与设计，不来自人。”</p>
+    <p class="subline">无障碍科普叙事 · 你是一名工业设计专业的大二学生</p>
+    <div class="pixline" id="pixline"></div>
+    <div class="menuBtns">
+      <button class="mbtn primary" id="btnStart">开始游戏<small>学期作业：让图书馆对轮椅可用</small></button>
+      <button class="mbtn" id="btnArchFromMenu">无障碍档案库<small id="archCount">已解锁 0 / 10 条</small></button>
+      <button class="mbtn" id="btnHelp">操作说明<small>键位 / 三条指标的含义</small></button>
+    </div>
+    <div class="menufoot">
+      <b>90 分钟黑客松作品</b> · 网页版单文件 Demo · 剧情与档案数据驱动<br>
+      每条科普都标注来源，可在档案库点开链接自查 · 本项目构建过程中由 TRAE 参与
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 游戏主体 ══════════ -->
 <div id="wrap">
   <div id="hud">
-    <div class="title">可及 <small>无障碍科普叙事 · 工业设计</small></div>
+    <div class="title">可及 <small id="chapter">工业设计 · 学期作业</small></div>
     <div class="meters">
       <div class="meter" id="mProg"><b>项目进度</b><div class="bar"><i></i></div></div>
       <div class="meter" id="mTrust"><b>当事人信任</b><div class="bar"><i></i></div></div>
       <div class="meter" id="mSus"><b>可持续性</b><div class="bar"><i></i></div></div>
     </div>
-    <div id="hintkey">Tab 档案库</div>
+    <div class="tools">
+      <button class="tbtn" id="tbArch">档案库 <span id="tbNum">0/10</span></button>
+      <button class="tbtn" id="tbHelp">说明</button>
+      <button class="tbtn" id="tbMenu">主菜单</button>
+    </div>
   </div>
 
   <div id="stage">
     <div class="shelfband"></div><div class="shelves"></div><div class="floor"></div>
-    <div class="mat"></div><div class="steps"></div><div class="counter"></div>
+    <div class="window"></div><div class="mat"></div><div class="steps"></div>
+    <div class="counter"></div><div class="door"></div>
     <div id="stageTag">市图书馆 · 一层大厅</div>
     <div id="actors"></div>
   </div>
@@ -119,27 +198,65 @@
     <div id="text"></div>
     <div id="opts"></div>
   </div>
+
   <div id="end"></div>
 </div>
 
-<div id="arch"><div id="archInner">
+<!-- ══════════ 档案库 ══════════ -->
+<div id="arch" class="ov"><div id="archInner">
+  <button class="closer" id="archClose">关闭 (Tab)</button>
   <h2>无障碍档案库</h2>
-  <div class="sub">随剧情解锁 · 每条都标注来源，可点开链接自查（Tab 关闭）</div>
+  <div class="sub">随剧情解锁 · 每条都标注来源，可点开链接自查</div>
   <div id="alist"></div>
 </div></div>
+
+<!-- ══════════ 操作说明 ══════════ -->
+<div id="help" class="ov"><div id="helpInner">
+  <button class="closer" id="helpClose">关闭 (Esc)</button>
+  <h2>怎么玩</h2>
+  <div class="sub">这是一个靠读和选推进的叙事游戏，没有操作难度</div>
+  <div class="keys">
+    <div><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd>…</div><span>选择选项（也可以直接用鼠标点）</span>
+    <div><kbd>空格</kbd>/<kbd>回车</kbd></div><span>跳过正在逐字显示的对话</span>
+    <div><kbd>Tab</kbd></div><span>打开 / 关闭 无障碍档案库</span>
+    <div><kbd>R</kbd></div><span>重新开始</span>
+    <div><kbd>Esc</kbd></div><span>关闭当前面板</span>
+  </div>
+  <h2 style="font-size:15px">左上角那三条，就是你的选择留下的痕迹</h2>
+  <div class="note" style="margin-top:10px">
+    <b>项目进度</b>：图书馆真的被改好了多少。<br>
+    <b>当事人信任</b>：真正要用这个空间的人，愿不愿意信你。<br>
+    <b>可持续性</b>：这套改动明年还在不在、有没有人维护。<br><br>
+    它们不是分数，也没有隐藏的最优解——你只是要承担选择的后果。
+    结局不评判你，只把你做过的决定摆出来。
+  </div>
+</div></div>
+
+<div id="toast"></div>
 
 <script>
 const CASE = __CASE_JSON__;
 const ARCHIVE = __ARCHIVE_JSON__;
 
-/* ── 状态机（契约与 CONTRACT.md 一致：flags / relation / progress / unlocked） ── */
-const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), path:[], node:null};
+/* ── 状态机（契约与 docs/CONTRACT.md 一致：flags / relation / progress / unlocked）── */
+const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), path:[], node:null, ended:false, started:false};
 
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("on");
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),1900);
+}
 function effects(n){
   (n.set?Object.entries(n.set):[]).forEach(([k,v])=>S.flags[k]=v);
   if(n.relation)Object.entries(n.relation).forEach(([k,v])=>S.relation[k]=(S.relation[k]||0)+v);
   if(n.progress)S.progress=Math.max(0,Math.min(100,S.progress+n.progress));
-  (n.unlock||[]).forEach(id=>S.unlocked.add(id));
+  (n.unlock||[]).forEach(id=>{
+    if(!S.unlocked.has(id)){
+      S.unlocked.add(id);
+      const e=ARCHIVE.find(x=>x.id===id);
+      if(e) toast("解锁档案：" + e.title);
+    }
+  });
   hud();
 }
 function ok(req){ return !req || Object.entries(req).every(([k,v])=>S.flags[k]===v); }
@@ -176,7 +293,6 @@ function speak(who, txt, done){
   sp.textContent=who; sp.className = (who==="旁白")?"narr":"";
   const el=document.getElementById("text");
   document.getElementById("opts").innerHTML="";
-  document.getElementById("end").classList.remove("on");
   clearInterval(typing); typing=null; pendTxt=txt; pendDone=done; el.textContent="";
   if(document.hidden){ el.textContent=txt; if(done) setTimeout(done,120); return; }
   let i=0;
@@ -201,20 +317,24 @@ function showOpts(list){
     box.appendChild(b);
   });
   window.__opts=list;
+  hud();
 }
 window.__pick=i=>{ const o=window.__opts&&window.__opts[i]; if(o) pick(o); };
 
 /* ── 像素小人（字符画 → div 网格）── */
 const SPR={
  player:["..hhh..","..hhh..",".sssss.",".s.s.s.","..ccc..",".ccccc.","..ccc..","..c.c..","..s.s.."],
- xiaozhou:["..hhh..","..hhh..",".sssss.","..ccc..","..ccc..","...c...",".wwwww.","w.w.w.w","..w.w.."]
+ xiaozhou:["..hhh..","..hhh..",".sssss.","..ccc..","..ccc..","...c...",".wwwww.","w.w.w.w","..w.w.."],
+ logo:["....aaa....","...aaaaa...","..aa...aa..",".aaaaaaaaa.","aa.......aa","aaa.....aaa","..aaaaaaa..","...aa.aa...","...aa.aa...","..aa...aa.."]
 };
 const PAL={h:"#2b2f3a",s:"#e6c9a8",c:"#4a9eda",w:"#c9ccd4",g:"#5fbf7f",a:"#e8b13a",b:"#8b93a3"};
-function sprite(map,left,pal){
+function sprite(map,left,pal,cell){
   const d=document.createElement("div"); d.className="px actor";
-  d.style.left=left; d.style.gridTemplateColumns=`repeat(${map[0].length},var(--cell))`;
+  if(left) d.style.left=left;
+  d.style.gridTemplateColumns=`repeat(${map[0].length},${cell||"var(--cell)"})`;
   map.forEach(row=>[...row].forEach(ch=>{
     const c=document.createElement("div");
+    if(cell){ c.style.width=cell; c.style.height=cell; }
     c.style.background = ch==="."?"transparent":(pal&&pal[ch])||PAL[ch]||"#333";
     d.appendChild(c);
   }));
@@ -234,12 +354,17 @@ function stage(names){
 
 /* ── HUD 三条（把"选择的代价"做成可见的量，而不是弹窗）── */
 function hud(){
-  const v=(k,x)=>Math.max(0,Math.min(100, x||0));
-  document.querySelector("#mProg i").style.width = v("p",S.progress*20)+"%";
-  document.querySelector("#mTrust i").style.width = v("t",55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5)+"%";
+  const v=(x)=>Math.max(0,Math.min(100, x||0));
+  document.querySelector("#mProg i").style.width = v(S.progress*20)+"%";
+  document.querySelector("#mTrust i").style.width = v(55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5)+"%";
   const sus = (S.flags.solution==="proposal"?78:S.flags.solution==="ramp"?70:S.flags.solution==="volunteer"?34:45)
             + (S.flags.measured?8:0);
-  document.querySelector("#mSus i").style.width = v("s",sus)+"%";
+  document.querySelector("#mSus i").style.width = v(sus)+"%";
+  const n=S.unlocked.size;
+  document.getElementById("tbNum").textContent = n+"/"+ARCHIVE.length;
+  document.getElementById("archCount").textContent = "已解锁 "+n+" / "+ARCHIVE.length+" 条";
+  document.getElementById("chapter").textContent = S.started
+    ? ("工业设计 · 已做 "+S.path.length+" 个决定") : "工业设计 · 学期作业";
   renderArch();
 }
 
@@ -258,30 +383,114 @@ function renderArch(){
     box.appendChild(d);
   });
 }
-document.addEventListener("keydown",e=>{
-  if(e.key==="Tab"){ e.preventDefault(); document.getElementById("arch").classList.toggle("on"); }
-  if(e.key===" "||e.key==="Enter"){ finishTyping(); }
-  if(/^[1-9]$/.test(e.key)){
-    document.querySelectorAll(".opt")[+e.key-1]?.click();
-  }
-});
+const ovOn=id=>document.getElementById(id).classList.add("on");
+const ovOff=id=>document.getElementById(id).classList.remove("on");
 
 /* ── 结局：把"你的选择"摆出来，不点评 ── */
 function ending(n){
+  S.ended=true;
   const rec = S.path.map(p=>`<div>· ${p.text}</div>`).join("");
   const el=document.getElementById("end");
-  el.innerHTML = `<h3>${n.title}</h3><div class="recap">你的选择：${rec}</div>
+  el.innerHTML = `<div class="badge">结局 · 可及</div><h3>${n.title}</h3>
+    <div class="recap">你做的 ${S.path.length} 个决定：${rec}</div>
     <div class="line">${n.text}</div>
-    <div style="margin-top:14px"><span class="key">R</span>重新开始</div>`;
+    <div class="scoreline">
+      <div>已解锁档案 <b>${S.unlocked.size}/${ARCHIVE.length}</b></div>
+      <div>项目进度 <b>${Math.min(100,S.progress*20)}%</b></div>
+      <div>当事人信任 <b>${Math.max(0,Math.min(100,55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5))}%</b></div>
+    </div>
+    <div id="endBtns">
+      <button class="tbtn" id="btnAgain">再玩一次 <span class="key">R</span></button>
+      <button class="tbtn" id="btnArchEnd">打开档案库 <span class="key">Tab</span></button>
+      <button class="tbtn" id="btnMenu2">回到主菜单</button>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--dim)">结局没有优劣——换个做法，世界会变成另一个样子。</div>`;
   el.classList.add("on");
-  document.getElementById("arch").classList.remove("on");
+  ovOff("arch");
+  document.getElementById("opts").innerHTML="";
+  document.getElementById("btnAgain").onclick=restart;
+  document.getElementById("btnArchEnd").onclick=()=>ovOn("arch");
+  document.getElementById("btnMenu2").onclick=toMenu;
+  hud();
 }
-document.addEventListener("keydown",e=>{ if(e.key.toLowerCase()==="r") location.reload(); });
 
-/* ── 启动 ── */
-stage(["我"]);
-goto(CASE.start);
-window.GAME={S,CASE,ARCHIVE,goto,pick,ok};  // 给自动化验收留的钩子
+/* ── 流程控制 ── */
+function resetState(){
+  S.flags={}; S.relation={}; S.progress=0; S.unlocked=new Set();
+  S.path=[]; S.node=null; S.ended=false;
+  ovOff("arch"); ovOff("help");
+  document.getElementById("end").classList.remove("on");
+  document.getElementById("opts").innerHTML="";
+  document.getElementById("end").innerHTML="";
+}
+function startGame(){
+  resetState(); S.started=true;
+  ovOff("menu"); document.getElementById("wrap").classList.add("on");
+  stage(["我"]); hud(); goto(CASE.start);
+}
+function restart(){ startGame(); }
+function toMenu(){
+  resetState(); S.started=false;
+  document.getElementById("wrap").classList.remove("on");
+  document.getElementById("text").textContent=""; 
+  document.getElementById("speaker").textContent="旁白";
+  document.getElementById("speaker").className="narr";
+  document.getElementById("arch").classList.remove("on");
+  document.getElementById("help").classList.remove("on");
+  ovOn("menu"); hud();
+}
+document.getElementById("btnStart").onclick=startGame;
+document.getElementById("btnHelp").onclick=()=>ovOn("help");
+document.getElementById("tbHelp").onclick=()=>ovOn("help");
+document.getElementById("btnArchFromMenu").onclick=()=>ovOn("arch");
+document.getElementById("tbArch").onclick=()=>document.getElementById("arch").classList.toggle("on");
+document.getElementById("tbMenu").onclick=toMenu;
+document.getElementById("archClose").onclick=()=>ovOff("arch");
+document.getElementById("helpClose").onclick=()=>ovOff("help");
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ ovOff("arch"); ovOff("help"); return; }
+  if(!S.started){ if(e.key==="Enter"||e.key===" "){ startGame(); } return; }
+  if(e.key==="Tab"){ e.preventDefault(); document.getElementById("arch").classList.toggle("on"); }
+  if(e.key===" "||e.key==="Enter"){ finishTyping(); }
+  if(e.key.toLowerCase()==="r"){ restart(); }
+  if(/^[1-9]$/.test(e.key)){ document.querySelectorAll(".opt")[+e.key-1]?.click(); }
+});
+
+/* ── 首界面装饰 ── */
+(function deco(){
+  const lp=document.getElementById("logoPx");
+  const s=sprite(SPR.logo,null,null,"6px"); s.className="px"; lp.replaceWith(s);
+  const pl=document.getElementById("pixline");
+  for(let i=0;i<48;i++){ const b=document.createElement("i");
+    if(i%7===2) b.className="a"; else if(i%11===5) b.className="b"; pl.appendChild(b); }
+})();
+
+/* ── 启动：先停在首界面 ── */
+stage(["我"]); hud();
+
+/* 演示/截图辅助：?screen=game|help|end 直接跳到对应界面（不影响正常玩法） */
+(function autoScreen(){
+  const m=/[?&]screen=([a-z]+)/.exec(location.search);
+  if(!m || m[1]==="menu") return;
+  const s=m[1];
+  startGame();
+  if(s==="help"){ ovOn("help"); return; }
+  if(s==="game"){
+    const t=setInterval(()=>{ if(document.querySelector(".opt")){ clearInterval(t); return; } finishTyping(); },100);
+    return;
+  }
+  if(s==="end"){
+    const t=setInterval(()=>{
+      if(document.getElementById("end").classList.contains("on")){ clearInterval(t); return; }
+      const o=document.querySelector(".opt");
+      if(o) o.click(); else finishTyping();
+    },110);
+    return;
+  }
+})();
+
+window.GAME={S,CASE,ARCHIVE,goto,pick,ok,startGame,restart,toMenu};  // 给自动化验收留的钩子
 </script>
 </body>
 </html>
