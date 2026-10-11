@@ -79,3 +79,47 @@ strings exports/web/index.pck | grep -c "M0 OK"   # =1  → 场景文本真的�
 - 15:33 三方开工：Codex(M1 引擎) / doc(剧本数据) / Trae(档案库 UI)
 - 15:36 用户指示：Codex 兼设计顾问 → 派视觉规范咨询（只读沙箱，不改文件）
 - 15:40 用户指示：全部文件工具收进一个文件夹 → 建 `research/ tools/ logs/`，本日志立起
+
+## 8. 重大转向：砍 Godot，改纯网页（承用户"赛程已经过半"）
+
+| 时间 | 事 | 结果 |
+|-|-|-|
+| 15:45 | 用户："赛程已经过半了" | 判断：90 分钟窗口内，Godot 导出链（1.2GB 模板刚下完）性价比不划算 → **改纯网页** |
+| 15:46 | 杀 Godot 线的 codex 进程 | 剩余 codex 进程 = 0 |
+| 15:47 | 自建 `web/template.html`（像素 UI + 数据驱动剧情引擎），留 `__CASE_JSON__` / `__ARCHIVE_JSON__` 注入占位符 | 279 行 |
+| 15:52 | `web/build_web.py` 一次性构建 | `web/index.html` 20,541 字节；自检"剧情文本可搜到 True / 档案来源可搜到 True" |
+| 15:45 派 / 16:00 回 | **Trae 接新需求并交付**（自己写 build_web.py + 自检） | 产物 26,297 字节；统筹方独立复验通过（**关键步骤由 Trae 完成** = 赛制关联） |
+| 16:2x | 补全游戏外壳 | 首界面 / 操作说明 / HUD 工具条 / 结局结算 / 解锁提示 |
+
+## 9. 验收记录（纯网页版，统筹方独立跑，只认产物）
+
+- **真实浏览器（CDP）点着走完两条路径**：
+  - 路径A（每步选第一项）→ 结局《能动用了》，档案解锁 5/10
+  - 路径B（每步选最后一项）→ 结局《半程》，解锁 3/10
+- **数据侧**：doc 分身校验器 exit 0（30 节点 / 39 条引用 0 悬空 / 2 结局 / 10 条档案 `source_url` 逐字命中调研底座）
+- **事实对表**（拿 ana 事实底座逐条验）：第四十条低位服务台、第三十条同步字幕、第四十六条服务犬、GB 50763 表 3.4.4（1:12 → 限高 0.75m、水平长 9.00m；本项目 0.45m×12 = 5.4m 落在表内）——全部一致，无需返工
+- **界面四屏**：无头 Edge 出图 1180×1460（`ui_menu` / `ui_gameplay` / `ui_help` / `ui_ending`）
+
+## 10. 踩坑（含统筹方自己的验收错误）
+
+| 坑 | 现象 | 处理 |
+|-|-|-|
+| `#menu` 是 `position:fixed` 且默认 `display:flex`，隐藏只移了 class | 点"开始游戏"后**标题页一直盖在游戏上** | 改 `#menu{display:none}` + `#menu.on{display:flex}` |
+| **用 `offsetParent` 判断可见性** | `fixed` 元素 `offsetParent` 恒为 `null` → 误判"已隐藏"，上面那个 bug 被我自己放过一次 | 改用 `getComputedStyle(el).display` + `rect.width>0` + `elementFromPoint()` 判最上层元素 |
+| `capture_screenshot()` 写同一路径 | 四张"不同界面"实际互相覆盖、全是同一页（尺寸几乎一样，102KB） | 每张单独落盘 + `md5sum` 校验；改用无头 Edge 出图后尺寸区分明显（102/26/47/47KB） |
+| 后台标签页定时器降频 | 固定等 9 秒判定 `?screen=end`「卡住」，实际 15 秒才到结局 | 验收改成轮询 + 每步打印状态 |
+| `.tools/`（1.5GB）被 `git add -A` 提交 | `.git` 膨胀到 **1.4GB**，源码包与推送都会炸 | 补 `.gitignore` → `reset --soft` 撤销 → `git rm -r --cached` → 重提交 → `gc`；`.git` 降到 **375K** |
+
+## 11. 证据流水线（比赛材料②③）
+
+- `tools/trae_evidence.py`：TRAE 窗口截图 + 会话文字导出 + 核验码候选扫描
+- `tools/evidence_shots.py`：无头 Edge 出四张界面图（页面支持 `?screen=game|help|end` 直达）
+- **核验码排查（七处全空）**：会话正文 / 元素属性 / shadow DOM / iframe / 回答操作区 / **TRAE 程序文件 `resources/` 内字符串** / 复制出的 54KB 文本 → 本版本无该字段
+- 误抓的 `6acb34f92196c87c6c631d84` 实为 TRAE 沙箱工作目录 ID，**已标红禁用**（误提交会被判诚信问题）
+
+## 12. 交付物与赛后清理
+
+- 源码包：`dist/keji_source_1011_1607.zip`（54 文件 / 压缩后 482KB，自检含成品页与两份数据）
+- `提交清单.md`（三份材料对照 + 演示命令 + 不可提交项）
+- `docs/路演稿.md`（2 分钟卡点 + 3 个备答）
+- `docs/赛后待办.md`：Godot 线 **3.5GB** 精确删除清单（`.tools` 1.5GB + `%APPDATA%\Godot\export_templates` 2.0GB）
