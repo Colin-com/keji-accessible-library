@@ -1,0 +1,14 @@
+### 验收时间 15:35:23 ###
+--- import ---
+[  16% ] [90m[1mloading_editor_layout[22m | 正在加载停靠面板……[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+--- quit-after ---
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+--- export web ---
+[  50% ] [90m[1msavepack[22m | 正在保存文件：res://project.binary[39m[0m
+[92m[ DONE ][39m [1msavepack[22m
+[0m
+--- pck 文本检查 ---
+1

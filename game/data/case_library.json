@@ -1,0 +1,293 @@
+{
+  "case_id": "library_access",
+  "title": "图书馆无障碍改造",
+  "major": "工业设计",
+  "start": "n_start",
+  "nodes": {
+    "n_start": {
+      "type": "say",
+      "speaker": "我",
+      "text": "我是工业设计大二。期末作业：\n让校园某处对轮椅真正可用。",
+      "next": "n_meet"
+    },
+    "n_meet": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "你要帮我推上去吗？\n先说好，我不想每次靠人推。",
+      "set": {"met_zhou": true},
+      "relation": {"zhou": 1},
+      "unlock": ["entry_social_model"],
+      "next": "n_need"
+    },
+    "n_need": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "进门查书我能自己来。\n卡在台阶、服务台和四楼。",
+      "set": {"heard_need": true},
+      "relation": {"zhou": 1},
+      "next": "n_choice1"
+    },
+    "n_choice1": {
+      "type": "choice",
+      "prompt": "第一步做什么？",
+      "options": [
+        {
+          "text": "跟着小舟走一遍全流程，把尺寸量清楚",
+          "next": "n_walk",
+          "set": {"walked": true},
+          "relation": {"zhou": 1},
+          "progress": 1
+        },
+        {
+          "text": "先去馆长办公室问预算和工期",
+          "next": "n_budget",
+          "set": {"asked_budget": true}
+        }
+      ],
+      "fallback_next": "n_budget"
+    },
+    "n_walk": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "你看：三级台阶，服务台，\n还有四楼的书库。",
+      "next": "n_walk2"
+    },
+    "n_walk2": {
+      "type": "say",
+      "speaker": "我",
+      "text": "台阶高 0.45 米，1:12 的坡\n要 5.4 米长，两端留平台。",
+      "set": {"measured": true},
+      "progress": 1,
+      "unlock": ["entry_ramp_slope"],
+      "next": "n_walk3"
+    },
+    "n_walk3": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "通道最窄 0.8 米，回转\n要 1.5 米才转得开。",
+      "unlock": ["entry_turning_space"],
+      "next": "n_walk4"
+    },
+    "n_walk4": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "服务台太高，我够不到，\n四楼的书也上不去。",
+      "relation": {"zhou": 1},
+      "unlock": ["entry_low_counter"],
+      "next": "n_walk5"
+    },
+    "n_walk5": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "还有视障的同学，\n导盲犬进馆常被拦。",
+      "unlock": ["entry_guide_dog"],
+      "next": "n_choice2"
+    },
+    "n_budget": {
+      "type": "say",
+      "speaker": "馆长",
+      "text": "经费紧，但依法得改：\n设施、信息、服务三块都算。",
+      "set": {"knows_gate": true},
+      "unlock": ["entry_law_2023"],
+      "next": "n_measure_prompt"
+    },
+    "n_measure_prompt": {
+      "type": "choice",
+      "prompt": "手上还没有数据，先做什么？",
+      "options": [
+        {
+          "text": "回去量台阶和通道，再谈方案",
+          "next": "n_walk",
+          "set": {"went_measure": true}
+        },
+        {
+          "text": "先不量，找学姐用志愿者顶上",
+          "next": "n_b1",
+          "set": {"shortcut": true}
+        }
+      ],
+      "fallback_next": "n_walk"
+    },
+    "n_choice2": {
+      "type": "choice",
+      "prompt": "三条路，你走哪条？",
+      "options": [
+        {
+          "text": "实测数据画 1:12 缓坡 + 低位服务台",
+          "next": "n_a1",
+          "require": {"measured": true},
+          "set": {"solution": "ramp"},
+          "progress": 3
+        },
+        {
+          "text": "找学姐组织志愿者代查代借、送书到座",
+          "next": "n_b1",
+          "set": {"solution": "volunteer"}
+        },
+        {
+          "text": "写成提案，走馆务会争取立项",
+          "next": "n_c1",
+          "require": {"measured": true},
+          "set": {"solution": "proposal"}
+        }
+      ],
+      "fallback_next": "n_b1"
+    },
+    "n_a1": {
+      "type": "say",
+      "speaker": "我",
+      "text": "缓坡按 1:12 画，5.4 米长，\n两端各留 1.5 米平台。",
+      "set": {"solution_a": true},
+      "progress": 3,
+      "next": "n_a2"
+    },
+    "n_a2": {
+      "type": "say",
+      "speaker": "馆长",
+      "text": "合规我认。但 5.4 米要占绿地，\n预算得走基建流程。",
+      "next": "n_a3"
+    },
+    "n_a3": {
+      "type": "say",
+      "speaker": "学姐",
+      "text": "先顶上送书可以，\n但靠人排班撑不久。",
+      "set": {"volunteer_offered": true},
+      "relation": {"xuejie": 1},
+      "next": "n_choice3"
+    },
+    "n_choice3": {
+      "type": "choice",
+      "prompt": "方案还要等工期，怎么办？",
+      "options": [
+        {
+          "text": "坚持原方案，把造价和工期表做完",
+          "next": "n_a4",
+          "require": {"solution_a": true},
+          "progress": 2
+        },
+        {
+          "text": "让志愿者先顶上，方案并行推进",
+          "next": "n_mix1",
+          "set": {"mixed": true}
+        }
+      ],
+      "fallback_next": "n_mix1"
+    },
+    "n_a4": {
+      "type": "say",
+      "speaker": "我",
+      "text": "造价表、工期表、条例文\n我一起交给基建处。",
+      "progress": 3,
+      "next": "n_a5"
+    },
+    "n_a5": {
+      "type": "say",
+      "speaker": "馆长",
+      "text": "下学期立项，暑假施工。\n小舟，验收你来。",
+      "set": {"approved": true},
+      "relation": {"zhou": 1},
+      "progress": 2,
+      "next": "n_good"
+    },
+    "n_c1": {
+      "type": "say",
+      "speaker": "我",
+      "text": "提案三块：坡道、低位台、\n还有检索机的读屏和字幕。",
+      "set": {"solution_c": true},
+      "progress": 2,
+      "unlock": ["entry_law_2023", "entry_sign_subtitle", "entry_wcag22"],
+      "next": "n_c2"
+    },
+    "n_c2": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "别替我列需求。清单我来写，\n馆务会我自己去说。",
+      "set": {"zhou_involved": true},
+      "relation": {"zhou": 2},
+      "unlock": ["entry_participation"],
+      "next": "n_c4"
+    },
+    "n_c4": {
+      "type": "say",
+      "speaker": "馆长",
+      "text": "馆务会通过了，排在暑假。\n预算走无障碍经费。",
+      "set": {"approved": true},
+      "progress": 4,
+      "next": "n_good"
+    },
+    "n_b1": {
+      "type": "say",
+      "speaker": "学姐",
+      "text": "我组队排班，周一到周五，\n代查代借、送书到座。",
+      "set": {"solution_b": true, "volunteer": true},
+      "next": "n_b2"
+    },
+    "n_b2": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "今天我能借到书了，谢谢。\n但这不是我自己来。",
+      "set": {"zhou_objection": true},
+      "relation": {"zhou": -1},
+      "next": "n_b4"
+    },
+    "n_b4": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "我要的不是有人替我，\n是我自己走完这四步。",
+      "relation": {"zhou": 1},
+      "unlock": ["entry_participation"],
+      "next": "n_b5"
+    },
+    "n_b5": {
+      "type": "say",
+      "speaker": "学姐",
+      "text": "排班全靠人，考完试就散了。\n这撑不到明年。",
+      "set": {"unsustainable_worry": true},
+      "next": "n_choice4"
+    },
+    "n_choice4": {
+      "type": "choice",
+      "prompt": "怎么收尾？",
+      "options": [
+        {
+          "text": "志愿者只做过渡，同时推改造方案",
+          "next": "n_mix1",
+          "set": {"handoff": true},
+          "progress": 2
+        },
+        {
+          "text": "先维持志愿者服务，改造下次再说",
+          "next": "n_partial",
+          "set": {"only_volunteer": true}
+        }
+      ],
+      "fallback_next": "n_partial"
+    },
+    "n_mix1": {
+      "type": "say",
+      "speaker": "学姐",
+      "text": "那我先把排班表做起来，\n改造的事你别停。",
+      "relation": {"xuejie": 1},
+      "next": "n_mix2"
+    },
+    "n_mix2": {
+      "type": "say",
+      "speaker": "小舟",
+      "text": "有人送书总比没有好。\n但门槛还在，下一步拆它。",
+      "unlock": ["entry_library_service"],
+      "next": "n_partial"
+    },
+    "n_partial": {
+      "type": "end",
+      "ending_id": "partial",
+      "title": "半程",
+      "text": "志愿者送书到座，小舟借到了书。\n但台阶没动，他说下一步拆门槛。"
+    },
+    "n_good": {
+      "type": "end",
+      "ending_id": "good_project",
+      "title": "能动用了",
+      "text": "小舟自己进馆、查书、取书、借书。\n他说：下次我可以自己来。"
+    }
+  }
+}

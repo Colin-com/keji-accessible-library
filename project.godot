@@ -5,8 +5,12 @@ config_version=5
 
 [application]
 
-config/name="PixelPhysics"
+config/name="可及"
 run/main_scene="res://scenes/main.tscn"
+
+[autoload]
+
+Story="*res://game/story/story_player.gd"
 
 [display]
 

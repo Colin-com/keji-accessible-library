@@ -1,0 +1,408 @@
+[
+  {
+    "title": "社会模式：是社会使人残障",
+    "one_liner": "UPIAS：“在我们看来，是社会使肢体损伤者变得残障。残障是被强加在损伤之上的一种处境。”",
+    "why_it_matters": "这是现代残障权利话语的起点：把“问题在个人身上”翻转为“问题在环境与制度里”。游戏里任何一处障碍，都可以据此判断它该写在哪一侧。",
+    "source_url": "https://the-ndaca.org/resources/audio-described-gallery/fundamental-principles-of-disability",
+    "tags": ["社会模式", "UPIAS", "概念", "1976"]
+  },
+  {
+    "title": "impairment 与 disability 是两个词",
+    "one_liner": "损伤（impairment）=身体某部分缺失或功能受限；残障（disability）=当代社会组织不考虑损伤者、将其排除在主流社会活动之外所造成的劣势。",
+    "why_it_matters": "中文里常被合并成一个“残疾”。分开之后，剧情就能同时写“身体的真实不便”和“社会造成的排除”，而不是二选一。",
+    "source_url": "https://the-ndaca.org/resources/audio-described-gallery/fundamental-principles-of-disability",
+    "tags": ["社会模式", "术语", "定义"]
+  },
+  {
+    "title": "“社会模式”这个词是谁命名的",
+    "one_liner": "英国学者 Mike Oliver（本人为残障者）在 1983 年《Social Work with Disabled People》中首次命名 social model of disability，1990 年《The Politics of Disablement》成为奠基著作。",
+    "why_it_matters": "给一个概念装上人名与年份，是科普叙事可信度的最低要求。",
+    "source_url": "https://en.wikipedia.org/wiki/Social_model_of_disability",
+    "tags": ["社会模式", "人物", "Mike Oliver"]
+  },
+  {
+    "title": "WHO 的交互式定义：残障来自相互作用",
+    "one_liner": "WHO：“残障源于有健康状况的个体与个人及环境因素之间的相互作用”，环境因素包括负面态度、不可达的交通与公共建筑、有限的社会支持。",
+    "why_it_matters": "国际主流既承认健康状况、又强调环境责任——所以“社会模式 vs 医学模式”的二分在正式文本里其实是被超越的。",
+    "source_url": "https://www.who.int/health-topics/disability",
+    "tags": ["WHO", "定义", "国际标准"]
+  },
+  {
+    "title": "全球 13 亿人有显著残障经历",
+    "one_liner": "WHO：约 13 亿人（约 16%，即 1/6）目前有显著残障经历，且因人口老龄化与非传染性疾病增加而上升。",
+    "why_it_matters": "反驳“无障碍只服务少数人”最直接的数字。",
+    "source_url": "https://www.who.int/news-room/fact-sheets/detail/disability-and-health",
+    "tags": ["数据", "WHO", "1.3 billion"]
+  },
+  {
+    "title": "CRPD 的“合理便利”定义",
+    "one_liner": "“在不造成不成比例或过度负担的前提下，为特定个案作出的必要、适当的调整，以确保残障者与他人平等地享有和行使一切人权与基本自由。”",
+    "why_it_matters": "考试延时、自带桌椅、允许助听器——这类“个案调整”在法律上是独立概念，不是恩惠。",
+    "source_url": "https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities/article-2-definitions.html",
+    "tags": ["CRPD", "合理便利", "法律"]
+  },
+  {
+    "title": "拒绝提供合理便利 = 歧视",
+    "one_liner": "CRPD 第二条：基于残障的歧视“包括一切形式的歧视，包括拒绝提供合理便利”。",
+    "why_it_matters": "把“不肯配合调整”从“态度不好”升级为“法律上的歧视”。",
+    "source_url": "https://www.un.org/development/desa/disabilities/convention-on-the-rights-of-persons-with-disabilities/article-2-definitions.html",
+    "tags": ["CRPD", "歧视", "法律"]
+  },
+  {
+    "title": "无障碍 ≠ 合理便利",
+    "one_liner": "无障碍面向群体、是渐进实现的义务、不做“不成比例负担”抗辩；合理便利面向个体、立即适用、可做负担抗辩。",
+    "why_it_matters": "剧本里“改造整个车站”和“为一个人多给 30 分钟”是两种不同的法律动作，混写就会失真。",
+    "source_url": "https://www.unv.org/sites/default/files/unvpf/UNDP%20Guidance%20note%20on%20reasonable%20accomodation.pdf",
+    "tags": ["CRPD", "无障碍", "概念辨析"]
+  },
+  {
+    "title": "“没有我们的参与，就不要为我们做决定”",
+    "one_liner": "CRPD 第 4.3 条要求在与残障人相关的事项上与其密切协商并使其积极参与；委员会第 7 号一般性意见指出，残障者常在自身相关决策中不被咨询、决定被替其作出。",
+    "why_it_matters": "判断一部作品是否尊重主体性的硬指标：当事人有没有出现在决策、测试、验收环节里。",
+    "source_url": "https://www.ohchr.org/en/documents/general-comments-and-recommendations/general-comment-no7-article-43-and-333-participation",
+    "tags": ["CRPD", "主体性", "参与"]
+  },
+  {
+    "title": "对社会模式的批评：它不解释一切",
+    "one_liner": "学界批评包括：未提供充分的社会理论框架、对智力残障等适用性受质疑、未考虑性别/种族等交叉性、过度聚焦物理障碍而忽略其他。",
+    "why_it_matters": "让作品里的“社会模式”保持为一个有边界的主张，而不是万能解释。",
+    "source_url": "https://sjdr.se/articles/10.16993/sjdr.1130",
+    "tags": ["社会模式", "批评", "学术"]
+  },
+  {
+    "title": "Shakespeare：损伤带来的不利是真实的",
+    "one_liner": "“残障者面对歧视，也面对内在的限制”：即便障碍被尽最大可能移除，许多形式的损伤仍然处于不利；“disability pride”也因此比种族/性别自豪更难。",
+    "why_it_matters": "为“承认疼痛与不便”留出空间，避免把社会模式误用成“损伤不存在”。",
+    "source_url": "http://thedigitalcommons.org/docs/shakespeare_social-model-of-disability.pdf",
+    "tags": ["社会模式", "批评", "Shakespeare"]
+  },
+  {
+    "title": "中国残疾人总数：8500 多万",
+    "one_liner": "国务院《“十四五”残疾人保障和发展规划》：“我国有 8500 多万残疾人。”",
+    "why_it_matters": "中文语境下最常用的权威口径（更近的“8591.4 万”只见二手转述，引用需谨慎）。",
+    "source_url": "https://www.ndrc.gov.cn/fggz/fzzlgh/gjjzxgh/202111/t20211101_1302520.html",
+    "tags": ["数据", "中国", "8500万"]
+  },
+  {
+    "title": "中国残联的称谓规范（10 条）",
+    "one_liner": "用“残疾人”这一法定称谓；对应词用“健全人”而非“正常人”；可称“聋人/听障人士”，一般不用“聋哑”；提到无障碍时多用“无障碍环境”而非“无障碍设施”。",
+    "why_it_matters": "中文无障碍写作最实用的一张词表，直接决定文本是否被从业者接受。",
+    "source_url": "https://www.xwq.gov.cn/xwzmqq/zwgkytj/fdzdgknr/zdlyxxgk/shjz/2025030316542937165/index.html",
+    "tags": ["用词规范", "中国残联", "中文"]
+  },
+  {
+    "title": "联合国中英对照的包容性语言表",
+    "one_liner": "建议“轮椅使用者/行动障碍者”而非“瘫在轮椅上的人”；建议“非残疾人”而非“健全人/正常人”。",
+    "why_it_matters": "面向国际发行时的用词依据，也提醒：中文规范与国际规范并不完全一致。",
+    "source_url": "https://www.ungeneva.org/zh/about/accessibility/disability-inclusive-language/annex-i",
+    "tags": ["用词规范", "联合国", "中文"]
+  },
+  {
+    "title": "《无障碍环境建设法》：2023 年 9 月 1 日起施行",
+    "one_liner": "2023 年 6 月 28 日十四届全国人大常委会第三次会议通过，共 8 章：总则、无障碍设施建设、无障碍信息交流、无障碍社会服务、保障措施、监督管理、法律责任、附则。",
+    "why_it_matters": "中国无障碍从行政法规升级为法律；三大领域（设施/信息/社会服务）是理解后续所有条文的地图。",
+    "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml",
+    "tags": ["法律", "中国", "2023", "无障碍环境建设法"]
+  },
+  {
+    "title": "“其他人有无障碍需求的，可以享受无障碍环境便利”",
+    "one_liner": "《无障碍环境建设法》第二条第二款。",
+    "why_it_matters": "一句话否掉“无障碍=残疾人专用”：推婴儿车的人、搬行李的人、临时受伤的人都在法条射程内。",
+    "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml",
+    "tags": ["法律", "中国", "通用设计", "第二条"]
+  },
+  {
+    "title": "无障碍经费要进本级预算",
+    "one_liner": "第六条：县级以上政府应将无障碍环境建设纳入国民经济和社会发展规划，将所需经费纳入本级预算，建立稳定的经费保障机制。",
+    "why_it_matters": "把“无障碍是慈善”这一常见叙事从法律上排除掉。",
+    "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml",
+    "tags": ["法律", "中国", "财政", "第六条"]
+  },
+  {
+    "title": "财政资金设立的电视台：须配同步字幕",
+    "one_liner": "第三十条：条件具备的每天至少播放一次配播手语的新闻节目；国家鼓励影视录像制品、网络视频加配字幕、手语或口述音轨。",
+    "why_it_matters": "信息无障碍最“可见”的法定要求，也是“手语/字幕/口述影像”三类服务的法律源头。",
+    "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml",
+    "tags": ["法律", "中国", "信息无障碍", "第三十条"]
+  },
+  {
+    "title": "服务犬：导盲犬、导听犬、辅助犬",
+    "one_liner": "第四十六条：公共场所经营管理单位、交通运输设施和公共交通运输工具的运营单位应当为残疾人携带服务犬提供便利。",
+    "why_it_matters": "导盲犬被拒不是误会，是本条下的合规问题（尽管执行细则仍缺）。",
+    "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml",
+    "tags": ["法律", "中国", "导盲犬", "第四十六条"]
+  },
+  {
+    "title": "检察公益诉讼：无障碍的执法扳手",
+    "one_liner": "第六十三条：对违反本法损害社会公共利益的行为，人民检察院可以提出检察建议或者提起公益诉讼；第六十二条规定任何组织和个人有权投诉举报，残联等可聘残障人士监督。",
+    "why_it_matters": "真实案例中大量整改是这样启动的——“无障碍不是没人管，而是有具体入口”。",
+    "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml",
+    "tags": ["法律", "中国", "公益诉讼", "救济"]
+  },
+  {
+    "title": "实时字幕之外，还要有低视力与认知友好",
+    "one_liner": "工信部《移动互联网应用（APP）适老化通用设计规范》：对比度至少 4.5:1（字号大于 18 dp/pt 时至少 3:1）；最大字体不小于 30 dp/pt；文本颜色不得作为传达信息的唯一手段。",
+    "why_it_matters": "把“无障碍”落到可测的数字上，避免文案只写“界面更友好”。",
+    "source_url": "http://www.hunan.gov.cn/zqt/zcsd/202104/t20210416_16470434.html",
+    "tags": ["标准", "中国", "移动应用", "对比度"]
+  },
+  {
+    "title": "GB/T 37668-2019：中国互联网无障碍第一号国标",
+    "one_liner": "《信息技术 互联网内容无障碍可访问性技术要求与测试方法》，2019-08-30 发布、2020-03-01 实施、现行；由中国残联与浙江大学牵头，参考 WCAG 2.0/2.1。",
+    "why_it_matters": "适用范围明确：互联网网页（含移动端网页）和移动应用产品——写数字产品剧情时的中国技术基线。",
+    "source_url": "https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=35ECC696805C1A67C93B74FB6D0D8EFB",
+    "tags": ["标准", "中国", "GB/T 37668"]
+  },
+  {
+    "title": "轮椅坡道：GB 50763-2012 查表",
+    "one_liner": "坡度 1:12 对应最大高度 0.75 m、水平长度 9.00 m；1:20 对应 1.20 m/24 m；最陡允许 1:8（高度 0.30 m、长度 2.40 m）；起点终点和中间休息平台水平长度不应小于 1.50 m。",
+    "why_it_matters": "写“坡道太陡”时有可引用的判定标准（贵阳案实测 1:4.76 被判不合格）。",
+    "source_url": "https://snamr.shaanxi.gov.cn/sy/ztzl/sbgxhxfpyjhx/bzcx/gjbz/202409/P020250320613009651129.pdf",
+    "tags": ["标准", "中国", "坡道", "GB 50763"]
+  },
+  {
+    "title": "1:8 是极限，不是标准",
+    "one_liner": "条文说明：当坡道提升高度小于 300 mm 时可选较陡坡度，但不得小于 1:8；“在有条件的情况下将坡道做到小于 1:12 的坡度，通行将更加安全和舒适”。",
+    "why_it_matters": "防止把“刚好合格的极限值”写成“好用”。",
+    "source_url": "https://snamr.shaanxi.gov.cn/sy/ztzl/sbgxhxfpyjhx/bzcx/gjbz/202409/P020250320613009651129.pdf",
+    "tags": ["标准", "中国", "坡道", "条文说明"]
+  },
+  {
+    "title": "GB 55019-2021 才是现在的强制规范",
+    "one_liner": "《建筑与市政工程无障碍通用规范》2022 年 4 月 1 日实施，为强制性工程建设规范、全部条文必须严格执行；GB 50763-2012 的 3.7.3(3、5)、4.4.5、6.2.4(5)、6.2.7(4)、8.1.4 条（款）同时废止。",
+    "why_it_matters": "最常见的专业错误就是把 GB 50763 说成“已废止”或说成“现行的强制标准”——两者都不准确。",
+    "source_url": "http://szwb.sz.gov.cn/gwszwfw/zsk/hybz/content/post_10877808.html",
+    "tags": ["标准", "中国", "GB 55019", "强制性"]
+  },
+  {
+    "title": "美国 ADA：1:12 与单段 30 英寸",
+    "one_liner": "2010 ADA Standards §405：纵向坡度不得陡于 1:12、横向坡度 1:48、净宽不小于 36 in（915 mm）、任何一段坡道升高不超过 30 in（760 mm）。",
+    "why_it_matters": "中美对照时可以避免拿一套数字判另一套做法。",
+    "source_url": "https://www.ada.gov/law-and-regs/design-standards/2010-stds",
+    "tags": ["标准", "美国", "ADA", "坡道"]
+  },
+  {
+    "title": "WCAG 2.2：2023 年 10 月 5 日成为 W3C 推荐标准",
+    "one_liner": "相比 WCAG 2.1 新增 9 条成功标准、移除 1 条（4.1.1 Parsing 已废弃），新增内容主要改善视觉、身体、认知障碍用户与触摸输入体验。",
+    "why_it_matters": "数字产品无障碍的全球通用技术基线，也是多国法规引用的版本。",
+    "source_url": "https://www.w3.org/news/2023/web-content-accessibility-guidelines-wcag-2-2-is-a-w3c-recommendation",
+    "tags": ["标准", "WCAG 2.2", "W3C"]
+  },
+  {
+    "title": "WCAG 2.2 的两条新规：24 像素与“不能只靠拖动”",
+    "one_liner": "2.5.8 目标尺寸（最小，AA）：可交互目标至少 24×24 CSS 像素或保持足够间距；2.5.7 拖动动作（AA）：需要拖动的操作必须也能用单击完成。",
+    "why_it_matters": "这两条直接对应手抖、精细动作受限的用户——写移动端剧情时的具体素材。",
+    "source_url": "https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22",
+    "tags": ["标准", "WCAG 2.2", "触摸目标"]
+  },
+  {
+    "title": "“无障碍身份验证”：登录不该考记忆",
+    "one_liner": "3.3.8 无障碍身份验证（最小，AA）：登录/验证不得要求认知功能测试（如记密码、解谜），须提供替代方式；3.3.7 冗余输入（A）：同一流程中已输入过的信息不得要求重复输入。",
+    "why_it_matters": "CAPTCHA、验证码、重复填表是残障用户最日常的挫败来源，而这两条给了明确答案。",
+    "source_url": "https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22",
+    "tags": ["标准", "WCAG 2.2", "登录", "认知障碍"]
+  },
+  {
+    "title": "WCAG 2.2 到底有多少条成功标准?",
+    "one_liner": "两种口径：87 条（78+9，未扣除已移除的 4.1.1）或 86 条（31 A + 24 AA + 31 AAA，扣除 4.1.1 后的有效条数）。",
+    "why_it_matters": "这是个会被专业读者抓住的细节：引用时必须说明口径。本文件两个来源并列，属【待核实/口径冲突】。",
+    "source_url": "https://www.adacompliancepros.com/blog/wcag-22-new-criteria-thresholds",
+    "tags": ["标准", "WCAG 2.2", "待核实"]
+  },
+  {
+    "title": "EN 301 549：欧盟 ICT 无障碍标准",
+    "one_liner": "由 ETSI、CEN、CENELEC 联合制定，覆盖网站、移动应用、软件、硬件、文档、电信；v3.2.1（2021-03 发布，2021-08-18 协调）纳入 WCAG 2.1 AA，v4.1.1 纳入 WCAG 2.2、2026-09-02 发布但尚未被《官方公报》引用。",
+    "why_it_matters": "“欧盟标准”不是单指网页：它把硬件与文档也纳入，是 WCAG 的超集。",
+    "source_url": "https://www.deque.com/accessibility-compliance/en-301-549",
+    "tags": ["标准", "欧盟", "EN 301 549"]
+  },
+  {
+    "title": "欧洲无障碍法案（EAA）：2025 年 6 月 28 日起管私营部门",
+    "one_liner": "EAA 自 2025 年 6 月 28 日起适用于受覆盖的私营部门产品与服务（电商、银行、交通、消费电子等），无论公司是否位于欧洲；27 个成员国均已转化立法。",
+    "why_it_matters": "无障碍从公共部门义务扩展到商业产品，是中国出海产品也会遇到的合规议题。",
+    "source_url": "https://www.levelaccess.com/compliance-overview/european-accessibility-act-eaa",
+    "tags": ["法律", "欧盟", "EAA", "私营部门"]
+  },
+  {
+    "title": "屏幕阅读器：2026 年主用率 JAWS 55.0%、NVDA 32.9%",
+    "one_liner": "WebAIM 屏幕阅读器用户调查 #11：主用 JAWS 55.0% / NVDA 32.9% / VoiceOver 6.5%；常用（可多选）JAWS 69.2% / NVDA 59.3% / VoiceOver 42.0% / Narrator 36.1%。",
+    "why_it_matters": "写“视障用户用什么”时最常被引用的行业调查；也提醒：同一个工具在不同地区/场景的比例差别很大。",
+    "source_url": "https://webaim.org/projects/screenreadersurvey11",
+    "tags": ["辅助技术", "屏幕阅读器", "数据"]
+  },
+  {
+    "title": "免费为什么重要：24.3% 的 NVDA 用户因成本选择它",
+    "one_liner": "WebAIM #11：24.3% 的 NVDA 用户把成本列为主要使用原因，而 JAWS 用户中只有 1.4%；“既有熟练度”是两类用户共同的主因。",
+    "why_it_matters": "辅助技术的可及性首先取决于价格——这就是为什么 NVDA（免费开源）在购买力较低地区普及。",
+    "source_url": "https://webaim.org/projects/screenreadersurvey11",
+    "tags": ["辅助技术", "屏幕阅读器", "可及性"]
+  },
+  {
+    "title": "盲文点显器：把屏幕变成能摸的点阵",
+    "one_liner": "“点显器又名盲人电子显示器或点字机，指能够将计算机上的信息用盲文同步显示，便于盲人摸读，通过与读屏软件配合使用……盲文按点会自动地凸起。”",
+    "why_it_matters": "触觉通道与听觉通道不是替代关系：精读教材、公式、表格时盲文不可替代。",
+    "source_url": "https://patents.google.com/patent/WO2016197928A1/zh",
+    "tags": ["辅助技术", "盲文", "点显器"]
+  },
+  {
+    "title": "口述影像：在对白间隙讲画面",
+    "one_liner": "“无障碍电影是在电影对白和音响的间隙，插入对于电影画面内容及其背后情感、意义的声音描述”，按“选片—撰稿—审核—校对—录制”流程、每环“三审三校”。",
+    "why_it_matters": "口述影像是人工创制的内容产品，不是自动生成——这一点直接决定它的成本与稀缺性。",
+    "source_url": "http://www.news.cn/politics/20241203/af7358f82b7344d1aea53b66b2fadbcf/c.html",
+    "tags": ["辅助技术", "口述影像", "无障碍电影", "光明影院"]
+  },
+  {
+    "title": "手语是语言，不是逐字手势",
+    "one_liner": "《国家通用手语常用词表》收词 5668 个，大量减少手指字母的使用，“重在体现手语表形表意的语言特点”，并注意描述体态动作与面部表情的变化。",
+    "why_it_matters": "这条决定了“AI 手语主播/字幕能否替代手语翻译”的正确答法：不能简单等同。",
+    "source_url": "http://www.moe.gov.cn/s78/A19/A19_ztzl/ztzl_yywzgfbz/guifanbzjs/201805/t20180521_336624.html",
+    "tags": ["辅助技术", "手语", "国家通用手语"]
+  },
+  {
+    "title": "央视 AI 手语主播：2021 年亮相，2022 冬奥首秀",
+    "one_liner": "2021 年 11 月 24 日央视新闻联合百度智能云推出总台首个 AI 手语主播，从北京冬奥会开始提供手语服务，词汇规范来自《国家通用手语词典》。",
+    "why_it_matters": "AI 手语的公开样本；注意报道口径是“具备高可懂度的手语表达能力”（目标），不是已验证结论。",
+    "source_url": "http://www.news.cn/tech/20211129/a88fd917d2c645728b09b9bba9eff17b/c.html",
+    "tags": ["辅助技术", "手语", "AI"]
+  },
+  {
+    "title": "人口级落差：25 亿人需要辅助产品，近 10 亿人拿不到",
+    "one_liner": "WHO–UNICEF 全球辅助技术报告：超 25 亿人需要至少一件辅助产品，近 10 亿人无法获得；低收入与中等收入国家可及率低至 3%；预计 2050 年需求超 35 亿人。",
+    "why_it_matters": "把“辅助技术能解决问题”放回供给现实：缺的往往不是技术，是可及性。",
+    "source_url": "https://www.unicef.org/reports/global-report-assistive-technology",
+    "tags": ["数据", "辅助技术", "WHO", "UNICEF"]
+  },
+  {
+    "title": "导盲犬：1731 万视障人士 vs 不足 300 只",
+    "one_liner": "中国盲人协会数据（2023）：全国 1731 万视障人士、导盲犬不足 300 只；全国训练基地仅 5 家（大连、上海、广州、西安、郑州）；培训成本约 20 万元/只、淘汰率约 55%。",
+    "why_it_matters": "结构性稀缺的典型：把“排队三年领到导盲犬”写成圆满结局，会掩盖真正的问题。",
+    "source_url": "https://epaper.oeeee.com/epaper/A/html/2023-04/27/content_7807.htm",
+    "tags": ["数据", "导盲犬", "中国"]
+  },
+  {
+    "title": "路遇导盲犬：不呼唤、不拒绝、不抚摸、不喂食",
+    "one_liner": "合格导盲犬温顺、稳定、无攻击倾向；一旦戴上特制鞍具即处于工作状态。专家提醒路遇导盲犬请做到“四不”。",
+    "why_it_matters": "公共礼仪是可以被剧情直接演示的“具体行动”，比讲道理更有效。",
+    "source_url": "https://www.xinhuanet.com/politics/2018-10/14/c_129971017.htm",
+    "tags": ["导盲犬", "礼仪", "公共教育"]
+  },
+  {
+    "title": "助听设备在中国：使用率仅约 10%",
+    "one_liner": "第二次全国残疾人抽样调查显示，我国听力损失人群中使用助听设备者仅占 10%，老年人尤其高龄老人比例更低；60 岁以上老年人听力损失患病率 11.04%、患者超 2000 万。",
+    "why_it_matters": "设备成熟但使用率极低——技术、费用、服务、认知四重缺口的具体样貌。",
+    "source_url": "http://www.xinhuanet.com/gongyi/20251218/4724b29ee84a4930baf2e866e50342ac/c.html",
+    "tags": ["数据", "助听器", "听力障碍", "中国"]
+  },
+  {
+    "title": "感应线圈（hearing loop）与 IEC 60118-4",
+    "one_liner": "IEC 60118-4 规定感应环路的磁场强度要求（足够信噪比且不过载助听器）、最低频率响应要求与测量方法，用于把音频信号直接送入助听器的拾音线圈。",
+    "why_it_matters": "典型“需要场所端投资”的无障碍：个人无法自行解决，必须由场馆、柜台承担。",
+    "source_url": "https://centerforhearingaccess.org/international-standards",
+    "tags": ["辅助技术", "助听器", "IEC 60118-4"]
+  },
+  {
+    "title": "眼控（眼动仪）：用眼睛说话",
+    "one_liner": "通过识别瞳孔与眼中反射点的关系定位注视点，用户可用眼睛控制电脑与语音输出设备，完成沟通、上网、控制家居；常用于渐冻症（ALS）、脑瘫、头部控制能力差者。",
+    "why_it_matters": "辅助沟通（AAC）的代表技术；它的瓶颈是可负担性与专业服务，不是使用者的意志。",
+    "source_url": "https://www.tobiidynavox.cn/pages/what-is-eye-tracking-for-aac",
+    "tags": ["辅助技术", "眼控", "AAC", "ALS"]
+  },
+  {
+    "title": "语音输入：长按空格就能打字",
+    "one_liner": "讯飞输入法做无障碍优化，视障用户“只需长按空格键说话就能完成打字”，支持 23 种方言，并朗读 Emoji 表情（“表情名称，第几行第几列”）。",
+    "why_it_matters": "一个具体、可演示的细节：无障碍改造往往不是宏大工程，而是“长按空格”这类交互决定。",
+    "source_url": "https://www.capa.run/news_content?id=116",
+    "tags": ["辅助技术", "语音输入", "输入法"]
+  },
+  {
+    "title": "高考合理便利：残障考生的制度化支持",
+    "one_liner": "盲文试卷、大字号试卷、免除外语听力、允许助听器与轮椅、可自带桌椅、盲文卷作答时间为普通考生 1.5 倍、其他视障与书写困难考生延长 30%。",
+    "why_it_matters": "把无障碍从“硬件”扩展到“考核方式再设计”；也是 CRPD 合理便利在中国最成熟的落地样本。",
+    "source_url": "http://www.moe.gov.cn/jyb_xwfb/xw_zt/moe_357/2025/2025_zt10/mtbd/202506/t20250611_1193824.html",
+    "tags": ["案例", "校园", "合理便利", "高考"]
+  },
+  {
+    "title": "1.4 万余名残障考生获批合理便利",
+    "one_liner": "2025 年 1335 万高考考生中，1.4 万余名残障考生获批合理便利；12 个省份 16 名盲人考生使用专门命制的盲文试卷；这是自 2014 年首次使用盲文试卷以来连续第 12 年。",
+    "why_it_matters": "用数字展示“制度化”而非“个别好心”：2012 年全国仅 100 余名残疾考生获便利，13 年后增长约 140 倍。",
+    "source_url": "http://www.moe.gov.cn/jyb_xwfb/xw_zt/moe_357/2025/2025_zt10/mtbd/202506/t20250611_1193824.html",
+    "tags": ["案例", "校园", "数据", "高考"]
+  },
+  {
+    "title": "12306：一个 App 的双版本设计",
+    "one_liner": "2021 年 9 月 1 日 12306 网站上线适老化无障碍功能：支持读屏获取完整信息、放大缩小/调整配色/语音识读，验证码优化为滑块或短信；App 推出标准版与“爱心版”（大字体、大图标、高对比度）。",
+    "why_it_matters": "买票能不能独立完成，本身就是出行能不能独立完成的一部分——交通与网络服务的边界已经消失。",
+    "source_url": "http://www.news.cn/politics/2021-09/01/c_1127815661.htm",
+    "tags": ["案例", "交通", "网络服务", "12306"]
+  },
+  {
+    "title": "天津：用 App 语音报站替代车外喇叭",
+    "one_liner": "视障者需要车外语音报站，周边居民投诉噪音；检察机关磋商后改为升级“天津公交 App”增加语音报站（进站震动并循环播报），并邀请同为视障人士的志愿者全程参与软件升级与测试。",
+    "why_it_matters": "无障碍冲突不是善恶对立，而是利益分配；解法可以是换一条技术路径，而不是让一方牺牲。",
+    "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html",
+    "tags": ["案例", "交通", "公益诉讼", "天津"]
+  },
+  {
+    "title": "Target 案：网站无障碍第一案",
+    "one_liner": "美国盲人联合会诉 Target（2006–2008）：指控网站图片缺少有意义的替代文本、导航搜索难操作、结账受阻；2008 年和解，赔付 600 万美元并接受三年 NFB 监督、培训与用户反馈机制。",
+    "why_it_matters": "确立“有实体店的零售商，网站也须无障碍”的先例。注意：和解协议明确不构成 Target 违法的承认。",
+    "source_url": "https://adasoutheast.org/legal/court/national-federation-of-the-blind-v-target-corporation-2",
+    "tags": ["案例", "网络服务", "诉讼", "美国"]
+  },
+  {
+    "title": "故宫手语导览：把讲解重做一遍",
+    "one_liner": "故宫博物院与北京手语研究会推出数字化手语导览：50 个手语讲解视频覆盖 30 个建筑空间，扫描文物标识牌上的二维码即可观看，首批手语讲解志愿者上岗（2023 年 5 月）。",
+    "why_it_matters": "无障碍可以是“内容级”的：不是加一条坡道，而是把导览重新生产一遍——成本也由此产生。",
+    "source_url": "http://bj.news.cn/20230519/58a5788ae6104ae8be3fad07b1bb602b/c.html",
+    "tags": ["案例", "公共服务", "手语", "故宫"]
+  },
+  {
+    "title": "合肥图书馆：设备在那儿，但用不了",
+    "one_liner": "盲人阅览室的盲文与有声读物无法正常使用、无障碍信息交流设备配置不完善、借阅流程不通畅；检察建议推动后，30 余家图书馆完成信息无障碍环境改造，新增 200 余册盲文图书与“网络+邮寄”借阅。",
+    "why_it_matters": "“设施存在 ≠ 服务可用”是信息无障碍最常见的最后一米，也是最有戏剧张力的现实矛盾。",
+    "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html",
+    "tags": ["案例", "公共服务", "图书馆", "公益诉讼"]
+  },
+  {
+    "title": "119/120 的文字报警通道",
+    "one_liner": "宁波（约 90 万听力言语障碍人士）2023 年 7 月 26 日上线消防短信报警：点击推送链接自动获取实时定位、上传现场视频照片；红安同年开通 120 短信与“微信+定位”报警。",
+    "why_it_matters": "信息无障碍等于生命线：只提供语音通道的应急系统，本身就在排除一部分公民。",
+    "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html",
+    "tags": ["案例", "公共服务", "应急", "听障"]
+  },
+  {
+    "title": "蔡勇斌：视障者做“信息无障碍工程师”",
+    "one_liner": "盲人程序员蔡勇斌 2014 年经两轮面试加入深圳的信息无障碍公益机构，成为视障工程师，为互联网产品提供无障碍测试；2017 年该机构有 7 名视障工程师。",
+    "why_it_matters": "“没有我们的参与就不要为我们做决定”的就业版本：测试与评审本身可以是由残障者担任的专业岗位。",
+    "source_url": "https://www.gddpf.org.cn/xwzx/zqzc/content/post_1316898.html",
+    "tags": ["案例", "就业", "视障", "信息无障碍"]
+  },
+  {
+    "title": "inspiration porn：不要拿别人的存在当励志素材",
+    "one_liner": "Stella Young：“我不来这里激励你们。我来告诉你们，关于残障，我们被骗了。”她批评把残障者写成“激励健全人的对象”。",
+    "why_it_matters": "首选题材雷区。自检方法：把角色换成健全人后这段剧情是否仍成立?成立就说明你在消费而非叙述。",
+    "source_url": "https://www.ted.com/talks/stella_young_i_m_not_your_inspiration_thank_you_very_much",
+    "tags": ["误区", "叙事", "inspiration porn"]
+  },
+  {
+    "title": "supercrip：把残障写成必须被“克服”的东西",
+    "one_liner": "学术批评指出，超残叙事“强化了只要足够努力任何人都能克服残障的印象”“把残障者的复杂现实过度简化，贬低为给健全人提供激励的形象”。",
+    "why_it_matters": "结局写法的高危区：成功剧情要写清靠了什么条件（辅具、钱、他人劳动、制度便利），而不是意志力。",
+    "source_url": "https://samischalk.com/wp-content/uploads/2019/01/Schalk_Reevaluating-the-Supercrip_JLCDS-2016.pdf",
+    "tags": ["误区", "叙事", "supercrip"]
+  },
+  {
+    "title": "“盲道被占用”是违法，不是素质问题",
+    "one_liner": "《无障碍环境建设法》第二十八条：不得擅自改变无障碍设施用途或非法占用、损坏；因特殊情况临时占用应公告并设置护栏、警示标志或信号设施，同时采取必要的替代性措施，期满及时恢复原状。",
+    "why_it_matters": "把日常摩擦接到法条上，剧情立刻从“抱怨”变成“可行动”。",
+    "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml",
+    "tags": ["法律", "中国", "盲道", "第二十八条"]
+  },
+  {
+    "title": "安检口与挡车柱：45 cm 拦住了轮椅",
+    "one_liner": "崂山区案中，出入口挡车柱间距仅 45 cm，轮椅无法通行，整改后按国家标准扩大到不小于 90 cm；无障碍卫生间轮椅回转空间直径也须不小于 1.5 m。",
+    "why_it_matters": "无障碍失效常常发生在“一个具体尺寸”上——这是剧本里最容易做出真实感的地方。",
+    "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html",
+    "tags": ["案例", "标准", "尺寸", "坡道"]
+  }
+]

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《可及》· 无障碍科普叙事 Demo</title>
+<style>
+  :root{
+    --bg:#0e1015; --panel:#171a21; --panel2:#1e222b; --line:#2c3140;
+    --ink:#e9e6e0; --muted:#8b93a3; --dim:#5a6070;
+    --accent:#e8b13a; --blue:#4a9eda; --ok:#5fbf7f; --warn:#d9694a;
+    --cell:4px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  #wrap{max-width:960px;margin:0 auto;padding:14px 14px 28px}
+
+  /* ── 顶部 HUD ── */
+  #hud{display:flex;gap:14px;align-items:center;justify-content:space-between;
+    background:var(--panel);border:2px solid var(--line);padding:8px 12px;margin-bottom:10px}
+  #hud .title{font-weight:700;letter-spacing:.06em}
+  #hud .title small{color:var(--dim);font-weight:400;margin-left:8px;letter-spacing:0}
+  .meters{display:flex;gap:12px}
+  .meter{min-width:96px}
+  .meter b{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.08em}
+  .bar{height:7px;background:#101319;border:1px solid var(--line);margin-top:3px;position:relative;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;transition:width .5s steps(8)}
+  #mProg i{background:var(--blue)} #mTrust i{background:var(--ok)} #mSus i{background:var(--accent)}
+  #hintkey{font-size:11px;color:var(--dim);border:1px dashed var(--line);padding:4px 8px}
+
+  /* ── 场景区 ── */
+  #stage{position:relative;height:300px;background:var(--panel2);
+    border:2px solid var(--line);overflow:hidden;image-rendering:pixelated}
+  #stage .shelfband{position:absolute;inset:0 0 34% 0;
+    background:repeating-linear-gradient(90deg,#232833 0 17px,#1b2029 17px 21px);
+    border-bottom:3px solid #12151b}
+  #stage .shelves{position:absolute;left:0;right:0;top:0;bottom:34%;
+    background:repeating-linear-gradient(0deg,transparent 0 23px,#12151b 23px 26px)}
+  #stage .floor{position:absolute;left:0;right:0;bottom:0;height:34%;background:#1a1e26;
+    border-top:3px solid #2c3140}
+  #stage .mat{position:absolute;left:8%;right:8%;bottom:6%;height:26px;
+    background:repeating-linear-gradient(90deg,#d9b23a 0 9px,#c9a233 9px 18px);opacity:.5;
+    border-radius:2px}
+  #stage .steps{position:absolute;right:6%;bottom:0;width:26%;height:26%;
+    background:repeating-linear-gradient(0deg,#2b303c 0 12px,#232833 12px 24px)}
+  #stage .counter{position:absolute;left:6%;bottom:34%;width:22%;height:16%;
+    background:#2a2f3a;border:2px solid #363c4a}
+  .actor{position:absolute;bottom:34%;transform:translateX(-50%)}
+  .actor .name{position:absolute;left:50%;transform:translateX(-50%);bottom:-20px;
+    font-size:11px;color:var(--muted);white-space:nowrap}
+  .actor.talk .name{color:var(--accent)}
+  .actor.talk::after{content:"";position:absolute;left:50%;transform:translateX(-50%);
+    bottom:-26px;width:0;height:0;border:5px solid transparent;border-top-color:var(--accent)}
+  .px{display:grid}
+  .px div{width:var(--cell);height:var(--cell)}
+  #stageTag{position:absolute;left:10px;top:8px;font-size:11px;color:var(--dim);
+    background:rgba(14,16,21,.8);border:1px solid var(--line);padding:2px 7px;letter-spacing:.06em}
+
+  /* ── 对话框 ── */
+  #box{margin-top:10px;background:var(--panel);border:2px solid var(--line);padding:14px 16px 16px;min-height:168px}
+  #speaker{display:inline-block;font-size:12px;letter-spacing:.1em;color:var(--bg);
+    background:var(--accent);padding:2px 10px;margin-bottom:9px;font-weight:700}
+  #speaker.narr{background:#2c3140;color:var(--muted)}
+  #text{font-size:19px;line-height:1.75;min-height:66px;letter-spacing:.02em}
+  #opts{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+  .opt{text-align:left;font:inherit;font-size:16px;color:var(--ink);background:#141821;
+    border:2px solid var(--line);padding:9px 12px;cursor:pointer;letter-spacing:.02em}
+  .opt:hover,.opt.sel{border-color:var(--accent);background:#1c2130;color:#fff}
+  .opt em{color:var(--dim);font-style:normal;margin-right:9px;font-size:13px}
+  .opt.sel em{color:var(--accent)}
+
+  /* ── 档案库 ── */
+  #arch{position:fixed;inset:0;background:rgba(8,10,14,.94);display:none;z-index:9;overflow:auto}
+  #arch.on{display:block}
+  #archInner{max-width:820px;margin:32px auto;background:var(--panel);border:2px solid var(--line);padding:20px 22px}
+  #arch h2{margin:0 0 4px;font-size:17px;letter-spacing:.08em}
+  #arch .sub{color:var(--dim);font-size:12px;margin-bottom:14px;letter-spacing:.04em}
+  .arow{border-left:3px solid var(--line);padding:8px 12px;margin-bottom:7px;cursor:pointer;background:#141821}
+  .arow:hover{border-left-color:var(--accent);background:#1a1f2b}
+  .arow b{font-size:14px;font-weight:600}
+  .arow.locked b{color:var(--dim)}
+  .arow p{margin:5px 0 0;font-size:13px;color:var(--muted);line-height:1.65;display:none}
+  .arow.open p{display:block}
+  .arow a{color:var(--blue);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--blue)}
+  .arow .src{font-size:11px;color:var(--dim);letter-spacing:.04em;margin-top:5px}
+
+  /* ── 结局卡 ── */
+  #end{display:none;margin-top:10px;background:var(--panel);border:2px solid var(--accent);padding:20px}
+  #end.on{display:block}
+  #end h3{margin:0 0 10px;font-size:22px;letter-spacing:.06em;color:var(--accent)}
+  #end .recap{font-size:13px;color:var(--muted);line-height:1.9;border-left:3px solid var(--line);padding-left:12px;margin:12px 0}
+  #end .line{font-size:17px;line-height:1.8}
+  .key{display:inline-block;font-size:11px;color:var(--dim);border:1px dashed var(--line);padding:2px 6px;margin-right:6px}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <div class="title">可及 <small>无障碍科普叙事 · 工业设计</small></div>
+    <div class="meters">
+      <div class="meter" id="mProg"><b>项目进度</b><div class="bar"><i></i></div></div>
+      <div class="meter" id="mTrust"><b>当事人信任</b><div class="bar"><i></i></div></div>
+      <div class="meter" id="mSus"><b>可持续性</b><div class="bar"><i></i></div></div>
+    </div>
+    <div id="hintkey">Tab 档案库</div>
+  </div>
+
+  <div id="stage">
+    <div class="shelfband"></div><div class="shelves"></div><div class="floor"></div>
+    <div class="mat"></div><div class="steps"></div><div class="counter"></div>
+    <div id="stageTag">市图书馆 · 一层大厅</div>
+    <div id="actors"></div>
+  </div>
+
+  <div id="box">
+    <div id="speaker" class="narr">旁白</div>
+    <div id="text"></div>
+    <div id="opts"></div>
+  </div>
+  <div id="end"></div>
+</div>
+
+<div id="arch"><div id="archInner">
+  <h2>无障碍档案库</h2>
+  <div class="sub">随剧情解锁 · 每条都标注来源，可点开链接自查（Tab 关闭）</div>
+  <div id="alist"></div>
+</div></div>
+
+<script>
+const CASE = {"case_id": "library_access", "title": "图书馆无障碍改造", "major": "工业设计", "start": "n_start", "nodes": {"n_start": {"type": "say", "speaker": "我", "text": "我是工业设计大二。期末作业：\n让校园某处对轮椅真正可用。", "next": "n_meet"}, "n_meet": {"type": "say", "speaker": "小舟", "text": "你要帮我推上去吗？\n先说好，我不想每次靠人推。", "set": {"met_zhou": true}, "relation": {"zhou": 1}, "unlock": ["entry_social_model"], "next": "n_need"}, "n_need": {"type": "say", "speaker": "小舟", "text": "进门查书我能自己来。\n卡在台阶、服务台和四楼。", "set": {"heard_need": true}, "relation": {"zhou": 1}, "next": "n_choice1"}, "n_choice1": {"type": "choice", "prompt": "第一步做什么？", "options": [{"text": "跟着小舟走一遍全流程，把尺寸量清楚", "next": "n_walk", "set": {"walked": true}, "relation": {"zhou": 1}, "progress": 1}, {"text": "先去馆长办公室问预算和工期", "next": "n_budget", "set": {"asked_budget": true}}], "fallback_next": "n_budget"}, "n_walk": {"type": "say", "speaker": "小舟", "text": "你看：三级台阶，服务台，\n还有四楼的书库。", "next": "n_walk2"}, "n_walk2": {"type": "say", "speaker": "我", "text": "台阶高 0.45 米，1:12 的坡\n要 5.4 米长，两端留平台。", "set": {"measured": true}, "progress": 1, "unlock": ["entry_ramp_slope"], "next": "n_walk3"}, "n_walk3": {"type": "say", "speaker": "小舟", "text": "通道最窄 0.8 米，回转\n要 1.5 米才转得开。", "unlock": ["entry_turning_space"], "next": "n_walk4"}, "n_walk4": {"type": "say", "speaker": "小舟", "text": "服务台太高，我够不到，\n四楼的书也上不去。", "relation": {"zhou": 1}, "unlock": ["entry_low_counter"], "next": "n_walk5"}, "n_walk5": {"type": "say", "speaker": "小舟", "text": "还有视障的同学，\n导盲犬进馆常被拦。", "unlock": ["entry_guide_dog"], "next": "n_choice2"}, "n_budget": {"type": "say", "speaker": "馆长", "text": "经费紧，但依法得改：\n设施、信息、服务三块都算。", "set": {"knows_gate": true}, "unlock": ["entry_law_2023"], "next": "n_measure_prompt"}, "n_measure_prompt": {"type": "choice", "prompt": "手上还没有数据，先做什么？", "options": [{"text": "回去量台阶和通道，再谈方案", "next": "n_walk", "set": {"went_measure": true}}, {"text": "先不量，找学姐用志愿者顶上", "next": "n_b1", "set": {"shortcut": true}}], "fallback_next": "n_walk"}, "n_choice2": {"type": "choice", "prompt": "三条路，你走哪条？", "options": [{"text": "实测数据画 1:12 缓坡 + 低位服务台", "next": "n_a1", "require": {"measured": true}, "set": {"solution": "ramp"}, "progress": 3}, {"text": "找学姐组织志愿者代查代借、送书到座", "next": "n_b1", "set": {"solution": "volunteer"}}, {"text": "写成提案，走馆务会争取立项", "next": "n_c1", "require": {"measured": true}, "set": {"solution": "proposal"}}], "fallback_next": "n_b1"}, "n_a1": {"type": "say", "speaker": "我", "text": "缓坡按 1:12 画，5.4 米长，\n两端各留 1.5 米平台。", "set": {"solution_a": true}, "progress": 3, "next": "n_a2"}, "n_a2": {"type": "say", "speaker": "馆长", "text": "合规我认。但 5.4 米要占绿地，\n预算得走基建流程。", "next": "n_a3"}, "n_a3": {"type": "say", "speaker": "学姐", "text": "先顶上送书可以，\n但靠人排班撑不久。", "set": {"volunteer_offered": true}, "relation": {"xuejie": 1}, "next": "n_choice3"}, "n_choice3": {"type": "choice", "prompt": "方案还要等工期，怎么办？", "options": [{"text": "坚持原方案，把造价和工期表做完", "next": "n_a4", "require": {"solution_a": true}, "progress": 2}, {"text": "让志愿者先顶上，方案并行推进", "next": "n_mix1", "set": {"mixed": true}}], "fallback_next": "n_mix1"}, "n_a4": {"type": "say", "speaker": "我", "text": "造价表、工期表、条例文\n我一起交给基建处。", "progress": 3, "next": "n_a5"}, "n_a5": {"type": "say", "speaker": "馆长", "text": "下学期立项，暑假施工。\n小舟，验收你来。", "set": {"approved": true}, "relation": {"zhou": 1}, "progress": 2, "next": "n_good"}, "n_c1": {"type": "say", "speaker": "我", "text": "提案三块：坡道、低位台、\n还有检索机的读屏和字幕。", "set": {"solution_c": true}, "progress": 2, "unlock": ["entry_law_2023", "entry_sign_subtitle", "entry_wcag22"], "next": "n_c2"}, "n_c2": {"type": "say", "speaker": "小舟", "text": "别替我列需求。清单我来写，\n馆务会我自己去说。", "set": {"zhou_involved": true}, "relation": {"zhou": 2}, "unlock": ["entry_participation"], "next": "n_c4"}, "n_c4": {"type": "say", "speaker": "馆长", "text": "馆务会通过了，排在暑假。\n预算走无障碍经费。", "set": {"approved": true}, "progress": 4, "next": "n_good"}, "n_b1": {"type": "say", "speaker": "学姐", "text": "我组队排班，周一到周五，\n代查代借、送书到座。", "set": {"solution_b": true, "volunteer": true}, "next": "n_b2"}, "n_b2": {"type": "say", "speaker": "小舟", "text": "今天我能借到书了，谢谢。\n但这不是我自己来。", "set": {"zhou_objection": true}, "relation": {"zhou": -1}, "next": "n_b4"}, "n_b4": {"type": "say", "speaker": "小舟", "text": "我要的不是有人替我，\n是我自己走完这四步。", "relation": {"zhou": 1}, "unlock": ["entry_participation"], "next": "n_b5"}, "n_b5": {"type": "say", "speaker": "学姐", "text": "排班全靠人，考完试就散了。\n这撑不到明年。", "set": {"unsustainable_worry": true}, "next": "n_choice4"}, "n_choice4": {"type": "choice", "prompt": "怎么收尾？", "options": [{"text": "志愿者只做过渡，同时推改造方案", "next": "n_mix1", "set": {"handoff": true}, "progress": 2}, {"text": "先维持志愿者服务，改造下次再说", "next": "n_partial", "set": {"only_volunteer": true}}], "fallback_next": "n_partial"}, "n_mix1": {"type": "say", "speaker": "学姐", "text": "那我先把排班表做起来，\n改造的事你别停。", "relation": {"xuejie": 1}, "next": "n_mix2"}, "n_mix2": {"type": "say", "speaker": "小舟", "text": "有人送书总比没有好。\n但门槛还在，下一步拆它。", "unlock": ["entry_library_service"], "next": "n_partial"}, "n_partial": {"type": "end", "ending_id": "partial", "title": "半程", "text": "志愿者送书到座，小舟借到了书。\n但台阶没动，他说下一步拆门槛。"}, "n_good": {"type": "end", "ending_id": "good_project", "title": "能动用了", "text": "小舟自己进馆、查书、取书、借书。\n他说：下次我可以自己来。"}}};
+const ARCHIVE = [{"id": "entry_law_2023", "title": "《无障碍环境建设法》：2023 年 9 月 1 日起施行", "one_liner": "2023 年 6 月 28 日十四届全国人大常委会第三次会议通过，共 8 章：总则、无障碍设施建设、无障碍信息交流、无障碍社会服务、保障措施、监督管理、法律责任、附则。", "why_it_matters": "中国无障碍从行政法规升级为法律；三大领域（设施／信息／社会服务）是理解后续所有条文的地图。第二条第二款还写明“其他人有无障碍需求的，可以享受无障碍环境便利”，一句话否掉“无障碍=残疾人专用”。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "2023", "无障碍环境建设法"]}, {"id": "entry_ramp_slope", "title": "轮椅坡道：GB 50763-2012 查表", "one_liner": "坡度 1:12 对应最大高度 0.75 m、水平长度 9.00 m；1:20 对应 1.20 m／24 m；最陡允许 1:8（高度 0.30 m、长度 2.40 m）；起点终点和中间休息平台水平长度不应小于 1.50 m。", "why_it_matters": "写“坡道太陡”时有可引用的判定标准（贵阳案实测 1:4.76 被判不合格）。条文说明另强调：1:8 是极限、不是标准，“在有条件的情况下将坡道做到小于 1:12 的坡度，通行将更加安全和舒适”。", "source_url": "https://snamr.shaanxi.gov.cn/sy/ztzl/sbgxhxfpyjhx/bzcx/gjbz/202409/P020250320613009651129.pdf", "tags": ["标准", "中国", "坡道", "GB 50763"]}, {"id": "entry_turning_space", "title": "安检口与挡车柱：45 cm 拦住了轮椅", "one_liner": "崂山区案中，出入口挡车柱间距仅 45 cm，轮椅无法通行，整改后按国家标准扩大到不小于 90 cm；无障碍卫生间轮椅回转空间直径也须不小于 1.5 m。", "why_it_matters": "无障碍失效常常发生在“一个具体尺寸”上——这是剧本里最容易做出真实感的地方。", "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html", "tags": ["案例", "标准", "尺寸", "回转空间"]}, {"id": "entry_low_counter", "title": "第四十条：低位服务台或无障碍服务窗口", "one_liner": "行政服务机构、社区服务机构以及供水、供电、供气、供热等公共服务机构，应当设置低位服务台或无障碍服务窗口，配备电子信息显示屏、手写板、语音提示等设备。", "why_it_matters": "“柜台太高够不到”不是态度问题，是法定设备问题——《无障碍环境建设法》第四十条。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "低位服务台", "第四十条"]}, {"id": "entry_library_service", "title": "合肥图书馆：设备在那儿，但用不了", "one_liner": "盲人阅览室的盲文与有声读物无法正常使用、无障碍信息交流设备配置不完善、借阅流程不通畅；检察建议推动后，30 余家图书馆完成信息无障碍环境改造，新增 200 余册盲文图书与“网络+邮寄”借阅。", "why_it_matters": "“设施存在 ≠ 服务可用”是信息无障碍最常见的最后一米，也是最有戏剧张力的现实矛盾。", "source_url": "https://nx.jcy.gov.cn/hlxy/qwfb/202312/t20231207_809362.html", "tags": ["案例", "公共服务", "图书馆", "公益诉讼"]}, {"id": "entry_social_model", "title": "社会模式：是社会使人残障", "one_liner": "UPIAS：“在我们看来，是社会使肢体损伤者变得残障。残障是被强加在损伤之上的一种处境。”", "why_it_matters": "这是现代残障权利话语的起点：把“问题在个人身上”翻转为“问题在环境与制度里”。游戏里任何一处障碍，都可以据此判断它该写在哪一侧。", "source_url": "https://the-ndaca.org/resources/audio-described-gallery/fundamental-principles-of-disability", "tags": ["社会模式", "UPIAS", "概念", "1976"]}, {"id": "entry_participation", "title": "“没有我们的参与，就不要为我们做决定”", "one_liner": "CRPD 第 4.3 条要求在与残障人相关的事项上与其密切协商并使其积极参与；委员会第 7 号一般性意见指出，残障者常在自身相关决策中不被咨询、决定被替其作出。", "why_it_matters": "判断一部作品是否尊重主体性的硬指标：当事人有没有出现在决策、测试、验收环节里。", "source_url": "https://www.ohchr.org/en/documents/general-comments-and-recommendations/general-comment-no7-article-43-and-333-participation", "tags": ["CRPD", "主体性", "参与"]}, {"id": "entry_wcag22", "title": "WCAG 2.2 的两条新规：24 像素与“不能只靠拖动”", "one_liner": "2.5.8 目标尺寸（最小，AA）：可交互目标至少 24×24 CSS 像素或保持足够间距；2.5.7 拖动动作（AA）：需要拖动的操作必须也能用单击完成。", "why_it_matters": "这两条直接对应手抖、精细动作受限的用户——检索机、网站、App 都适用；WCAG 2.2 已于 2023 年 10 月 5 日成为 W3C 推荐标准。", "source_url": "https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22", "tags": ["标准", "WCAG 2.2", "W3C", "触摸目标"]}, {"id": "entry_sign_subtitle", "title": "财政资金设立的电视台：须配同步字幕", "one_liner": "第三十条：条件具备的每天至少播放一次配播手语的新闻节目；国家鼓励影视录像制品、网络视频加配字幕、手语或口述音轨。", "why_it_matters": "信息无障碍最“可见”的法定要求，也是“手语／字幕／口述影像”三类服务的法律源头。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "信息无障碍", "第三十条"]}, {"id": "entry_guide_dog", "title": "服务犬：导盲犬、导听犬、辅助犬", "one_liner": "第四十六条：公共场所经营管理单位、交通运输设施和公共交通运输工具的运营单位应当为残疾人携带服务犬提供便利。", "why_it_matters": "导盲犬被拒不是误会，是本条下的合规问题（尽管执行细则仍缺）。", "source_url": "https://www.12371.cn/2023/06/29/ARTI1687994873832995.shtml", "tags": ["法律", "中国", "导盲犬", "第四十六条"]}];
+
+/* ── 状态机（契约与 CONTRACT.md 一致：flags / relation / progress / unlocked） ── */
+const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), path:[], node:null};
+
+function effects(n){
+  (n.set?Object.entries(n.set):[]).forEach(([k,v])=>S.flags[k]=v);
+  if(n.relation)Object.entries(n.relation).forEach(([k,v])=>S.relation[k]=(S.relation[k]||0)+v);
+  if(n.progress)S.progress=Math.max(0,Math.min(100,S.progress+n.progress));
+  (n.unlock||[]).forEach(id=>S.unlocked.add(id));
+  hud();
+}
+function ok(req){ return !req || Object.entries(req).every(([k,v])=>S.flags[k]===v); }
+
+function goto(id){
+  const n = CASE.nodes[id];
+  if(!n){ console.error("节点不存在", id); return; }
+  S.node = id; S.flags.__node = id;
+  if(n.unlock) effects({unlock:n.unlock});
+  if(n.type==="say"){
+    if(n.set||n.relation||n.progress) effects(n);
+    speak(n.speaker||"旁白", n.text, ()=>goto(n.next));
+  } else if(n.type==="choice"){
+    if(n.set||n.relation) effects(n);
+    const vis = n.options.filter(o=>ok(o.require));
+    if(!vis.length){ goto(n.fallback_next); return; }
+    speak(n.speaker||"旁白", n.prompt, null);
+    showOpts(vis);
+  } else if(n.type==="end"){
+    ending(n);
+  }
+}
+function pick(o){
+  S.path.push({node:S.node, text:o.text});
+  if(o.set||o.relation||o.progress){ effects(o); }
+  if(o.unlock) effects({unlock:o.unlock});
+  goto(o.next);
+}
+
+/* ── 打字机（支持点击/空格跳过；后台标签页不做动画，避免定时器被降频卡住）── */
+let typing=null, pendTxt="", pendDone=null;
+function speak(who, txt, done){
+  const sp=document.getElementById("speaker");
+  sp.textContent=who; sp.className = (who==="旁白")?"narr":"";
+  const el=document.getElementById("text");
+  document.getElementById("opts").innerHTML="";
+  document.getElementById("end").classList.remove("on");
+  clearInterval(typing); typing=null; pendTxt=txt; pendDone=done; el.textContent="";
+  if(document.hidden){ el.textContent=txt; if(done) setTimeout(done,120); return; }
+  let i=0;
+  typing=setInterval(()=>{
+    el.textContent = txt.slice(0, ++i);
+    if(i>=txt.length){ clearInterval(typing); typing=null; if(done) setTimeout(done, 260); }
+  }, 26);
+}
+function finishTyping(){
+  if(!typing) return;
+  clearInterval(typing); typing=null;
+  document.getElementById("text").textContent=pendTxt;
+  if(pendDone) setTimeout(pendDone, 120);
+}
+document.getElementById("text").onclick=finishTyping;
+function showOpts(list){
+  const box=document.getElementById("opts"); box.innerHTML="";
+  list.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.innerHTML=`<em>${i+1}</em>${o.text}`;
+    b.onclick=()=>pick(o);
+    box.appendChild(b);
+  });
+  window.__opts=list;
+}
+window.__pick=i=>{ const o=window.__opts&&window.__opts[i]; if(o) pick(o); };
+
+/* ── 像素小人（字符画 → div 网格）── */
+const SPR={
+ player:["..hhh..","..hhh..",".sssss.",".s.s.s.","..ccc..",".ccccc.","..ccc..","..c.c..","..s.s.."],
+ xiaozhou:["..hhh..","..hhh..",".sssss.","..ccc..","..ccc..","...c...",".wwwww.","w.w.w.w","..w.w.."]
+};
+const PAL={h:"#2b2f3a",s:"#e6c9a8",c:"#4a9eda",w:"#c9ccd4",g:"#5fbf7f",a:"#e8b13a",b:"#8b93a3"};
+function sprite(map,left,pal){
+  const d=document.createElement("div"); d.className="px actor";
+  d.style.left=left; d.style.gridTemplateColumns=`repeat(${map[0].length},var(--cell))`;
+  map.forEach(row=>[...row].forEach(ch=>{
+    const c=document.createElement("div");
+    c.style.background = ch==="."?"transparent":(pal&&pal[ch])||PAL[ch]||"#333";
+    d.appendChild(c);
+  }));
+  return d;
+}
+function stage(names){
+  const box=document.getElementById("actors"); box.innerHTML="";
+  const P={ "我":["player","28%",null], "小舟":["xiaozhou","52%",null],
+            "馆长":["player","72%",{c:"#8b93a3"}], "学姐":["player","16%",{c:"#5fbf7f"}] };
+  Object.entries(P).forEach(([nm,[sp,lx,over]])=>{
+    const el=sprite(SPR[sp],lx,over);
+    el.innerHTML+=`<div class="name">${nm}</div>`;
+    if(names.includes(nm)) el.classList.add("talk");
+    box.appendChild(el);
+  });
+}
+
+/* ── HUD 三条（把"选择的代价"做成可见的量，而不是弹窗）── */
+function hud(){
+  const v=(k,x)=>Math.max(0,Math.min(100, x||0));
+  document.querySelector("#mProg i").style.width = v("p",S.progress*20)+"%";
+  document.querySelector("#mTrust i").style.width = v("t",55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5)+"%";
+  const sus = (S.flags.solution==="proposal"?78:S.flags.solution==="ramp"?70:S.flags.solution==="volunteer"?34:45)
+            + (S.flags.measured?8:0);
+  document.querySelector("#mSus i").style.width = v("s",sus)+"%";
+  renderArch();
+}
+
+/* ── 档案库 ── */
+function renderArch(){
+  const box=document.getElementById("alist"); box.innerHTML="";
+  ARCHIVE.forEach(e=>{
+    const un=S.unlocked.has(e.id);
+    const d=document.createElement("div");
+    d.className="arow"+(un?"":" locked");
+    d.innerHTML = un
+      ? `<b>${e.title}</b><p>${e.one_liner}<br>${e.why_it_matters||""}</p>
+         <div class="src">来源：<a href="${e.source_url}" target="_blank" rel="noopener">${e.source_url}</a></div>`
+      : `<b>？？？</b><p>尚未解锁</p>`;
+    if(un) d.onclick=()=>d.classList.toggle("open");
+    box.appendChild(d);
+  });
+}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Tab"){ e.preventDefault(); document.getElementById("arch").classList.toggle("on"); }
+  if(e.key===" "||e.key==="Enter"){ finishTyping(); }
+  if(/^[1-9]$/.test(e.key)){
+    document.querySelectorAll(".opt")[+e.key-1]?.click();
+  }
+});
+
+/* ── 结局：把"你的选择"摆出来，不点评 ── */
+function ending(n){
+  const rec = S.path.map(p=>`<div>· ${p.text}</div>`).join("");
+  const el=document.getElementById("end");
+  el.innerHTML = `<h3>${n.title}</h3><div class="recap">你的选择：${rec}</div>
+    <div class="line">${n.text}</div>
+    <div style="margin-top:14px"><span class="key">R</span>重新开始</div>`;
+  el.classList.add("on");
+  document.getElementById("arch").classList.remove("on");
+}
+document.addEventListener("keydown",e=>{ if(e.key.toLowerCase()==="r") location.reload(); });
+
+/* ── 启动 ── */
+stage(["我"]);
+goto(CASE.start);
+window.GAME={S,CASE,ARCHIVE,goto,pick,ok};  // 给自动化验收留的钩子
+</script>
+</body>
+</html>

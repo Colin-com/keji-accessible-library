@@ -46,3 +46,13 @@ python -m http.server 8000
 - 必须使用 console 版可执行文件跑命令行任务，否则 Windows GUI 版不会提供同样清晰的 stdout。
 - 当前 Web preset 已关闭线程支持，因此本地静态服务器无需额外配置 COOP/COEP 响应头。
 - `.godot/` 是导入缓存，`exports/` 是构建产物；两者都不应提交到 Git。
+
+## 剧情路径测试与结局覆盖
+
+运行剧情图穷举测试：
+
+```powershell
+.\.tools\godot\Godot_v4.7.2-stable_win64_console.exe --headless --path . res://tests/test_paths.tscn
+```
+
+测试优先读取 `res://game/data/case_library.json`；正式数据尚未就位时才使用 `res://tests/fixture_case.json`。输出中的每条“路径通过”会列出选择链与对应 `ending_id`，末尾“可达结局”即本次覆盖到的结局集合。测试同时检查所有路径抵达 `end`、所有 `next`/`fallback_next` 引用有效、至少两个不同结局可达，以及选项被条件过滤后仍有回退路径。任一检查失败都会打印具体路径并以非零状态退出。

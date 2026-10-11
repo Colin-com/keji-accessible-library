@@ -1,0 +1,27 @@
+{
+  "case_id": "fixture",
+  "title": "路径测试夹具",
+  "major": "测试",
+  "start": "start",
+  "nodes": {
+    "start": {
+      "type": "choice",
+      "prompt": "选择路径",
+      "options": [
+        {"text": "设置条件", "next": "conditional", "set": {"ready": true}},
+        {"text": "直接结束", "next": "end_b"}
+      ],
+      "fallback_next": "end_b"
+    },
+    "conditional": {
+      "type": "choice",
+      "prompt": "条件选择",
+      "options": [
+        {"text": "条件已满足", "next": "end_a", "require": {"ready": true}}
+      ],
+      "fallback_next": "end_b"
+    },
+    "end_a": {"type": "end", "ending_id": "fixture_a", "title": "甲", "text": "甲结局"},
+    "end_b": {"type": "end", "ending_id": "fixture_b", "title": "乙", "text": "乙结局"}
+  }
+}

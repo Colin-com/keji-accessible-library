@@ -1,3 +1,18 @@
+# ── 工具与引擎（体积大、可重下，不进仓库）──
+.tools/
+*.tpz
+*.tpz.ok
+*.zip.ok
+
+# ── 引擎/编辑器产物 ──
 exports/
 .godot/
+*.import
+
+# ── Python ──
+__pycache__/
+*.pyc
+
+# ── 临时/备份 ──
 *.tmp
+*.bak

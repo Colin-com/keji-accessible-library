@@ -1,0 +1,369 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://game/world/library.gd" id="1_library"]
+[ext_resource type="Script" path="res://game/world/player.gd" id="2_player"]
+[ext_resource type="Script" path="res://game/world/interactable.gd" id="3_interactable"]
+
+[sub_resource type="RectangleShape2D" id="ShapeBoat"]
+size = Vector2(78, 66)
+
+[sub_resource type="RectangleShape2D" id="ShapeDirector"]
+size = Vector2(92, 76)
+
+[sub_resource type="RectangleShape2D" id="ShapeSenior"]
+size = Vector2(84, 72)
+
+[sub_resource type="RectangleShape2D" id="ShapeNotice"]
+size = Vector2(76, 72)
+
+[node name="Library" type="Node2D"]
+script = ExtResource("1_library")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.035, 0.047, 0.067, 1)
+
+[node name="Floor" type="ColorRect" parent="."]
+offset_left = 18.0
+offset_top = 38.0
+offset_right = 622.0
+offset_bottom = 338.0
+mouse_filter = 2
+color = Color(0.09, 0.11, 0.145, 1)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 22.0
+offset_top = 9.0
+offset_right = 360.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.55, 0.9, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+text = "可及 · 校园图书馆"
+
+[node name="ZoneReading" type="Label" parent="."]
+offset_left = 38.0
+offset_top = 126.0
+offset_right = 184.0
+offset_bottom = 148.0
+theme_override_colors/font_color = Color(0.48, 0.52, 0.61, 1)
+text = "阅览区"
+
+[node name="ServiceCounter" type="ColorRect" parent="." groups=["obstacle"]]
+offset_left = 220.0
+offset_top = 72.0
+offset_right = 420.0
+offset_bottom = 108.0
+mouse_filter = 2
+color = Color(0.31, 0.23, 0.19, 1)
+
+[node name="Label" type="Label" parent="ServiceCounter"]
+layout_mode = 0
+offset_left = 67.0
+offset_top = 8.0
+offset_right = 136.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.9, 0.82, 0.65, 1)
+text = "服务台"
+
+[node name="ShelfA" type="ColorRect" parent="." groups=["obstacle"]]
+offset_left = 42.0
+offset_top = 160.0
+offset_right = 176.0
+offset_bottom = 188.0
+mouse_filter = 2
+color = Color(0.18, 0.25, 0.3, 1)
+
+[node name="Label" type="Label" parent="ShelfA"]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 3.0
+offset_right = 102.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0.67, 0.76, 0.82, 1)
+text = "书架 A"
+
+[node name="ShelfB" type="ColorRect" parent="." groups=["obstacle"]]
+offset_left = 250.0
+offset_top = 168.0
+offset_right = 390.0
+offset_bottom = 196.0
+mouse_filter = 2
+color = Color(0.18, 0.25, 0.3, 1)
+
+[node name="Label" type="Label" parent="ShelfB"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 3.0
+offset_right = 105.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0.67, 0.76, 0.82, 1)
+text = "书架 B"
+
+[node name="ShelfC" type="ColorRect" parent="." groups=["obstacle"]]
+offset_left = 464.0
+offset_top = 142.0
+offset_right = 592.0
+offset_bottom = 170.0
+mouse_filter = 2
+color = Color(0.18, 0.25, 0.3, 1)
+
+[node name="Label" type="Label" parent="ShelfC"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 3.0
+offset_right = 101.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0.67, 0.76, 0.82, 1)
+text = "书架 C"
+
+[node name="NoticeBoard" type="ColorRect" parent="." groups=["obstacle"]]
+offset_left = 548.0
+offset_top = 234.0
+offset_right = 606.0
+offset_bottom = 286.0
+mouse_filter = 2
+color = Color(0.37, 0.27, 0.15, 1)
+
+[node name="Label" type="Label" parent="NoticeBoard"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 14.0
+offset_right = 57.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(0.95, 0.81, 0.49, 1)
+text = "公告板"
+horizontal_alignment = 1
+
+[node name="Door" type="ColorRect" parent="." groups=["obstacle"]]
+offset_left = 564.0
+offset_top = 40.0
+offset_right = 614.0
+offset_bottom = 112.0
+mouse_filter = 2
+color = Color(0.13, 0.18, 0.24, 1)
+
+[node name="Label" type="Label" parent="Door"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 25.0
+offset_right = 43.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.62, 0.76, 0.82, 1)
+text = "门"
+
+[node name="Stair1" type="ColorRect" parent="." groups=["obstacle"]]
+offset_left = 244.0
+offset_top = 322.0
+offset_right = 396.0
+offset_bottom = 330.0
+mouse_filter = 2
+color = Color(0.27, 0.29, 0.35, 1)
+
+[node name="Stair2" type="ColorRect" parent="."]
+offset_left = 258.0
+offset_top = 330.0
+offset_right = 382.0
+offset_bottom = 338.0
+mouse_filter = 2
+color = Color(0.21, 0.23, 0.29, 1)
+
+[node name="EntranceLabel" type="Label" parent="."]
+offset_left = 284.0
+offset_top = 297.0
+offset_right = 357.0
+offset_bottom = 319.0
+theme_override_colors/font_color = Color(0.5, 0.54, 0.63, 1)
+text = "入口台阶"
+
+[node name="BoatVisual" type="ColorRect" parent="."]
+offset_left = 184.0
+offset_top = 112.0
+offset_right = 200.0
+offset_bottom = 130.0
+mouse_filter = 2
+color = Color(0.38, 0.72, 0.89, 1)
+
+[node name="BoatName" type="Label" parent="."]
+offset_left = 174.0
+offset_top = 130.0
+offset_right = 218.0
+offset_bottom = 151.0
+theme_override_font_sizes/font_size = 12
+text = "小舟"
+
+[node name="DirectorVisual" type="ColorRect" parent="."]
+offset_left = 310.0
+offset_top = 47.0
+offset_right = 326.0
+offset_bottom = 67.0
+mouse_filter = 2
+color = Color(0.8, 0.58, 0.32, 1)
+
+[node name="DirectorName" type="Label" parent="."]
+offset_left = 298.0
+offset_top = 27.0
+offset_right = 342.0
+offset_bottom = 47.0
+theme_override_font_sizes/font_size = 12
+text = "馆长"
+
+[node name="SeniorVisual" type="ColorRect" parent="."]
+offset_left = 426.0
+offset_top = 218.0
+offset_right = 442.0
+offset_bottom = 238.0
+mouse_filter = 2
+color = Color(0.77, 0.42, 0.69, 1)
+
+[node name="SeniorName" type="Label" parent="."]
+offset_left = 416.0
+offset_top = 239.0
+offset_right = 460.0
+offset_bottom = 260.0
+theme_override_font_sizes/font_size = 12
+text = "学姐"
+
+[node name="Player" type="ColorRect" parent="."]
+z_index = 5
+offset_left = 302.0
+offset_top = 286.0
+offset_right = 318.0
+offset_bottom = 308.0
+mouse_filter = 2
+color = Color(0.27, 0.92, 0.68, 1)
+script = ExtResource("2_player")
+
+[node name="StudentLabel" type="Label" parent="Player"]
+layout_mode = 0
+offset_left = -20.0
+offset_top = 22.0
+offset_right = 38.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.75, 0.95, 0.87, 1)
+theme_override_font_sizes/font_size = 11
+text = "工业设计生"
+
+[node name="Interactables" type="Node2D" parent="."]
+
+[node name="Boat" type="Area2D" parent="Interactables"]
+position = Vector2(192, 121)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("3_interactable")
+display_name = "小舟"
+node_id = "n_start"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Boat"]
+shape = SubResource("ShapeBoat")
+
+[node name="Prompt" type="Label" parent="Interactables/Boat"]
+z_index = 10
+offset_left = -54.0
+offset_top = -54.0
+offset_right = 74.0
+offset_bottom = -31.0
+theme_override_colors/font_color = Color(0.98, 0.91, 0.56, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.03, 0.05, 1)
+theme_override_constants/outline_size = 3
+text = "小舟　按 E 交互"
+horizontal_alignment = 1
+
+[node name="Director" type="Area2D" parent="Interactables"]
+position = Vector2(318, 60)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("3_interactable")
+display_name = "馆长"
+node_id = "n_budget"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Director"]
+shape = SubResource("ShapeDirector")
+
+[node name="Prompt" type="Label" parent="Interactables/Director"]
+z_index = 10
+offset_left = -63.0
+offset_top = 53.0
+offset_right = 65.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.98, 0.91, 0.56, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.03, 0.05, 1)
+theme_override_constants/outline_size = 3
+text = "馆长　按 E 交互"
+horizontal_alignment = 1
+
+[node name="Senior" type="Area2D" parent="Interactables"]
+position = Vector2(434, 228)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("3_interactable")
+display_name = "学姐"
+node_id = "n_b1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Senior"]
+shape = SubResource("ShapeSenior")
+
+[node name="Prompt" type="Label" parent="Interactables/Senior"]
+z_index = 10
+offset_left = -62.0
+offset_top = -52.0
+offset_right = 66.0
+offset_bottom = -29.0
+theme_override_colors/font_color = Color(0.98, 0.91, 0.56, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.03, 0.05, 1)
+theme_override_constants/outline_size = 3
+text = "学姐　按 E 交互"
+horizontal_alignment = 1
+
+[node name="Notice" type="Area2D" parent="Interactables"]
+position = Vector2(577, 260)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("3_interactable")
+display_name = "公告板"
+node_id = "n_choice2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Notice"]
+shape = SubResource("ShapeNotice")
+
+[node name="Prompt" type="Label" parent="Interactables/Notice"]
+z_index = 10
+offset_left = -98.0
+offset_top = 38.0
+offset_right = 31.0
+offset_bottom = 61.0
+theme_override_colors/font_color = Color(0.98, 0.91, 0.56, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.03, 0.05, 1)
+theme_override_constants/outline_size = 3
+text = "公告板　按 E 交互"
+horizontal_alignment = 1
+
+[node name="Interface" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="StatusBar" type="ColorRect" parent="Interface"]
+offset_left = 8.0
+offset_top = 334.0
+offset_right = 632.0
+offset_bottom = 358.0
+mouse_filter = 2
+color = Color(0.025, 0.035, 0.052, 0.92)
+
+[node name="Status" type="Label" parent="Interface"]
+offset_left = 16.0
+offset_top = 337.0
+offset_right = 624.0
+offset_bottom = 357.0
+theme_override_colors/font_color = Color(0.62, 0.68, 0.77, 1)
+theme_override_font_sizes/font_size = 12
+text = "靠近人物或公告板，按 E 交互　｜　Tab 档案库"
+horizontal_alignment = 1

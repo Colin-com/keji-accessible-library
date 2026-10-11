@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《可及》· 无障碍科普叙事 Demo</title>
+<style>
+  :root{
+    --bg:#0e1015; --panel:#171a21; --panel2:#1e222b; --line:#2c3140;
+    --ink:#e9e6e0; --muted:#8b93a3; --dim:#5a6070;
+    --accent:#e8b13a; --blue:#4a9eda; --ok:#5fbf7f; --warn:#d9694a;
+    --cell:4px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  #wrap{max-width:960px;margin:0 auto;padding:14px 14px 28px}
+
+  /* ── 顶部 HUD ── */
+  #hud{display:flex;gap:14px;align-items:center;justify-content:space-between;
+    background:var(--panel);border:2px solid var(--line);padding:8px 12px;margin-bottom:10px}
+  #hud .title{font-weight:700;letter-spacing:.06em}
+  #hud .title small{color:var(--dim);font-weight:400;margin-left:8px;letter-spacing:0}
+  .meters{display:flex;gap:12px}
+  .meter{min-width:96px}
+  .meter b{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.08em}
+  .bar{height:7px;background:#101319;border:1px solid var(--line);margin-top:3px;position:relative;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;transition:width .5s steps(8)}
+  #mProg i{background:var(--blue)} #mTrust i{background:var(--ok)} #mSus i{background:var(--accent)}
+  #hintkey{font-size:11px;color:var(--dim);border:1px dashed var(--line);padding:4px 8px}
+
+  /* ── 场景区 ── */
+  #stage{position:relative;height:300px;background:var(--panel2);
+    border:2px solid var(--line);overflow:hidden;image-rendering:pixelated}
+  #stage .shelfband{position:absolute;inset:0 0 34% 0;
+    background:repeating-linear-gradient(90deg,#232833 0 17px,#1b2029 17px 21px);
+    border-bottom:3px solid #12151b}
+  #stage .shelves{position:absolute;left:0;right:0;top:0;bottom:34%;
+    background:repeating-linear-gradient(0deg,transparent 0 23px,#12151b 23px 26px)}
+  #stage .floor{position:absolute;left:0;right:0;bottom:0;height:34%;background:#1a1e26;
+    border-top:3px solid #2c3140}
+  #stage .mat{position:absolute;left:8%;right:8%;bottom:6%;height:26px;
+    background:repeating-linear-gradient(90deg,#d9b23a 0 9px,#c9a233 9px 18px);opacity:.5;
+    border-radius:2px}
+  #stage .steps{position:absolute;right:6%;bottom:0;width:26%;height:26%;
+    background:repeating-linear-gradient(0deg,#2b303c 0 12px,#232833 12px 24px)}
+  #stage .counter{position:absolute;left:6%;bottom:34%;width:22%;height:16%;
+    background:#2a2f3a;border:2px solid #363c4a}
+  .actor{position:absolute;bottom:34%;transform:translateX(-50%)}
+  .actor .name{position:absolute;left:50%;transform:translateX(-50%);bottom:-20px;
+    font-size:11px;color:var(--muted);white-space:nowrap}
+  .actor.talk .name{color:var(--accent)}
+  .actor.talk::after{content:"";position:absolute;left:50%;transform:translateX(-50%);
+    bottom:-26px;width:0;height:0;border:5px solid transparent;border-top-color:var(--accent)}
+  .px{display:grid}
+  .px div{width:var(--cell);height:var(--cell)}
+  #stageTag{position:absolute;left:10px;top:8px;font-size:11px;color:var(--dim);
+    background:rgba(14,16,21,.8);border:1px solid var(--line);padding:2px 7px;letter-spacing:.06em}
+
+  /* ── 对话框 ── */
+  #box{margin-top:10px;background:var(--panel);border:2px solid var(--line);padding:14px 16px 16px;min-height:168px}
+  #speaker{display:inline-block;font-size:12px;letter-spacing:.1em;color:var(--bg);
+    background:var(--accent);padding:2px 10px;margin-bottom:9px;font-weight:700}
+  #speaker.narr{background:#2c3140;color:var(--muted)}
+  #text{font-size:19px;line-height:1.75;min-height:66px;letter-spacing:.02em}
+  #opts{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+  .opt{text-align:left;font:inherit;font-size:16px;color:var(--ink);background:#141821;
+    border:2px solid var(--line);padding:9px 12px;cursor:pointer;letter-spacing:.02em}
+  .opt:hover,.opt.sel{border-color:var(--accent);background:#1c2130;color:#fff}
+  .opt em{color:var(--dim);font-style:normal;margin-right:9px;font-size:13px}
+  .opt.sel em{color:var(--accent)}
+
+  /* ── 档案库 ── */
+  #arch{position:fixed;inset:0;background:rgba(8,10,14,.94);display:none;z-index:9;overflow:auto}
+  #arch.on{display:block}
+  #archInner{max-width:820px;margin:32px auto;background:var(--panel);border:2px solid var(--line);padding:20px 22px}
+  #arch h2{margin:0 0 4px;font-size:17px;letter-spacing:.08em}
+  #arch .sub{color:var(--dim);font-size:12px;margin-bottom:14px;letter-spacing:.04em}
+  .arow{border-left:3px solid var(--line);padding:8px 12px;margin-bottom:7px;cursor:pointer;background:#141821}
+  .arow:hover{border-left-color:var(--accent);background:#1a1f2b}
+  .arow b{font-size:14px;font-weight:600}
+  .arow.locked b{color:var(--dim)}
+  .arow p{margin:5px 0 0;font-size:13px;color:var(--muted);line-height:1.65;display:none}
+  .arow.open p{display:block}
+  .arow a{color:var(--blue);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--blue)}
+  .arow .src{font-size:11px;color:var(--dim);letter-spacing:.04em;margin-top:5px}
+
+  /* ── 结局卡 ── */
+  #end{display:none;margin-top:10px;background:var(--panel);border:2px solid var(--accent);padding:20px}
+  #end.on{display:block}
+  #end h3{margin:0 0 10px;font-size:22px;letter-spacing:.06em;color:var(--accent)}
+  #end .recap{font-size:13px;color:var(--muted);line-height:1.9;border-left:3px solid var(--line);padding-left:12px;margin:12px 0}
+  #end .line{font-size:17px;line-height:1.8}
+  .key{display:inline-block;font-size:11px;color:var(--dim);border:1px dashed var(--line);padding:2px 6px;margin-right:6px}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <div class="title">可及 <small>无障碍科普叙事 · 工业设计</small></div>
+    <div class="meters">
+      <div class="meter" id="mProg"><b>项目进度</b><div class="bar"><i></i></div></div>
+      <div class="meter" id="mTrust"><b>当事人信任</b><div class="bar"><i></i></div></div>
+      <div class="meter" id="mSus"><b>可持续性</b><div class="bar"><i></i></div></div>
+    </div>
+    <div id="hintkey">Tab 档案库</div>
+  </div>
+
+  <div id="stage">
+    <div class="shelfband"></div><div class="shelves"></div><div class="floor"></div>
+    <div class="mat"></div><div class="steps"></div><div class="counter"></div>
+    <div id="stageTag">市图书馆 · 一层大厅</div>
+    <div id="actors"></div>
+  </div>
+
+  <div id="box">
+    <div id="speaker" class="narr">旁白</div>
+    <div id="text"></div>
+    <div id="opts"></div>
+  </div>
+  <div id="end"></div>
+</div>
+
+<div id="arch"><div id="archInner">
+  <h2>无障碍档案库</h2>
+  <div class="sub">随剧情解锁 · 每条都标注来源，可点开链接自查（Tab 关闭）</div>
+  <div id="alist"></div>
+</div></div>
+
+<script>
+const CASE = __CASE_JSON__;
+const ARCHIVE = __ARCHIVE_JSON__;
+
+/* ── 状态机（契约与 CONTRACT.md 一致：flags / relation / progress / unlocked） ── */
+const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), path:[], node:null};
+
+function effects(n){
+  (n.set?Object.entries(n.set):[]).forEach(([k,v])=>S.flags[k]=v);
+  if(n.relation)Object.entries(n.relation).forEach(([k,v])=>S.relation[k]=(S.relation[k]||0)+v);
+  if(n.progress)S.progress=Math.max(0,Math.min(100,S.progress+n.progress));
+  (n.unlock||[]).forEach(id=>S.unlocked.add(id));
+  hud();
+}
+function ok(req){ return !req || Object.entries(req).every(([k,v])=>S.flags[k]===v); }
+
+function goto(id){
+  const n = CASE.nodes[id];
+  if(!n){ console.error("节点不存在", id); return; }
+  S.node = id; S.flags.__node = id;
+  if(n.unlock) effects({unlock:n.unlock});
+  if(n.type==="say"){
+    if(n.set||n.relation||n.progress) effects(n);
+    speak(n.speaker||"旁白", n.text, ()=>goto(n.next));
+  } else if(n.type==="choice"){
+    if(n.set||n.relation) effects(n);
+    const vis = n.options.filter(o=>ok(o.require));
+    if(!vis.length){ goto(n.fallback_next); return; }
+    speak(n.speaker||"旁白", n.prompt, null);
+    showOpts(vis);
+  } else if(n.type==="end"){
+    ending(n);
+  }
+}
+function pick(o){
+  S.path.push({node:S.node, text:o.text});
+  if(o.set||o.relation||o.progress){ effects(o); }
+  if(o.unlock) effects({unlock:o.unlock});
+  goto(o.next);
+}
+
+/* ── 打字机（支持点击/空格跳过；后台标签页不做动画，避免定时器被降频卡住）── */
+let typing=null, pendTxt="", pendDone=null;
+function speak(who, txt, done){
+  const sp=document.getElementById("speaker");
+  sp.textContent=who; sp.className = (who==="旁白")?"narr":"";
+  const el=document.getElementById("text");
+  document.getElementById("opts").innerHTML="";
+  document.getElementById("end").classList.remove("on");
+  clearInterval(typing); typing=null; pendTxt=txt; pendDone=done; el.textContent="";
+  if(document.hidden){ el.textContent=txt; if(done) setTimeout(done,120); return; }
+  let i=0;
+  typing=setInterval(()=>{
+    el.textContent = txt.slice(0, ++i);
+    if(i>=txt.length){ clearInterval(typing); typing=null; if(done) setTimeout(done, 260); }
+  }, 26);
+}
+function finishTyping(){
+  if(!typing) return;
+  clearInterval(typing); typing=null;
+  document.getElementById("text").textContent=pendTxt;
+  if(pendDone) setTimeout(pendDone, 120);
+}
+document.getElementById("text").onclick=finishTyping;
+function showOpts(list){
+  const box=document.getElementById("opts"); box.innerHTML="";
+  list.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.innerHTML=`<em>${i+1}</em>${o.text}`;
+    b.onclick=()=>pick(o);
+    box.appendChild(b);
+  });
+  window.__opts=list;
+}
+window.__pick=i=>{ const o=window.__opts&&window.__opts[i]; if(o) pick(o); };
+
+/* ── 像素小人（字符画 → div 网格）── */
+const SPR={
+ player:["..hhh..","..hhh..",".sssss.",".s.s.s.","..ccc..",".ccccc.","..ccc..","..c.c..","..s.s.."],
+ xiaozhou:["..hhh..","..hhh..",".sssss.","..ccc..","..ccc..","...c...",".wwwww.","w.w.w.w","..w.w.."]
+};
+const PAL={h:"#2b2f3a",s:"#e6c9a8",c:"#4a9eda",w:"#c9ccd4",g:"#5fbf7f",a:"#e8b13a",b:"#8b93a3"};
+function sprite(map,left,pal){
+  const d=document.createElement("div"); d.className="px actor";
+  d.style.left=left; d.style.gridTemplateColumns=`repeat(${map[0].length},var(--cell))`;
+  map.forEach(row=>[...row].forEach(ch=>{
+    const c=document.createElement("div");
+    c.style.background = ch==="."?"transparent":(pal&&pal[ch])||PAL[ch]||"#333";
+    d.appendChild(c);
+  }));
+  return d;
+}
+function stage(names){
+  const box=document.getElementById("actors"); box.innerHTML="";
+  const P={ "我":["player","28%",null], "小舟":["xiaozhou","52%",null],
+            "馆长":["player","72%",{c:"#8b93a3"}], "学姐":["player","16%",{c:"#5fbf7f"}] };
+  Object.entries(P).forEach(([nm,[sp,lx,over]])=>{
+    const el=sprite(SPR[sp],lx,over);
+    el.innerHTML+=`<div class="name">${nm}</div>`;
+    if(names.includes(nm)) el.classList.add("talk");
+    box.appendChild(el);
+  });
+}
+
+/* ── HUD 三条（把"选择的代价"做成可见的量，而不是弹窗）── */
+function hud(){
+  const v=(k,x)=>Math.max(0,Math.min(100, x||0));
+  document.querySelector("#mProg i").style.width = v("p",S.progress*20)+"%";
+  document.querySelector("#mTrust i").style.width = v("t",55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5)+"%";
+  const sus = (S.flags.solution==="proposal"?78:S.flags.solution==="ramp"?70:S.flags.solution==="volunteer"?34:45)
+            + (S.flags.measured?8:0);
+  document.querySelector("#mSus i").style.width = v("s",sus)+"%";
+  renderArch();
+}
+
+/* ── 档案库 ── */
+function renderArch(){
+  const box=document.getElementById("alist"); box.innerHTML="";
+  ARCHIVE.forEach(e=>{
+    const un=S.unlocked.has(e.id);
+    const d=document.createElement("div");
+    d.className="arow"+(un?"":" locked");
+    d.innerHTML = un
+      ? `<b>${e.title}</b><p>${e.one_liner}<br>${e.why_it_matters||""}</p>
+         <div class="src">来源：<a href="${e.source_url}" target="_blank" rel="noopener">${e.source_url}</a></div>`
+      : `<b>？？？</b><p>尚未解锁</p>`;
+    if(un) d.onclick=()=>d.classList.toggle("open");
+    box.appendChild(d);
+  });
+}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Tab"){ e.preventDefault(); document.getElementById("arch").classList.toggle("on"); }
+  if(e.key===" "||e.key==="Enter"){ finishTyping(); }
+  if(/^[1-9]$/.test(e.key)){
+    document.querySelectorAll(".opt")[+e.key-1]?.click();
+  }
+});
+
+/* ── 结局：把"你的选择"摆出来，不点评 ── */
+function ending(n){
+  const rec = S.path.map(p=>`<div>· ${p.text}</div>`).join("");
+  const el=document.getElementById("end");
+  el.innerHTML = `<h3>${n.title}</h3><div class="recap">你的选择：${rec}</div>
+    <div class="line">${n.text}</div>
+    <div style="margin-top:14px"><span class="key">R</span>重新开始</div>`;
+  el.classList.add("on");
+  document.getElementById("arch").classList.remove("on");
+}
+document.addEventListener("keydown",e=>{ if(e.key.toLowerCase()==="r") location.reload(); });
+
+/* ── 启动 ── */
+stage(["我"]);
+goto(CASE.start);
+window.GAME={S,CASE,ARCHIVE,goto,pick,ok};  // 给自动化验收留的钩子
+</script>
+</body>
+</html>
