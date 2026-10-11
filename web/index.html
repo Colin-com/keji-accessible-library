@@ -151,6 +151,7 @@
   .arow.open p{display:block}
   .arow a{color:var(--blue);font-size:12px;text-decoration:none;border-bottom:1px dotted var(--blue);word-break:break-all}
   .arow .src{font-size:11px;color:var(--dim);letter-spacing:.04em;margin-top:5px}
+  .archdiag{margin-top:12px;padding-top:9px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);line-height:1.6}
   .closer{float:right;font-size:11px;color:var(--muted);background:#141821;border:1px solid var(--line);padding:4px 10px;cursor:pointer}
   .closer:hover{border-color:var(--accent);color:var(--ink)}
   .keys{display:grid;grid-template-columns:110px 1fr;gap:8px 14px;font-size:14px;line-height:1.7;margin:6px 0 18px}
@@ -196,7 +197,8 @@
     <div class="menufoot">
       <b>90 分钟黑客松作品</b> · 网页版单文件 Demo · 剧情与档案数据驱动<br>
       每条科普都标注来源，可在档案库点开链接自查 · 本项目构建过程中由 TRAE 参与<br>
-      <span id="buildStamp" style="opacity:.75">构建 v4 · 117 节点 · 9 决策 · 10-11 17:15</span>
+      <span id="buildStamp" style="opacity:.75">构建 v6 · 117 节点 · 9 决策 · 10-11 17:20</span>
+      <button id="btnRefresh" style="margin-left:8px;font:inherit;font-size:11px;color:#9aa4b2;background:#141821;border:1px solid var(--line);border-radius:4px;padding:3px 9px;cursor:pointer">刷新到最新版</button>
     </div>
   </div>
 </div>
@@ -242,6 +244,7 @@
   <h2>无障碍档案库</h2>
   <div class="sub">随剧情解锁 · 每条都标注来源，可点开链接自查</div>
   <div id="alist"></div>
+  <div id="archDiag" class="archdiag"></div>
 </div></div>
 
 <!-- ══════════ 操作说明 ══════════ -->
@@ -279,13 +282,30 @@ const S = {flags:{}, relation:{}, progress:0, unlocked:new Set(), path:[], node:
 
 /* ── 档案库跨局保留：解锁即写盘，重开 / 回主菜单 / 关掉浏览器都还在 ── */
 const ARCH_KEY = "keji_archive_v1";
-try {
-  JSON.parse(localStorage.getItem(ARCH_KEY) || "[]").forEach(id => {
-    if (ARCHIVE.some(e => e.id === id)) S.unlocked.add(id);
-  });
-} catch (err) { /* 隐私模式等场景下忽略 */ }
+let storageOK = true;
+try { localStorage.setItem("__keji_probe","1"); localStorage.removeItem("__keji_probe"); }
+catch (err) { storageOK = false; }
+function storedArchive(){
+  try { const a = JSON.parse(localStorage.getItem(ARCH_KEY) || "[]"); return Array.isArray(a) ? a : []; }
+  catch (err) { return []; }
+}
+storedArchive().forEach(id => { if (ARCHIVE.some(e => e.id === id)) S.unlocked.add(id); });
 function saveArchive() {
-  try { localStorage.setItem(ARCH_KEY, JSON.stringify([...S.unlocked])); } catch (err) {}
+  try { localStorage.setItem(ARCH_KEY, JSON.stringify([...S.unlocked])); }
+  catch (err) { storageOK = false; }
+}
+/* 每次刷新 HUD 都先读盘合并：任何代码路径都不可能把已解锁的条目弄丢 */
+function mergeArchive(){
+  storedArchive().forEach(id => { if (ARCHIVE.some(e => e.id === id)) S.unlocked.add(id); });
+}
+/* 把"同步"这件事本身显示出来：本机记录几条、本次会话几条、存储可不可用 */
+function archDiagText(){
+  const stored = storedArchive().filter(id => ARCHIVE.some(e => e.id === id)).length;
+  const st = document.getElementById("buildStamp");
+  const stamp = st ? st.textContent : "";
+  if(!storageOK) return "\u26a0 本机存储不可用（无痕/隐私模式？）——解锁只在本次打开期间有效 \u00b7 " + stamp;
+  if(stored < S.unlocked.size) return "本次会话 " + S.unlocked.size + " 条 \u00b7 本机记录 " + stored + " 条（未写盘）\u00b7 " + stamp;
+  return "本机记录 " + stored + " 条 \u00b7 本次会话 " + S.unlocked.size + " 条 \u00b7 跨局保留正常 \u00b7 " + stamp;
 }
 
 function toast(msg){
@@ -856,6 +876,7 @@ function setScene(id, talker){
 
 /* ── HUD 三条（把"选择的代价"做成可见的量，而不是弹窗）── */
 function hud(){
+  mergeArchive();
   const v=(x)=>Math.max(0,Math.min(100, x||0));
   document.querySelector("#mProg i").style.width = v(S.progress*10)+"%";
   document.querySelector("#mTrust i").style.width = v(55+(S.relation.zhou||0)*15+(S.relation.guan||0)*5)+"%";
@@ -893,6 +914,8 @@ function renderArch(){
     if(un) d.onclick=()=>d.classList.toggle("open");
     box.appendChild(d);
   });
+  const dg=document.getElementById("archDiag");
+  if(dg) dg.textContent = archDiagText();
 }
 const ovOn=id=>document.getElementById(id).classList.add("on");
 const ovOff=id=>document.getElementById(id).classList.remove("on");
@@ -952,6 +975,8 @@ function toMenu(){
   ovOn("menu"); hud();
 }
 document.getElementById("btnStart").onclick=startGame;
+/* 一键破缓存：带 ?v=时间戳 重新打开，避免浏览器拿到旧的 index.html */
+document.getElementById("btnRefresh").onclick=()=>location.replace(location.pathname+"?v="+Date.now());
 document.getElementById("btnHelp").onclick=()=>ovOn("help");
 document.getElementById("tbHelp").onclick=()=>ovOn("help");
 document.getElementById("btnArchFromMenu").onclick=()=>ovOn("arch");

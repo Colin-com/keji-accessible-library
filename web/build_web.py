@@ -21,7 +21,7 @@ OUTPUT_PATH = ROOT / "web" / "index.html"
 CASE_MARK = "__CASE_JSON__"
 ARCHIVE_MARK = "__ARCHIVE_JSON__"
 BUILD_MARK = "__BUILD__"
-BUILD_VERSION = "v4"
+BUILD_VERSION = "v6"
 
 
 def fail(msg: str):
